@@ -20,7 +20,11 @@
 #include "renderer.h"
 #include "object.h"
 #include "object3D.h"
+
+//モデル
 #include "player.h"
+#include "Shark.h"
+
 #include "model3D.h"
 #include "mesh.h"
 #include "sphere.h"
@@ -30,6 +34,8 @@
 // 静的メンバ変数宣言
 //*****************************************************************************
 CPlayer *CGame::m_pPlayer = nullptr;					// プレイヤークラス
+CEnemyShark *CGame::m_pEnemyShark = nullptr;	//Enemy
+
 CMesh3D *CGame::m_pMesh3D;								// メッシュクラス
 bool CGame::m_bGame = false;							// ゲームの状況
 
@@ -88,6 +94,13 @@ HRESULT CGame::Init()
 	m_pPlayer = CPlayer::Create();
 	m_pPlayer->SetMotion("data/MOTION/motion.txt");
 	m_pPlayer->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	//サメ設定
+	m_pEnemyShark = CEnemyShark::Create();
+	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
+	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
+
+
 
 	CModelObj *pModelObj = CModelObj::Create();
 	pModelObj->SetPos(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
