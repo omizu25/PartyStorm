@@ -118,7 +118,7 @@ void CObject::DrawAll()
 
 				if (!pObject->m_bDeath)
 				{// レンダラーのゲット
-					CRenderer *pRenderer = CApplication::GetRenderer();
+					//CRenderer *pRenderer = CApplication::GetRenderer();
 
 					// ステンシルの設定
 					//pRenderer->SetStencil(1, D3DCMP_EQUAL);

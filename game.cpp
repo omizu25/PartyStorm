@@ -24,7 +24,7 @@
 #include "model3D.h"
 #include "mesh.h"
 #include "sphere.h"
-#include "bg.h"
+#include "model_obj.h"
 
 //*****************************************************************************
 // 静的メンバ変数宣言
@@ -89,8 +89,12 @@ HRESULT CGame::Init()
 	m_pPlayer->SetMotion("data/MOTION/motion.txt");
 	m_pPlayer->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
+	CModelObj *pModelObj = CModelObj::Create();
+	pModelObj->SetPos(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
+	pModelObj->SetType(21);
+
 	// カメラの追従設定(目標 : プレイヤー)
-	CApplication::GetCamera()->SetFollowTarget(m_pPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 300.0f);
+	CApplication::GetCamera()->SetFollowTarget(m_pPlayer, D3DXVECTOR3(0.0f, 50.0f, 0.0f), 300.0f);
 	
 	// マウスカーソルを消す
 	pMouse->SetShowCursor(false);

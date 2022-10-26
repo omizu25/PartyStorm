@@ -137,7 +137,7 @@ D3DXVECTOR3 CApplication::WorldCastScreen(const D3DXVECTOR3 &pos)
 
 	// ‹t•ÏŠ·
 	mtx = mtxViewPort * mtxPrj * mtxView;
-	D3DXVec3TransformCoord(&vec, &D3DXVECTOR3(vec.x, vec.y, vec.z), &mtx);
+	D3DXVec3TransformCoord(&vec, &vec, &mtx);
 
 	return vec;
 }

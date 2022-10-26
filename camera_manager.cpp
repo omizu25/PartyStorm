@@ -157,7 +157,15 @@ void CCameraManager::LoadFile(const char *pFileName)
 						int nLoop = 0;
 						fscanf(pFile, "%s", &aStr[0]);
 						fscanf(pFile, "%d", &nLoop);
-						m_pMotion[nCntMotion].bLoop = nLoop;
+
+						if (nLoop != 0)
+						{
+							m_pMotion[nCntMotion].bLoop = true;
+						}
+						else
+						{
+							m_pMotion[nCntMotion].bLoop = false;
+						}
 					}
 
 					if (strstr(&aStr[0], "ACTIONSET") != NULL)

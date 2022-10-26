@@ -186,7 +186,7 @@ void CEffect3D::Draw()
 void CEffect3D::SetLife(const int nLife)
 {
 	m_nLife = nLife;
-	m_subSize = GetSize() / m_nLife;
+	m_subSize = GetSize() / (float)m_nLife;
 	m_fSubAlpha = GetColor().a / m_nLife;
 }
 
