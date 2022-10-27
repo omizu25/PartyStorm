@@ -1,427 +1,246 @@
-//=============================================================================
-//
-// 当たり判定クラス(collision.cpp)
-// Author : 唐﨑結斗
-// 概要 : 当たり判定生成を行う
-//
-//=============================================================================
-
-//*****************************************************************************
-// インクルード
-//*****************************************************************************
-#include <assert.h>
-
-#include "collision.h"
-#include "renderer.h"
-#include "application.h"
-
-//=============================================================================
-// コンストラクタ
-// Author : 唐﨑結斗
-// 概要 : インスタンス生成時に行う処理
-//=============================================================================
-CCollision::CCollision() : m_pParent(nullptr),
-m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
-m_posOld(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-m_rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-m_size(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
-{
-
-}
-
-//=============================================================================
-// デストラクタ
-// Author : 唐﨑結斗
-// 概要 : インスタンス終了時に行う処理
-//=============================================================================
-CCollision::~CCollision()
-{
-
-}
-
-//=============================================================================
-// 初期化
-// Author : 唐﨑結斗
-// 概要 : 頂点バッファを生成し、メンバ変数の初期値を設定
-//=============================================================================
-HRESULT CCollision::Init()
-{
-	// 変数の初期化
-	m_pParent = nullptr;							// 親
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
-	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 過去位置
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
-	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 大きさ
-
-	return S_OK;
-}
-
-//=============================================================================
-// 終了
-// Author : 唐﨑結斗
-// 概要 : テクスチャのポインタと頂点バッファの解放
-//=============================================================================
-void CCollision::Uninit()
-{
-	// オブジェクト3Dの解放
-	Release();
-}
-
-//=============================================================================
-// 更新
-// Author : 唐﨑結斗
-// 概要 : 2D更新を行う
-//=============================================================================
-void CCollision::Update()
-{
-	
-}
-
-//=============================================================================
-// 描画
-// Author : 唐﨑結斗
-// 概要 : 2D描画を行う
-//=============================================================================
-void CCollision::Draw()
-{
-
-}
-
 ////=============================================================================
-//// 範囲内の判定
+////
+//// オブジェクトクラス(object.h)
 //// Author : 唐﨑結斗
-//// 概要 : ターゲットが範囲内に入ったかの判定
+//// 概要 : オブジェクト生成を行う
+////
 ////=============================================================================
-//bool CCollision::ColisonRange2D(CObject * target)
-//{// 自分の情報を取得する
-//	D3DXVECTOR3 pos = GetPos() + m_posAdd;
-//	D3DXVECTOR3 size = GetSize();
 //
-//	// 目標の情報取得
-//	D3DXVECTOR3 posTarget = target->GetPos() + target->GetColisonPos();
-//	D3DXVECTOR3 sizeTarget = target->GetSize();
+////*****************************************************************************
+//// インクルード
+////*****************************************************************************
+//#include <assert.h>
 //
-//	if (pos.x - size.x >= posTarget.x - sizeTarget.x
-//		&& pos.x + size.x <= posTarget.x + sizeTarget.x
-//		&& pos.y - size.y >= posTarget.y - sizeTarget.y
-//		&& pos.y + size.y <= posTarget.y + sizeTarget.y)
+//#include "collision.h"
+//#include "renderer.h"
+//#include "application.h"
+//
+////*****************************************************************************
+//// 静的メンバ変数宣言
+////*****************************************************************************
+//CObject *CCollision::m_pTop = nullptr;				// 先頭オブジェクトへのポインタ
+//CObject *CCollision::m_pCurrent = nullptr;			// 現在の(一番後ろ)オブジェクトへのポインタ
+//
+////=============================================================================
+//// インスタンスの解放
+//// Author : 唐﨑結斗
+//// 概要 : すべてのインスタンスを解放する処理
+////=============================================================================
+//void CObject::ReleaseAll(bool bPermanent)
+//{
+//	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
 //	{
-//		return true;
+//		if (m_pTop[nCntPriority] != nullptr)
+//		{// 変数宣言
+//			CObject *pObject = m_pTop[nCntPriority];
+//
+//			while (pObject)
+//			{// 現在のオブジェクトの次のオブジェクトを保管
+//				CObject *pObjectNext = pObject->m_pNext;
+//				if (bPermanent)
+//				{
+//					if (!pObject->m_bDeath)
+//					{// オブジェクトの解放
+//						pObject->Release();
+//					}
+//				}
+//				else
+//				{
+//					if (!pObject->m_bDeath
+//						&& pObject->m_objectType != CObject::OBJTYPE_FADE)
+//					{// オブジェクトの解放
+//						pObject->Release();
+//					}
+//				}
+//
+//				// 現在のオブジェクトの次のオブジェクトを更新
+//				pObject = pObjectNext;
+//			}
+//		}
+//	}
+//
+//	// すべてのリスト解除
+//	ReleaseListAll();
+//}
+//
+////=============================================================================
+//// すべてのインスタンスの更新
+//// Author : 唐﨑結斗
+//// 概要 : 使用されてるインスタンスの更新処理を呼び出す
+////=============================================================================
+//void CObject::UpdateAll(void)
+//{
+//	// オブジェクトの使用数の表示
+//	CDebugProc::Print("オブジェクトの使用数 : %d\n", m_nMaxObject);
+//
+//	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+//	{
+//		if (m_pTop[nCntPriority] != nullptr)
+//		{// 変数宣言
+//			CObject *pObject = m_pTop[nCntPriority];
+//
+//			while (pObject)
+//			{// 現在のオブジェクトの次のオブジェクトを保管
+//				CObject *pObjectNext = pObject->m_pNext;
+//
+//				if (!pObject->m_bDeath)
+//				{// オブジェクトの更新
+//					pObject->Update();
+//				}
+//				
+//				// 現在のオブジェクトの次のオブジェクトを更新
+//				pObject = pObjectNext;
+//			}
+//		}
+//	}
+//}
+//
+////=============================================================================
+//// すべてのインスタンスの描画
+//// Author : 唐﨑結斗
+//// 概要 : 使用されてるインスタンスの描画処理を呼び出す
+////=============================================================================
+//void CObject::DrawAll()
+//{
+//	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+//	{
+//		if (m_pTop[nCntPriority] != nullptr)
+//		{// 変数宣言
+//			CObject *pObject = m_pTop[nCntPriority];
+//
+//			while (pObject)
+//			{// 現在のオブジェクトの次のオブジェクトを保管
+//				CObject *pObjectNext = pObject->m_pNext;
+//
+//				if (!pObject->m_bDeath)
+//				{// レンダラーのゲット
+//					//CRenderer *pRenderer = CApplication::GetRenderer();
+//
+//					// ステンシルの設定
+//					//pRenderer->SetStencil(1, D3DCMP_EQUAL);
+//
+//					// オブジェクトの描画
+//					pObject->Draw();
+//				}
+//
+//				// 現在のオブジェクトの次のオブジェクトを更新
+//				pObject = pObjectNext;
+//			}
+//		}
+//	}
+//
+//	// すべてのリスト解除
+//	ReleaseListAll();
+//}
+//
+////=============================================================================
+//// すべてのオブジェクトのリスト解除
+//// Author : 唐﨑結斗
+//// 概要 : すべてのオブジェクトのリスト解除を呼び出す
+////=============================================================================
+//void CObject::ReleaseListAll()
+//{
+//	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+//	{
+//		if (m_pTop[nCntPriority] != nullptr)
+//		{// 変数宣言
+//			CObject *pObject = m_pTop[nCntPriority];
+//
+//			while (pObject)
+//			{// 現在のオブジェクトの次のオブジェクトを保管
+//				CObject *pObjectNext = pObject->m_pNext;
+//
+//				if (pObject->m_bDeath)
+//				{// オブジェクトのリスト解除
+//					pObject->ReleaseList();
+//				}
+//
+//				// 現在のオブジェクトの次のオブジェクトを更新
+//				pObject = pObjectNext;
+//			}
+//		}
+//	}
+//}
+//
+////=============================================================================
+//// コンストラクタ
+//// Author : 唐﨑結斗
+//// 概要 : インスタンス生成時に行う処理
+////=============================================================================
+//CObject::CObject(int nPriority/* = PRIORITY_LEVEL0*/) : m_pPrev(nullptr),		// 前のオブジェクトへのポインタ
+//m_pNext(nullptr),																// 次のオブジェクトへのポインタ
+//m_bDeath(false)																	// 死亡フラグ
+//{
+//	// 使用数のインクリメント
+//	m_nMaxObject++;
+//	m_nPriorityMaxObj[m_nLevPriority]++;
+//
+//	if (m_pTop[m_nLevPriority] == nullptr)
+//	{// 先頭ポインターの設定
+//		m_pTop[m_nLevPriority] = this;
 //	}
 //	else
-//	{
-//		return false;
+//	{// 過去の最後尾オブジェクトの次のオブジェクトを設定
+//		m_pCurrent[m_nLevPriority]->m_pNext = this;
+//
+//		// 自分の前のオブジェクトの設定
+//		this->m_pPrev = m_pCurrent[m_nLevPriority];
 //	}
+//	
+//	// 自分を現在のオブジェクトに設定
+//	m_pCurrent[m_nLevPriority] = this;
 //}
 //
 ////=============================================================================
-//// 矩形の判定
+//// デストラクタ
 //// Author : 唐﨑結斗
-//// 概要 : ターゲットとの矩形判定
+//// 概要 : インスタンス終了時に行う処理
 ////=============================================================================
-//bool CCollision::ColisonRectangle2D(CObject *target, bool bExtrude)
-//{// 返り値用の変数
-//	bool bColision = false;
-//
-//	// 自分の情報を取得する
-//	D3DXVECTOR3 pos = GetPos() + m_posAdd;
-//	D3DXVECTOR3 posOld = GetPosOld();
-//	D3DXVECTOR3 size = GetSize() / 2.0f;
-//
-//	// 目標の情報取得
-//	D3DXVECTOR3 posTarget = target->GetPos() + target->GetColisonPos();
-//	D3DXVECTOR3 sizeTarget = target->GetSize() / 2.0f;
-//
-//	if (pos.y - size.y  < posTarget.y + sizeTarget.y
-//		&& pos.y + size.y  > posTarget.y - sizeTarget.y)
-//	{// モデル内にいる(Y軸)
-//		if (posOld.x + size.y <= posTarget.x - sizeTarget.x
-//			&& pos.x + size.y  > posTarget.x - sizeTarget.x)
-//		{
-//			if (bExtrude)
-//			{// 押し出しを使用する
-//				pos.x = posTarget.x - sizeTarget.x - size.y;
-//			}
-//
-//			bColision = true;
-//		}
-//		if (posOld.x - size.y >= posTarget.x + sizeTarget.x
-//			&& pos.x - size.y  < posTarget.x + sizeTarget.x)
-//		{
-//			if (bExtrude)
-//			{// 押し出しを使用する
-//				pos.x = posTarget.x + sizeTarget.x + size.y;
-//			}
-//
-//			bColision = true;
-//		}
-//	}
-//	if (pos.x - size.x  < posTarget.x + sizeTarget.x
-//		&& pos.x + size.x  > posTarget.x - sizeTarget.x)
-//	{// モデル内にいる(X軸)
-//		if (posOld.y + size.y <= posTarget.y - sizeTarget.y
-//			&& pos.y + size.y  > posTarget.y - sizeTarget.y)
-//		{
-//			if (bExtrude)
-//			{// 押し出しを使用する
-//				pos.y = posTarget.y - sizeTarget.y - size.y;
-//			}
-//
-//			bColision = true;
-//		}
-//		if (posOld.y - size.y >= posTarget.y + sizeTarget.y
-//			&& pos.y - size.y  < posTarget.y + sizeTarget.y)
-//		{
-//			if (bExtrude)
-//			{// 押し出しを使用する
-//				pos.y = posTarget.y + sizeTarget.y + size.y;
-//			}
-//
-//			bColision = true;
-//		}
-//	}
-//
-//	// 位置の設定
-//	SetPos(pos);
-//	return bColision;
-//}
-//
-////=============================================================================
-//// 円の判定
-//// Author : 唐﨑結斗
-//// 概要 : ターゲットとの円判定
-////=============================================================================
-//bool CCollision::ColisonCircle2D(CObject * target, bool bExtrude)
+//CObject::~CObject()
 //{
-//	// 変数宣言
-//	bool bCollision = false;
-//
-//	// 自分の情報を取得する
-//	D3DXVECTOR3 pos = GetPos() + m_posAdd;
-//	D3DXVECTOR3 size = GetSize() / 2.0f;
-//
-//	// 目標の情報取得
-//	D3DXVECTOR3 posTarget = target->GetPos() + target->GetColisonPos();
-//	D3DXVECTOR3 sizeTarget = target->GetSize() / 2.0f;
-//
-//	// 判定を行う距離を算出
-//	float fJudgeDistance = sqrtf((size.x * size.x) + (size.y * size.y));
-//	fJudgeDistance += sqrtf((sizeTarget.x * sizeTarget.x) + (sizeTarget.y * sizeTarget.y));
-//
-//	// お互いの位置の差を算出
-//	D3DXVECTOR3 distance = posTarget - pos;
-//	float fDistance = sqrtf((distance.x * distance.x) + (distance.y * distance.y));
-//
-//	if (fDistance <= fJudgeDistance)
-//	{// 位置の差が判定を行う距離より短い場合
-//		bCollision = true;
-//
-//		if (bExtrude)
-//		{
-//			float fRotDif = atan2f(distance.x, distance.y);
-//			pos.x = posTarget.x - (sinf(fRotDif) * fJudgeDistance);
-//			pos.y = posTarget.y - (cosf(fRotDif) * fJudgeDistance);
-//		}
-//	}
-//
-//	// 位置の設定
-//	SetPos(pos);
-//	return bCollision;
+//	
 //}
 //
 ////=============================================================================
-//// 矩形の判定
+//// インスタンスの解放
 //// Author : 唐﨑結斗
-//// 概要 : ターゲットとの矩形判定
+//// 概要 : すべてのインスタンスを解放する処理
 ////=============================================================================
-//bool CCollision::ColisonRectangle3D(CObject * target, bool bExtrude)
-//{// 返り値用の変数
-//	bool bColision = false;
-//
-//	// 自分の情報を取得する
-//	D3DXVECTOR3 pos = GetPos() + m_posAdd;
-//	D3DXVECTOR3 posOld = GetPosOld();
-//	D3DXVECTOR3 size = GetSize() / 2.0f;
-//
-//	// 目標の情報取得
-//	D3DXVECTOR3 posTarget = target->GetPos() + target->GetColisonPos();
-//	D3DXVECTOR3 sizeTarget = target->GetSize() / 2.0f;
-//
-//	if ((pos.z - size.z / 2) < (posTarget.z + sizeTarget.z)
-//		&& (pos.z + size.z / 2) > (posTarget.z - sizeTarget.z)
-//		&& (pos.x - size.x / 2) < (posTarget.x + sizeTarget.x)
-//		&& (pos.x + size.x / 2) > (posTarget.x - sizeTarget.x))
-//	{// モデル内にいる(XZ軸)
-//		if ((posOld.y + size.y) <= (posTarget.y - sizeTarget.y)
-//			&& (pos.y + size.y) >(posTarget.y - sizeTarget.y))
-//		{
-//			bColision = true;
-//
-//			if (bExtrude)
-//			{
-//				pos.y = posTarget.y - sizeTarget.y - size.y;
-//			}
-//		}
-//		if ((posOld.y) >= (posTarget.y + sizeTarget.y)
-//			&& (pos.y) < (posTarget.y + sizeTarget.y))
-//		{
-//			bColision = true;
-//
-//			if (bExtrude)
-//			{
-//				pos.y = posTarget.y + sizeTarget.y;
-//			}
-//		}
-//	}
-//	if ((pos.y) < (posTarget.y + sizeTarget.y)
-//		&& (pos.y + size.y) > (posTarget.y - sizeTarget.y))
-//	{// モデル内にいる(Y軸)
-//		if ((pos.z - size.z / 2) < (posTarget.z + sizeTarget.z)
-//			&& (pos.z + size.z / 2) > (posTarget.z - sizeTarget.z))
-//		{// モデル内にいる(Z軸)
-//			if ((posOld.x + size.z / 2) <= (posTarget.x - sizeTarget.x)
-//				&& (pos.x + size.z / 2) > (posTarget.x - sizeTarget.x))
-//			{
-//				bColision = true;
-//
-//				if (bExtrude)
-//				{
-//					pos.x = posTarget.x - sizeTarget.x - size.z / 2;
-//				}
-//			}
-//			if ((posOld.x - size.z / 2) >= (posTarget.x + sizeTarget.x)
-//				&& (pos.x - size.z / 2) < (posTarget.x + sizeTarget.x))
-//			{
-//				bColision = true;
-//
-//				if (bExtrude)
-//				{
-//					pos.x = posTarget.x + sizeTarget.x + size.z / 2;
-//				}
-//			}
-//		}
-//		if ((pos.x - size.x / 2) < (posTarget.x + sizeTarget.x)
-//			&& (pos.x + size.x / 2) > (posTarget.x - sizeTarget.x))
-//		{// モデル内にいる(X軸)
-//			if ((posOld.z + size.z / 2) <= (posTarget.z - sizeTarget.z)
-//				&& (pos.z + size.z / 2) > (posTarget.z - sizeTarget.z))
-//			{
-//				bColision = true;
-//
-//				if (bExtrude)
-//				{
-//					pos.z = posTarget.z - sizeTarget.z - size.z / 2;
-//				}
-//			}
-//			if ((posOld.z - size.z / 2) >= (posTarget.z + sizeTarget.z)
-//				&& (pos.z - size.z / 2) < (posTarget.z + sizeTarget.z))
-//			{
-//				bColision = true;
-//
-//				if (bExtrude)
-//				{
-//					pos.z = posTarget.z + sizeTarget.z + size.z / 2;
-//				}
-//			}
-//		}
-//	}
-//
-//	// 位置の設定
-//	SetPos(pos);
-//	return bColision;
-//}
-//
-////=============================================================================
-//// 球の判定
-//// Author : 唐﨑結斗
-//// 概要 : ターゲットとの球判定
-////=============================================================================
-//bool CCollision::ColisonSphere3D(CObject *target, D3DXVECTOR3 size, D3DXVECTOR3 targetSize, bool bExtrude)
+//void CObject::Release(void)
 //{
-//	// 変数宣言
-//	bool bCollision = false;
+//	// 使用数のデクリメント
+//	m_nMaxObject--;
+//	m_nPriorityMaxObj[m_nLevPriority]--;
 //
-//	// 自分の情報を取得する
-//	D3DXVECTOR3 pos = GetPos() + m_posAdd;
-//	size /= 2.0f;
+//	// 死亡フラグを立てる
+//	m_bDeath = true;
+//}
 //
-//	// 目標の情報取得
-//	D3DXVECTOR3 posTarget = target->GetPos() + target->GetColisonPos();
-//	targetSize /= 2.0f;
-//
-//	// 判定を行う距離を算出
-//	float fJudgeDistance = sqrtf((size.x * size.x) + (size.y * size.y) + (size.z * size.z));
-//	fJudgeDistance += sqrtf((targetSize.x * targetSize.x) + (targetSize.y * targetSize.y) + (targetSize.z * targetSize.z));
-//
-//	// お互いの位置の差を算出
-//	D3DXVECTOR3 distance = posTarget - pos;
-//	float fDistance = sqrtf((distance.x * distance.x) + (distance.y * distance.y) + (distance.z * distance.z));
-//
-//	if (fDistance <= fJudgeDistance)
-//	{// 位置の差が判定を行う距離より短い場合
-//		bCollision = true;
-//
-//		if (bExtrude)
-//		{
-//			// 角度の算出
-//			D3DXVECTOR3 rotDiff;
-//			rotDiff.y = atan2f(distance.x, distance.z);
-//			rotDiff.x = atan2f(sqrtf((distance.x * distance.x) + (distance.z * distance.z)), distance.y);
-//			rotDiff.z = 0.0f;
-//
-//			// 位置の算出
-//			pos.z = posTarget.z - sinf(rotDiff.x) * cosf(rotDiff.y) * fJudgeDistance;
-//			pos.x = posTarget.x - sinf(rotDiff.x) * sinf(rotDiff.y) * fJudgeDistance;
-//			pos.y = posTarget.y - cosf(rotDiff.x) * fJudgeDistance;
-//
-//			// 位置の設定
-//			SetPos(pos);
-//		}
+////=============================================================================
+//// リストの解除と破棄
+//// Author : 唐﨑結斗
+//// 概要 : リストの解除と破棄をする処理
+////=============================================================================
+//void CObject::ReleaseList(void)
+//{
+//	if (m_pTop[m_nLevPriority] == this)
+//	{// 先頭オブジェクトを自分の次のオブジェクトに設定
+//		m_pTop[m_nLevPriority] = m_pNext;
+//	}
+//	if (m_pCurrent[m_nLevPriority] == this)
+//	{// 最後尾オブジェクトを自分の前のオブジェクトに設定
+//		m_pCurrent[m_nLevPriority] = m_pPrev;
 //	}
 //
-//	return bCollision;
+//	if (m_pPrev != nullptr)
+//	{// 前のオブジェクトの前のオブジェクトに自分の次のオブジェクトを設定
+//		m_pPrev->m_pNext = m_pNext;
+//	}
+//	if (m_pNext != nullptr)
+//	{// 自分の次のオブジェクトに自分の前のオブジェクトを設定
+//		m_pNext->m_pPrev = m_pPrev;
+//	}
+//
+//	// オブジェクトの解放
+//	delete this;
 //}
-
-//=============================================================================
-// 親のセッター
-// Author : 唐﨑結斗
-// 概要 : 親のメンバ変数に引数を代入
-//=============================================================================
-void CCollision::SetParent(CObject * pParent)
-{
-	 // 親オブジェクトの設定
-	m_pParent = pParent;
-}
-
-//=============================================================================
-// 位置のセッター
-// Author : 唐﨑結斗
-// 概要 : 位置のメンバ変数に引数を代入
-//=============================================================================
-void CCollision::SetPos(const D3DXVECTOR3 &pos)
-{
-	// 位置の設定
-	m_pos = pos;
-}
-
-//=============================================================================
-// 向きのセッター
-// Author : 唐﨑結斗
-// 概要 : 向きのメンバ変数に引数を代入
-//=============================================================================
-void CCollision::SetRot(const D3DXVECTOR3 &rot)
-{
-	// 位置の設定
-	m_rot = rot;
-}
-
-//=============================================================================
-// 大きさのセッター
-// Author : 唐﨑結斗
-// 概要 : 大きさのメンバ変数に引数を代入
-//=============================================================================
-void CCollision::SetSize(const D3DXVECTOR3 & size)
-{
-	// 大きさの設定
-	m_size = size;
-}

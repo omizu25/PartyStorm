@@ -719,12 +719,12 @@ bool CMesh3D::Collison(CObject *pTarget)
 				fInnerProduct[nCntVtx] = (aVecLine[nCntVtx].z * aVecPos[nCntVtx].x) - (aVecLine[nCntVtx].x * aVecPos[nCntVtx].z);
 			}
 			
-			if ((0.0f < fInnerProduct[0]
-				&& 0.0f < fInnerProduct[1]
-				&& 0.0f < fInnerProduct[2])
-				|| (0.0f > fInnerProduct[0]
-				&& 0.0f > fInnerProduct[1]
-				&& 0.0f > fInnerProduct[2]))
+			if ((0.0f <= fInnerProduct[0]
+				&& 0.0f <= fInnerProduct[1]
+				&& 0.0f <= fInnerProduct[2])
+				|| (0.0f >= fInnerProduct[0]
+				&& 0.0f >= fInnerProduct[1]
+				&& 0.0f >= fInnerProduct[2]))
 			{
 				// 面法線ベクトル
 				D3DXVECTOR3 norVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

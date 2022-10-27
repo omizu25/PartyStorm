@@ -100,8 +100,6 @@ HRESULT CGame::Init()
 	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
 	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
 
-
-
 	CModelObj *pModelObj = CModelObj::Create();
 	pModelObj->SetPos(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
 	pModelObj->SetType(21);

@@ -55,7 +55,7 @@ CFade *CApplication::m_pFade = nullptr;								// フェードクラス
 CLight *CApplication::m_pLight = nullptr;							// ライトクラス
 int CApplication::m_nPriority = 0;									// プライオリティ番号
 bool CApplication::m_bWireFrame = false;							// ワイヤーフレームを使うか
-
+																	
 //=============================================================================
 // スクリーン座標をワールド座標にキャストする
 // Author : 唐﨑結斗

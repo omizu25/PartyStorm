@@ -117,16 +117,6 @@ void CEnemyShark::Update()
 	// 回転
 	Rotate();
 
-	if (pKeyboard->GetPress(DIK_SPACE))
-	{// 弾の生成
-		CBullet3D *pBullet3D = CBullet3D::Create();
-		pBullet3D->SetPos(D3DXVECTOR3(pos.x, pos.y + 50.0f, pos.z));
-		pBullet3D->SetSize(D3DXVECTOR3(10.0f, 10.0f, 0.0f));
-		pBullet3D->SetMoveVec(D3DXVECTOR3(rot.x + D3DX_PI * -0.5f, rot.y, 0.0f));
-		pBullet3D->SetSpeed(10.0f);
-		pBullet3D->SetLife(120);
-	}
-
 	// ニュートラルモーションの設定
 	if (pMotion != nullptr
 		&& !pMotion->GetMotion())
@@ -144,10 +134,6 @@ void CEnemyShark::Update()
 
 	// 位置の取得
 	pos = GetPos();
-
-	// デバック表示
-	CDebugProc::Print("Enemyの位置 | X : %.3f | Y : %.3f | Z : %.3f |\n", pos.x, pos.y, pos.z);
-
 
 	// 更新
 	CMotionModel3D::Update();

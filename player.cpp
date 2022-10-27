@@ -86,7 +86,7 @@ HRESULT CPlayer::Init()
 	// ˆÚ“®ƒNƒ‰ƒX‚Ìƒƒ‚ƒŠŠm•Û
 	m_pMove = new CMove;
 	assert(m_pMove != nullptr);
-	m_pMove->SetMoving(1.0f, 10.0f, 0.5f, 0.1f);
+	m_pMove->SetMoving(1.0f, 5.0f, 0.5f, 0.1f);
 
 	 // ‰e‚Ìİ’è
 	m_pShadow = CShadow::Create(this);
