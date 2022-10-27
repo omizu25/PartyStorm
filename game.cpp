@@ -29,13 +29,14 @@
 #include "mesh.h"
 #include "sphere.h"
 #include "model_obj.h"
+#include "score.h"
 
 //*****************************************************************************
 // 静的メンバ変数宣言
 //*****************************************************************************
 CPlayer *CGame::m_pPlayer = nullptr;					// プレイヤークラス
-CEnemyShark *CGame::m_pEnemyShark = nullptr;	//Enemy
-
+CEnemyShark *CGame::m_pEnemyShark = nullptr;			// Enemy
+CScore *CGame::m_pScore = nullptr;						// スコアクラス
 CMesh3D *CGame::m_pMesh3D;								// メッシュクラス
 bool CGame::m_bGame = false;							// ゲームの状況
 
@@ -100,9 +101,17 @@ HRESULT CGame::Init()
 	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
 	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
 
-	CModelObj *pModelObj = CModelObj::Create();
-	pModelObj->SetPos(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
-	pModelObj->SetType(21);
+	// モデルの設置
+	CModelObj::LoadFile("data/FILE/setModel.txt");
+
+	//CModelObj *pModelObj = CModelObj::Create();
+	//pModelObj->SetPos(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
+	//pModelObj->SetType(21);
+
+	// スコアの生成
+	m_pScore = CScore::Create(10, false);
+	m_pScore->SetScore(0);
+	m_pScore->SetPos(D3DXVECTOR3(1280.0f, m_pScore->GetSize().y / 2.0f, 0.0f));
 
 	// カメラの追従設定(目標 : プレイヤー)
 	CApplication::GetCamera()->SetFollowTarget(m_pPlayer, D3DXVECTOR3(0.0f, 50.0f, 0.0f), 300.0f);

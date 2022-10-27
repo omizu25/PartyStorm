@@ -10,6 +10,7 @@
 // インクルード
 //*****************************************************************************
 #include <assert.h>
+#include <stdio.h>
 
 #include "model_obj.h"
 #include "model3D.h"
@@ -37,6 +38,84 @@ CModelObj * CModelObj::Create()
 
 	// インスタンスを返す
 	return pModelObj;
+}
+
+//=============================================================================
+// ファイルを読み込み処理
+// Author : 唐﨑結斗
+// 概要 : ファイルを読み込みモデルを生成する
+//=============================================================================
+void CModelObj::LoadFile(const char *pFileName)
+{
+	// 変数宣言
+	char aStr[128];
+	int nCntModel = 0;
+	int nCntSetModel = 0;
+
+	// ファイルの読み込み
+	FILE *pFile = fopen(pFileName, "r");
+
+	if (pFile != nullptr)
+	{
+		while (fscanf(pFile, "%s", &aStr[0]) != EOF)
+		{// "EOF"を読み込むまで 
+			if (strncmp(&aStr[0], "#", 1) == 0)
+			{// 一列読み込む
+				fgets(&aStr[0], sizeof(aStr), pFile);
+			}
+
+			if (strstr(&aStr[0], "MODELSET") != NULL)
+			{
+				// モデルの設置
+				CModelObj *pModelObj = Create();
+				assert(pModelObj != nullptr);
+
+				while (strstr(&aStr[0], "END_MODELSET") == NULL)
+				{
+					fscanf(pFile, "%s", &aStr[0]);
+
+					if (strncmp(&aStr[0], "#", 1) == 0)
+					{// 一列読み込む
+						fgets(&aStr[0], sizeof(aStr), pFile);
+					}
+
+					if (strstr(&aStr[0], "POS") != NULL)
+					{// モデルのファイル名の設定
+						D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+						fscanf(pFile, "%s", &aStr[0]);
+						fscanf(pFile, "%f", &pos.x);
+						fscanf(pFile, "%f", &pos.y);
+						fscanf(pFile, "%f", &pos.z);
+						pModelObj->SetPos(pos);
+					}
+
+					if (strstr(&aStr[0], "ROT") != NULL)
+					{// モデルのファイル名の設定
+						D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+						fscanf(pFile, "%s", &aStr[0]);
+						fscanf(pFile, "%f", &rot.x);
+						fscanf(pFile, "%f", &rot.y);
+						fscanf(pFile, "%f", &rot.z);
+						pModelObj->SetRot(rot);
+					}
+
+					if (strcmp(&aStr[0], "TYPE") == 0)
+					{// キー数の読み込み
+						int nID = 0;
+						fscanf(pFile, "%s", &aStr[0]);
+						fscanf(pFile, "%d", &nID);
+						pModelObj->SetType(nID);
+					}
+				}
+
+				nCntSetModel++;
+			}
+		}
+	}
+	else
+	{
+		assert(false);
+	}
 }
 
 //=============================================================================
