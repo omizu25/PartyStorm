@@ -110,7 +110,7 @@ void CEnemyShark::Update()
 	}
 
 	// ˆÚ“®
-	pos += Move();
+	//pos += Move();
 
 	pos.y -= CCalculation::Gravity();
 
