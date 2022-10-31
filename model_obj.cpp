@@ -16,6 +16,7 @@
 #include "model3D.h"
 #include "renderer.h"
 #include "application.h"
+#include "line.h"
 
 //=============================================================================
 // インスタンス生成
@@ -49,7 +50,6 @@ void CModelObj::LoadFile(const char *pFileName)
 {
 	// 変数宣言
 	char aStr[128];
-	int nCntModel = 0;
 	int nCntSetModel = 0;
 
 	// ファイルの読み込み
@@ -79,7 +79,16 @@ void CModelObj::LoadFile(const char *pFileName)
 						fgets(&aStr[0], sizeof(aStr), pFile);
 					}
 
-					if (strstr(&aStr[0], "POS") != NULL)
+					if (strstr(&aStr[0], "COLISON_POS") != NULL)
+					{// モデルのファイル名の設定
+						D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+						fscanf(pFile, "%s", &aStr[0]);
+						fscanf(pFile, "%f", &pos.x);
+						fscanf(pFile, "%f", &pos.y);
+						fscanf(pFile, "%f", &pos.z);
+						pModelObj->SetColisonPos(pos);
+					}
+					else if (strstr(&aStr[0], "POS") != NULL)
 					{// モデルのファイル名の設定
 						D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 						fscanf(pFile, "%s", &aStr[0]);
@@ -99,6 +108,30 @@ void CModelObj::LoadFile(const char *pFileName)
 						pModelObj->SetRot(rot);
 					}
 
+					if (strcmp(&aStr[0], "COLISON") == 0)
+					{// キー数の読み込み
+						int nColison = 0;
+						fscanf(pFile, "%s", &aStr[0]);
+						fscanf(pFile, "%d", &nColison);
+
+						if (nColison != 0)
+						{// 大きさの初期値を入力する
+							CModel3D::MODEL_MATERIAL *material = pModelObj->GetModel()->GetMaterial();
+							D3DXVECTOR3 size = material[pModelObj->GetModel()->GetModelID()].size;
+							pModelObj->SetColisonSize(size);
+						}
+					}
+
+					if (strstr(&aStr[0], "COLISONSIZE") != NULL)
+					{// モデルのファイル名の設定
+						D3DXVECTOR3 size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+						fscanf(pFile, "%s", &aStr[0]);
+						fscanf(pFile, "%f", &size.x);
+						fscanf(pFile, "%f", &size.y);
+						fscanf(pFile, "%f", &size.z);
+						pModelObj->SetColisonSize(size);
+					}
+
 					if (strcmp(&aStr[0], "TYPE") == 0)
 					{// キー数の読み込み
 						int nID = 0;
@@ -107,6 +140,11 @@ void CModelObj::LoadFile(const char *pFileName)
 						pModelObj->SetType(nID);
 					}
 				}
+
+#ifdef _DEBUG
+				// ラインの設定
+				pModelObj->SetLine();
+#endif // _DEBUG
 
 				nCntSetModel++;
 			}
@@ -131,7 +169,10 @@ m_rot(D3DXVECTOR3()),										// 向き
 m_size(D3DXVECTOR3()),										// 大きさ
 m_nType(-1)													// モデルのタイプ
 {
-	
+#ifdef _DEBUG
+	// ライン情報
+	m_pLine = nullptr;
+#endif // _DEBUG
 }
 
 //=============================================================================
@@ -159,10 +200,26 @@ HRESULT CModelObj::Init()
 	m_size = D3DXVECTOR3(1.0f, 1.0f, 1.0f);					// 大きさ
 	m_nType = -1;											// モデルのタイプ
 
+	// オブジェクトタイプの入力
+	SetObjType(OBJTYPE_3DMODEL);
+
 	// モデルクラスのメモリ確保
 	m_pModel = CModel3D::Create();
 	assert(m_pModel != nullptr);
 	m_pModel->SetModelID(m_nType);
+
+#ifdef _DEBUG
+	// ライン情報
+	m_pLine = new CLine*[12];
+
+	for (int nCntLine = 0; nCntLine < 12; nCntLine++)
+	{
+		m_pLine[nCntLine] = CLine::Create();
+	}
+
+	// ラインの設定
+	SetLine();
+#endif // _DEBUG
 
 	return E_NOTIMPL;
 }
@@ -182,6 +239,15 @@ void CModelObj::Uninit()
 		delete m_pModel;
 		m_pModel = nullptr;
 	}
+
+#ifdef _DEBUG
+	for (int nCntLine = 0; nCntLine < 12; nCntLine++)
+	{
+		m_pLine[nCntLine]->Uninit();
+	}
+
+	delete m_pLine;
+#endif // _DEBUG
 
 	// オブジェクトの解放
 	Release();
@@ -242,4 +308,34 @@ void CModelObj::SetType(const int nType)
 	// モデルクラスのID設定
 	m_pModel->SetModelID(m_nType);
 }
+
+#ifdef _DEBUG
+//=============================================================================
+// ラインの設置
+// Author : 唐﨑結斗
+// 概要 : ラインを矩形状に設置
+//=============================================================================
+void CModelObj::SetLine()
+{
+	// 変数宣言
+	const D3DXVECTOR3 pos = GetPos() + GetColisonPos();
+	const D3DXVECTOR3 rot = GetRot();
+	const D3DXVECTOR3 size = GetColisonSize() / 2.0f;
+	const D3DXCOLOR col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+	// ラインの設定
+	m_pLine[0]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, size.z), D3DXVECTOR3(size.x, -size.y, size.z), col);
+	m_pLine[1]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, -size.z), D3DXVECTOR3(-size.x, -size.y, size.z), col);
+	m_pLine[2]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, -size.z), D3DXVECTOR3(size.x, -size.y, -size.z), col);
+	m_pLine[3]->SetLine(pos, rot, D3DXVECTOR3(size.x, -size.y, -size.z), D3DXVECTOR3(size.x, -size.y, size.z), col);
+	m_pLine[4]->SetLine(pos, rot, D3DXVECTOR3(-size.x, size.y, size.z), D3DXVECTOR3(size.x, size.y, size.z), col);
+	m_pLine[5]->SetLine(pos, rot, D3DXVECTOR3(-size.x, size.y, -size.z), D3DXVECTOR3(-size.x, size.y, size.z), col);
+	m_pLine[6]->SetLine(pos, rot, D3DXVECTOR3(-size.x, size.y, -size.z), D3DXVECTOR3(size.x, size.y, -size.z), col);
+	m_pLine[7]->SetLine(pos, rot, D3DXVECTOR3(size.x, size.y, -size.z), D3DXVECTOR3(size.x, size.y, size.z), col);
+	m_pLine[8]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, size.z), D3DXVECTOR3(-size.x, size.y, size.z), col);
+	m_pLine[9]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, -size.z), D3DXVECTOR3(-size.x, size.y, -size.z), col);
+	m_pLine[10]->SetLine(pos, rot, D3DXVECTOR3(size.x, -size.y, -size.z), D3DXVECTOR3(size.x, size.y, -size.z), col);
+	m_pLine[11]->SetLine(pos, rot, D3DXVECTOR3(size.x, -size.y, size.z), D3DXVECTOR3(size.x, size.y, size.z), col);
+}
+#endif // DEBUG
 

@@ -108,6 +108,65 @@ void CModel3D::InitModel()
 				}
 			}
 		}
+
+		// 頂点座標の最小値・最大値の算出
+		int		nNumVtx;	// 頂点数
+		DWORD	sizeFVF;	// 頂点フォーマットのサイズ
+		BYTE	*pVtxBuff;	// 頂点バッファへのポインタ
+
+		// 頂点数の取得
+		nNumVtx = m_material[nCntModel].pMesh->GetNumVertices();
+
+		// 頂点フォーマットのサイズの取得
+		sizeFVF = D3DXGetFVFVertexSize(m_material[nCntModel].pMesh->GetFVF());
+
+		// 頂点バッファのロック
+		m_material[nCntModel].pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
+
+		// 最も大きな頂点
+		D3DXVECTOR3 vtxMax = D3DXVECTOR3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3(FLT_MAX, FLT_MAX, FLT_MAX);
+
+		for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
+		{
+			// 頂点座標の代入
+			D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
+
+			if (vtx.x < vtxMin.x)
+			{// 比較対象が現在の頂点座標(X)の最小値より小さい
+				vtxMin.x = vtx.x;
+			}
+			if (vtx.y < vtxMin.y)
+			{// 比較対象が現在の頂点座標(Y)の最小値より小さい
+				vtxMin.y = vtx.y;
+			}
+			if (vtx.z < vtxMin.z)
+			{// 比較対象が現在の頂点座標(Z)の最小値より小さい
+				vtxMin.z = vtx.z;
+			}
+
+			if (vtx.x > vtxMax.x)
+			{// 比較対象が現在の頂点座標(X)の最大値より大きい
+				vtxMax.x = vtx.x;
+			}
+			if (vtx.y > vtxMax.y)
+			{// 比較対象が現在の頂点座標(Y)の最大値より大きい
+				vtxMax.y = vtx.y;
+			}
+			if (vtx.z > vtxMax.z)
+			{// 比較対象が現在の頂点座標(Z)の最大値より大きい
+				vtxMax.z = vtx.z;
+			}
+
+			// 頂点フォーマットのサイズ分ポインタを進める
+			pVtxBuff += sizeFVF;
+		}
+
+		// 頂点バッファのアンロック
+		m_material[nCntModel].pMesh->UnlockVertexBuffer();
+
+		// 大きさの設定
+		m_material[nCntModel].size = D3DXVECTOR3(vtxMax.x - vtxMin.x, vtxMax.y - vtxMin.y, vtxMax.z - vtxMin.z);
 	}
 }
 

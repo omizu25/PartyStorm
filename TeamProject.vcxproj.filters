@@ -33,9 +33,6 @@
     <ClInclude Include="camera_manager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="collision.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="debug_proc.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -129,6 +126,12 @@
     <ClInclude Include="score.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="obstacle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="line.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="application.cpp">
@@ -147,9 +150,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="camera_manager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="debug_proc.cpp">
@@ -243,6 +243,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="score.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="obstacle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="line.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

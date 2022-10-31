@@ -24,6 +24,7 @@
 #include "shadow.h"
 #include "bullet3D.h"
 #include "debug_proc.h"
+#include "line.h"
 
 //=============================================================================
 // インスタンス生成
@@ -60,7 +61,10 @@ m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
 m_nNumMotion(0)
 {
-
+#ifdef _DEBUG
+	// ライン情報
+	m_pLine = nullptr;
+#endif // _DEBUG
 }
 
 //=============================================================================
@@ -88,10 +92,22 @@ HRESULT CPlayer::Init()
 	assert(m_pMove != nullptr);
 	m_pMove->SetMoving(1.0f, 5.0f, 0.5f, 0.1f);
 
-	 // 影の設定
-	m_pShadow = CShadow::Create(this);
-	m_pShadow->SetPos(GetPos());
-	m_pShadow->SetSize(D3DXVECTOR3(20.0f, 20.0f, 0.0f));
+	// 当たり判定の設定
+	SetColisonPos(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
+	SetColisonSize(D3DXVECTOR3(50.0f, 50.0f, 20.0f));
+
+#ifdef _DEBUG
+	// ライン情報
+	m_pLine = new CLine*[12];
+
+	for (int nCntLine = 0; nCntLine < 12; nCntLine++)
+	{
+		m_pLine[nCntLine] = CLine::Create();
+	}
+
+	// ラインの設定
+	SetLine();
+#endif // _DEBUG
 
 	return E_NOTIMPL;
 }
@@ -103,15 +119,21 @@ HRESULT CPlayer::Init()
 //=============================================================================
 void CPlayer::Uninit()
 {
-	// 影の終了
-	m_pShadow->Uninit();
-
 	if (m_pMove != nullptr)
 	{// 終了処理
 	 // メモリの解放
 		delete m_pMove;
 		m_pMove = nullptr;
 	}
+
+#ifdef _DEBUG
+	for (int nCntLine = 0; nCntLine < 12; nCntLine++)
+	{
+		m_pLine[nCntLine]->Uninit();
+	}
+
+	delete m_pLine;
+#endif // _DEBUG
 
 	// 終了
 	CMotionModel3D::Uninit();
@@ -132,6 +154,7 @@ void CPlayer::Update()
 	// 位置の取得
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
+	SetPosOld(pos);
 
 	// 攻撃
 	if (pKeyboard->GetTrigger(DIK_RETURN)
@@ -144,19 +167,18 @@ void CPlayer::Update()
 	// 移動
 	pos += Move();
 
-	pos.y -= CCalculation::Gravity();
+	//pos.y -= CCalculation::Gravity();
 
 	// 回転
 	Rotate();
 
 	if (pKeyboard->GetPress(DIK_SPACE))
-	{// 弾の生成
-		CBullet3D *pBullet3D = CBullet3D::Create();
-		pBullet3D->SetPos(D3DXVECTOR3(pos.x, pos.y + 50.0f, pos.z));
-		pBullet3D->SetSize(D3DXVECTOR3(10.0f, 10.0f, 0.0f));
-		pBullet3D->SetMoveVec(D3DXVECTOR3(rot.x + D3DX_PI * -0.5f, rot.y, 0.0f));
-		pBullet3D->SetSpeed(10.0f);
-		pBullet3D->SetLife(120);
+	{
+		pos.y += 1.0f;
+	}
+	if (pKeyboard->GetPress(DIK_DOWN))
+	{
+		pos.y -= 1.0f;
 	}
 
 	// ニュートラルモーションの設定
@@ -170,9 +192,16 @@ void CPlayer::Update()
 	// 位置の設定
 	SetPos(pos);
 
+	// 当たり判定
+	Collison();
+
 	// メッシュの当たり判定
 	CMesh3D *pMesh = CGame::GetMesh();
-	pMesh->Collison(this);
+
+	if (pMesh != nullptr)
+	{
+		pMesh->Collison(this);
+	}
 	
 	// 位置の取得
 	pos = GetPos();
@@ -182,6 +211,10 @@ void CPlayer::Update()
 
 	// 更新
 	CMotionModel3D::Update();
+
+#ifdef _DEBUG
+	SetLine();
+#endif // _DEBUG
 }
 
 //=============================================================================
@@ -339,5 +372,67 @@ void CPlayer::Rotate()
 	// 向きの設定
 	SetRot(rot);
 }
+
+//=============================================================================
+// 当たり判定
+// Author : 唐﨑結斗
+// 概要 : 当たり判定を行う
+//=============================================================================
+void CPlayer::Collison()
+{
+	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	{
+		CObject *pTop = CObject::GetTop(nCntPriority);
+
+		if (pTop != nullptr)
+		{// 変数宣言
+			CObject *pObject = pTop;
+
+			while (pObject)
+			{// 現在のオブジェクトの次のオブジェクトを保管
+				CObject *pObjectNext = pObject->GetNext();
+
+				if (!pObject->GetFlagDeath()
+					&& pObject->GetObjType() == OBJTYPE_3DMODEL)
+				{
+					ColisonRectangle3D(pObject, true);
+				}
+
+				// 現在のオブジェクトの次のオブジェクトを更新
+				pObject = pObjectNext;
+			}
+		}
+	}
+}
+
+#ifdef _DEBUG
+//=============================================================================
+// ラインの設置
+// Author : 唐﨑結斗
+// 概要 : ラインを矩形状に設置
+//=============================================================================
+void CPlayer::SetLine()
+{
+	// 変数宣言
+	const D3DXVECTOR3 pos = GetPos() + GetColisonPos();
+	const D3DXVECTOR3 rot = GetRot();
+	const D3DXVECTOR3 size = GetColisonSize() / 2.0f;
+	const D3DXCOLOR col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+	// ラインの設定
+	m_pLine[0]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, size.z), D3DXVECTOR3(size.x, -size.y, size.z), col);
+	m_pLine[1]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, -size.z), D3DXVECTOR3(-size.x, -size.y, size.z), col);
+	m_pLine[2]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, -size.z), D3DXVECTOR3(size.x, -size.y, -size.z), col);
+	m_pLine[3]->SetLine(pos, rot, D3DXVECTOR3(size.x, -size.y, -size.z), D3DXVECTOR3(size.x, -size.y, size.z), col);
+	m_pLine[4]->SetLine(pos, rot, D3DXVECTOR3(-size.x, size.y, size.z), D3DXVECTOR3(size.x, size.y, size.z), col);
+	m_pLine[5]->SetLine(pos, rot, D3DXVECTOR3(-size.x, size.y, -size.z), D3DXVECTOR3(-size.x, size.y, size.z), col);
+	m_pLine[6]->SetLine(pos, rot, D3DXVECTOR3(-size.x, size.y, -size.z), D3DXVECTOR3(size.x, size.y, -size.z), col);
+	m_pLine[7]->SetLine(pos, rot, D3DXVECTOR3(size.x, size.y, -size.z), D3DXVECTOR3(size.x, size.y, size.z), col);
+	m_pLine[8]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, size.z), D3DXVECTOR3(-size.x, size.y, size.z), col);
+	m_pLine[9]->SetLine(pos, rot, D3DXVECTOR3(-size.x, -size.y, -size.z), D3DXVECTOR3(-size.x, size.y, -size.z), col);
+	m_pLine[10]->SetLine(pos, rot, D3DXVECTOR3(size.x, -size.y, -size.z), D3DXVECTOR3(size.x, size.y, -size.z), col);
+	m_pLine[11]->SetLine(pos, rot, D3DXVECTOR3(size.x, -size.y, size.z), D3DXVECTOR3(size.x, size.y, size.z), col);
+}
+#endif // DEBUG
 
 

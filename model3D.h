@@ -46,6 +46,7 @@ public:
 		LPD3DXMESH		pMesh;				// メッシュ情報へのポインタ
 		LPD3DXBUFFER	pBuffer;			// マテリアル情報へのポインタ
 		DWORD			nNumMat;			// マテリアル情報の数
+		D3DXVECTOR3		size;				// モデルの大きさ
 		int				*pNumTex;			// テクスチャタイプ
 		char			aFileName[0xff];	// Xファイルのパス
 	};
@@ -85,6 +86,7 @@ public:
 	D3DXVECTOR3 GetSize() { return m_size; }								// 大きさのゲッター
 	D3DXMATRIX GetMtxWorld() { return m_mtxWorld; }							// ワールドマトリックスの取得
 	CModel3D *GetParent() { return m_pParent; }								// 親モデルのゲッター
+	int GetModelID() { return m_nModelID; }									// モデルIDの取得
 
 private:
 	//--------------------------------------------------------------------

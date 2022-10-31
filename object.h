@@ -47,6 +47,7 @@ public:
 		OBJTYPE_3DPLAYER,			// 3Dプレイヤー
 		OBJTYPE_3DENEMY,			// 3Dエネミー
 		OBJTYPE_3DBULLET,			// 3Dバレット
+		OBJTYPE_3DMODEL,			// 3Dモデル
 		OBJTYPE_FADE,				// フェード
 		MAX_OBJTYPE,				// 種別の最大数
 	};
@@ -54,10 +55,12 @@ public:
 	//--------------------------------------------------------------------
 	// 静的メンバ関数
 	//--------------------------------------------------------------------
-	static void ReleaseAll(bool bPermanent);	// すべてのオブジェクトの解放
-	static void UpdateAll();					// すべてのオブジェクトの更新
-	static void DrawAll();						// すべてのオブジェクトの描画
-	static void ReleaseListAll();				// すべてのオブジェクトのリスト解除
+	static void ReleaseAll(bool bPermanent);										// すべてのオブジェクトの解放
+	static void UpdateAll();														// すべてのオブジェクトの更新
+	static void DrawAll();															// すべてのオブジェクトの描画
+	static void ReleaseListAll();													// すべてのオブジェクトのリスト解除
+	static CObject *GetTop(int nPriority) { return m_pTop[nPriority]; }				// 先頭オブジェクトへのポインタのゲッター
+	static CObject *GetCurrent(int nPriority) { return m_pCurrent[nPriority]; }		// 現在の(一番後ろ)オブジェクトへのポインタのゲッター
 
 #ifdef _DEBUG
 	static void ReleaseTop(int nPriority);
@@ -74,28 +77,36 @@ public:
 	//--------------------------------------------------------------------
 	// 純粋仮想関数
 	//--------------------------------------------------------------------
-	virtual HRESULT Init() = 0;														// 初期化
-	virtual void Uninit() = 0;														// 終了
-	virtual void Update() = 0;														// 更新
-	virtual void Draw() = 0;														// 描画
-	virtual void SetPos(const D3DXVECTOR3 &pos) = 0;								// 位置のセッター
-	virtual void SetPosOld(const D3DXVECTOR3 &posOld) = 0;							// 過去位置のセッタ
-	virtual void SetRot(const D3DXVECTOR3 &rot) = 0;								// 向きのセッター
-	virtual void SetSize(const D3DXVECTOR3 &size) = 0;								// 大きさのセッター
-	virtual D3DXVECTOR3 GetPos() = 0;												// 位置のゲッター
-	virtual D3DXVECTOR3 GetPosOld() = 0;											// 過去位置のゲッタ
-	virtual D3DXVECTOR3 GetRot() = 0;												// 向きのゲッター
-	virtual D3DXVECTOR3 GetSize() = 0;												// 大きさのゲッター
-	void SetObjType(EObjectType objectType) { m_objectType = objectType; }			// オブジェクトの種別設定
-	EObjectType GetObjType() { return m_objectType; }								// オブジェクトの種別設定
-	bool GetFlagDeath() { return m_bDeath; }										// 死亡フラグの取得
+	virtual HRESULT Init() = 0;																// 初期化
+	virtual void Uninit() = 0;																// 終了
+	virtual void Update() = 0;																// 更新
+	virtual void Draw() = 0;																// 描画
+	virtual void SetPos(const D3DXVECTOR3 &pos) = 0;										// 位置のセッター
+	virtual void SetPosOld(const D3DXVECTOR3 &posOld) = 0;									// 過去位置のセッタ
+	virtual void SetRot(const D3DXVECTOR3 &rot) = 0;										// 向きのセッター
+	virtual void SetSize(const D3DXVECTOR3 &size) = 0;										// 大きさのセッター
+	virtual D3DXVECTOR3 GetPos() = 0;														// 位置のゲッター
+	virtual D3DXVECTOR3 GetPosOld() = 0;													// 過去位置のゲッター
+	virtual D3DXVECTOR3 GetRot() = 0;														// 向きのゲッター
+	virtual D3DXVECTOR3 GetSize() = 0;														// 大きさのゲッター
+	void SetObjType(EObjectType objectType) { m_objectType = objectType; }					// オブジェクトの種別設定
+	EObjectType GetObjType() { return m_objectType; }										// オブジェクトの種別設定
+	void SetColisonPos(const D3DXVECTOR3 &colisonPos) { m_colisonPos = colisonPos; }		// あたり判定の位置のセッター
+	D3DXVECTOR3 GetColisonPos() { return m_colisonPos; }									// あたり判定の位置のゲッター
+	void SetColisonSize(const D3DXVECTOR3 &colisonSize) { m_colisonSize = colisonSize; }	// あたり判定の大きさのセッター
+	D3DXVECTOR3 GetColisonSize() { return m_colisonSize; }									// あたり判定の大きさのゲッター
+	CObject *GetPrev() { return m_pPrev; }													// 前のオブジェクトへのポインタのゲッター
+	CObject *GetNext() { return m_pNext; }													// 次のオブジェクトへのポインタのゲッター
+	bool GetFlagDeath() { return m_bDeath; }												// 死亡フラグの取得
 
 protected:
 	//--------------------------------------------------------------------
 	// メンバ関数
 	//--------------------------------------------------------------------
-	void Release(void);			// オブジェクトの解放
-	void ReleaseList(void);		// オブジェクトのリスト解除
+	void Release(void);												// オブジェクトの解放
+	void ReleaseList(void);											// オブジェクトのリスト解除
+	bool ColisonRectangle3D(CObject *target, bool bExtrude);		// 矩形の判定(3D)
+	bool ColisonSphere3D(CObject *target, bool bExtrude);			// 球の判定(3D)
 
 private:
 	//--------------------------------------------------------------------
@@ -112,6 +123,8 @@ private:
 	CObject *m_pPrev;				// 前のオブジェクトへのポインタ
 	CObject *m_pNext;				// 次のオブジェクトへのポインタ
 	EObjectType m_objectType;		// オブジェクトの種別
+	D3DXVECTOR3 m_colisonPos;		// あたり判定の位置
+	D3DXVECTOR3 m_colisonSize;		// あたり判定の大きさ
 	int	 m_nLevPriority;			// プライオリティのレベル
 	bool m_bDeath;					// 死亡フラグ
 };

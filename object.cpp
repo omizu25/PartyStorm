@@ -281,3 +281,147 @@ void CObject::ReleaseList(void)
 	// オブジェクトの解放
 	delete this;
 }
+
+//=============================================================================
+// 矩形の判定
+// Author : 唐﨑結斗
+// 概要 : ターゲットとの矩形判定
+//=============================================================================
+bool CObject::ColisonRectangle3D(CObject * target, bool bExtrude)
+{// 返り値用の変数
+	bool bColision = false;
+
+	// 自分の情報を取得する
+	D3DXVECTOR3 pos = GetPos() + m_colisonPos;
+	D3DXVECTOR3 posOld = GetPosOld() + m_colisonPos;
+	D3DXVECTOR3 size = m_colisonSize / 2.0f;
+
+	// 目標の情報取得
+	D3DXVECTOR3 posTarget = target->GetPos() + target->GetColisonPos();
+	D3DXVECTOR3 sizeTarget = target->GetColisonSize() / 2.0f;
+
+	if ((pos.z - size.z) < (posTarget.z + sizeTarget.z)
+		&& (pos.z + size.z) > (posTarget.z - sizeTarget.z)
+		&& (pos.x - size.x) < (posTarget.x + sizeTarget.x)
+		&& (pos.x + size.x) > (posTarget.x - sizeTarget.x))
+	{// モデル内にいる(XZ軸)
+   		bColision = true;
+		if ((posOld.y + size.y) <= (posTarget.y - sizeTarget.y)
+			&& (pos.y + size.y) > (posTarget.y - sizeTarget.y))
+		{
+			if (bExtrude)
+			{
+				pos.y = posTarget.y - sizeTarget.y - size.y;
+			}
+		}
+		if ((posOld.y - size.y) >= (posTarget.y + sizeTarget.y)
+			&& (pos.y - size.y) < (posTarget.y + sizeTarget.y))
+		{
+			if (bExtrude)
+			{
+				pos.y = posTarget.y + sizeTarget.y + size.y;
+			}
+		}
+	}
+	if ((pos.y - size.y) < (posTarget.y + sizeTarget.y)
+		&& (pos.y + size.y) > (posTarget.y - sizeTarget.y))
+	{// モデル内にいる(Y軸)
+		if ((pos.z - size.z) < (posTarget.z + sizeTarget.z)
+			&& (pos.z + size.z) > (posTarget.z - sizeTarget.z))
+		{// モデル内にいる(Z軸)
+			bColision = true;
+			if ((posOld.x + size.z) <= (posTarget.x - sizeTarget.x)
+				&& (pos.x + size.z) > (posTarget.x - sizeTarget.x))
+			{
+				if (bExtrude)
+				{
+					pos.x = posTarget.x - sizeTarget.x - size.z;
+				}
+			}
+			if ((posOld.x - size.z) >= (posTarget.x + sizeTarget.x)
+				&& (pos.x - size.z) < (posTarget.x + sizeTarget.x))
+			{
+				if (bExtrude)
+				{
+					pos.x = posTarget.x + sizeTarget.x + size.z;
+				}
+			}
+		}
+		if ((pos.x - size.x) < (posTarget.x + sizeTarget.x)
+			&& (pos.x + size.x) > (posTarget.x - sizeTarget.x))
+		{// モデル内にいる(X軸)
+			bColision = true;
+			if ((posOld.z + size.z) <= (posTarget.z - sizeTarget.z)
+				&& (pos.z + size.z) > (posTarget.z - sizeTarget.z))
+			{
+				if (bExtrude)
+				{
+					pos.z = posTarget.z - sizeTarget.z - size.z;
+				}
+			}
+			if ((posOld.z - size.z) >= (posTarget.z + sizeTarget.z)
+				&& (pos.z - size.z) < (posTarget.z + sizeTarget.z))
+			{
+				if (bExtrude)
+				{
+					pos.z = posTarget.z + sizeTarget.z + size.z;
+				}
+			}
+		}
+	}
+
+	// 位置の設定
+	SetPos(pos - m_colisonPos);
+	return bColision;
+}
+
+//=============================================================================
+// 球の判定
+// Author : 唐﨑結斗
+// 概要 : ターゲットとの球判定
+//=============================================================================
+bool CObject::ColisonSphere3D(CObject *target, bool bExtrude)
+{
+	// 変数宣言
+	bool bCollision = false;
+
+	// 自分の情報を取得する
+	D3DXVECTOR3 pos = GetPos() + m_colisonPos;
+	D3DXVECTOR3 size = m_colisonSize / 2.0f;
+
+	// 目標の情報取得
+	D3DXVECTOR3 posTarget = target->GetPos() + target->GetColisonPos();
+	D3DXVECTOR3 sizeTarget = target->GetColisonSize() / 2.0f;
+
+	// 判定を行う距離を算出
+	float fJudgeDistance = sqrtf((size.x * size.x) + (size.y * size.y) + (size.z * size.z));
+	fJudgeDistance += sqrtf((sizeTarget.x * sizeTarget.x) + (sizeTarget.y * sizeTarget.y) + (sizeTarget.z * sizeTarget.z));
+
+	// お互いの位置の差を算出
+	D3DXVECTOR3 distance = posTarget - pos;
+	float fDistance = sqrtf((distance.x * distance.x) + (distance.y * distance.y) + (distance.z * distance.z));
+
+	if (fDistance <= fJudgeDistance)
+	{// 位置の差が判定を行う距離より短い場合
+		bCollision = true;
+
+		if (bExtrude)
+		{
+			// 角度の算出
+			D3DXVECTOR3 rotDiff;
+			rotDiff.y = atan2f(distance.x, distance.z);
+			rotDiff.x = atan2f(sqrtf((distance.x * distance.x) + (distance.z * distance.z)), distance.y);
+			rotDiff.z = 0.0f;
+
+			// 位置の算出
+			pos.z = posTarget.z - sinf(rotDiff.x) * cosf(rotDiff.y) * fJudgeDistance;
+			pos.x = posTarget.x - sinf(rotDiff.x) * sinf(rotDiff.y) * fJudgeDistance;
+			pos.y = posTarget.y - cosf(rotDiff.x) * fJudgeDistance;
+
+			// 位置の設定
+			SetPos(pos - m_colisonPos);
+		}
+	}
+
+	return bCollision;
+}
