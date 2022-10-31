@@ -26,6 +26,7 @@
 //モデル
 #include "player.h"
 #include "Shark.h"
+#include "obstacle.h"
 
 #include "model3D.h"
 #include "mesh.h"
@@ -111,9 +112,6 @@ HRESULT CGame::Init()
 	//m_pScore->SetScore(0);
 	//m_pScore->SetPos(D3DXVECTOR3(1280.0f, m_pScore->GetSize().y / 2.0f, 0.0f));
 
-	// カメラの追従設定(目標 : プレイヤー)
-	CApplication::GetCamera()->SetFollowTarget(m_pPlayer, D3DXVECTOR3(0.0f, 50.0f, 0.0f), 300.0f);
-
 	// マウスカーソルを消す
 	//pMouse->SetShowCursor(false);
 
@@ -145,12 +143,16 @@ void CGame::Uninit()
 //=============================================================================
 void CGame::Update()
 {// キーボードの取得
+	// 障害物
+	CObstacle::Pop();
+
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 	if (pKeyboard->GetTrigger(DIK_F3))
 	{
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
 
+	//コントローラー使用の確認
 	CInputController *pjoy = CApplication::GetJoy();
 	if (pjoy->GetJoypadTrigger(CInputController::JOYKEY_A, 0))
 	{

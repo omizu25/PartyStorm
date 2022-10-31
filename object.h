@@ -98,6 +98,8 @@ public:
 	CObject *GetPrev() { return m_pPrev; }													// 前のオブジェクトへのポインタのゲッター
 	CObject *GetNext() { return m_pNext; }													// 次のオブジェクトへのポインタのゲッター
 	bool GetFlagDeath() { return m_bDeath; }												// 死亡フラグの取得
+	bool ColisonRectangle3D(CObject *target, bool bExtrude);								// 矩形の判定(3D)
+	bool ColisonSphere3D(CObject *target, bool bExtrude);									// 球の判定(3D)
 
 protected:
 	//--------------------------------------------------------------------
@@ -105,8 +107,6 @@ protected:
 	//--------------------------------------------------------------------
 	void Release(void);												// オブジェクトの解放
 	void ReleaseList(void);											// オブジェクトのリスト解除
-	bool ColisonRectangle3D(CObject *target, bool bExtrude);		// 矩形の判定(3D)
-	bool ColisonSphere3D(CObject *target, bool bExtrude);			// 球の判定(3D)
 
 private:
 	//--------------------------------------------------------------------

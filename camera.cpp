@@ -53,6 +53,7 @@ CCamera::CCamera()
 	m_viewType = TYPE_CLAIRVOYANCE;					// 投影の種別
 	m_fDistance = 0.0f;								// 視点から注視点までの距離
 	m_fRotMove = 0.0f;								// 移動方向
+	m_fCoeffFllow = 0.0f;							// 追従の減衰係数
 	m_nCntFrame = 0;								// フレームカウント
 	m_nCntKey = 0;									// キーカウント
 	m_nNumMotion = 0;								// モーションカウント
@@ -328,11 +329,12 @@ void CCamera::SetCamera(const D3DXVECTOR3 posV, const D3DXVECTOR3 posR, const D3
 // Author : 唐﨑結斗
 // 概要 : 追従相手の設定
 //=============================================================================
-void CCamera::SetFollowTarget(CObject *pTarget, D3DXVECTOR3 posRAdd, float fDistance)
+void CCamera::SetFollowTarget(CObject *pTarget, D3DXVECTOR3 posRAdd, float fDistance, float fCoeffFllow)
 {
 	m_pTarget = pTarget;
 	m_posRAdd = posRAdd;
 	m_fDistance = fDistance;
+	m_fCoeffFllow = fCoeffFllow;
 	m_bFllow = true;
 }
 
@@ -570,10 +572,10 @@ void CCamera::Follow(void)
 		m_posVDest.y = 0.0f;
 
 		// 注視点の移動
-		m_posR += (m_posRDest - m_posR) * 0.1f;
+		m_posR += (m_posRDest - m_posR) * m_fCoeffFllow;
 
 		// 視点の移動
-		m_posV += (m_posVDest - m_posV) * 0.1f;
+		m_posV += (m_posVDest - m_posV) * m_fCoeffFllow;
 	}
 	else
 	{

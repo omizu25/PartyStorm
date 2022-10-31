@@ -11,15 +11,18 @@
 #include <assert.h>
 
 #include "obstacle.h"
+#include "model3D.h"
+#include "player.h"
+#include "move.h"
 
 //*****************************************************************************
 // 定数定義
 //*****************************************************************************
 namespace
 {
-const int MODEL_TYPE = 1;				// モデルの種類
+const int MODEL_TYPE = 21;				// モデルの種類
 const int POP_INTERVAL = 120;			// 出現の間隔
-const float MOVE_SPEED = 2.5f;			// 移動速度
+const float MOVE_SPEED = 1.0f;			// 移動速度
 const float POP_POS_Z = -1500.0f;		// 出現のZの位置
 const float RELEASE_POS_Z = 1500.0f;	// 解放のZの位置
 const D3DXVECTOR2 POP_POS_X[] =			// 出現のXの位置
@@ -105,6 +108,12 @@ HRESULT CObstacle::Init()
 	// 種類の設定
 	CModelObj::SetType(MODEL_TYPE);
 
+	// 当たり判定の設定
+	CModel3D::MODEL_MATERIAL *material = GetModel()->GetMaterial();
+	D3DXVECTOR3 size = material[GetModel()->GetModelID()].size;
+	SetColisonSize(size);
+	SetColisonPos(D3DXVECTOR3(0.0f, size.y / 2.0f, 0.0f));
+
 	return E_NOTIMPL;
 }
 
@@ -136,6 +145,9 @@ void CObstacle::Update()
 		return;
 	}
 
+	// 当たり判定
+	Collison();
+
 	// 更新
 	CModelObj::Update();
 }
@@ -148,3 +160,43 @@ void CObstacle::Draw()
 	// 描画
 	CModelObj::Draw();
 }
+
+//=============================================================================
+// 当たり判定
+// Author : 唐﨑結斗
+// 概要 : 当たり判定を行う
+//=============================================================================
+void CObstacle::Collison()
+{
+	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	{
+		// 変数宣言
+		CObject *pObject = CObject::GetTop(nCntPriority);
+
+		while (pObject != nullptr)
+		{// 現在のオブジェクトの次のオブジェクトを保管
+			CObject *pObjectNext = pObject->GetNext();
+
+			if (pObject->GetFlagDeath() ||
+				(pObject->GetObjType() != OBJTYPE_3DPLAYER) ||
+				!pObject->ColisonRectangle3D(this, true))
+			{
+				// 現在のオブジェクトの次のオブジェクトを更新
+				pObject = pObjectNext;
+				continue;
+			}
+
+			// プレイヤーの移動
+			CPlayer *pPlayer = dynamic_cast<CPlayer*>(pObject);
+			CMove *pMove = pPlayer->GetMove();
+			D3DXVECTOR3 pos = pPlayer->GetPos();
+			pos.z += MOVE_SPEED - pMove->GetMove().z;
+			pPlayer->SetPos(pos);
+
+			// 現在のオブジェクトの次のオブジェクトを更新
+			pObject = pObjectNext;
+		}
+	}
+}
+
+

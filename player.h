@@ -59,6 +59,7 @@ public:
 	void Update() override;											// 更新
 	void Draw() override;											// 描画
 	void SetSpeed(const float fSpeed) { m_fSpeed = fSpeed; }		// 移動速度の設定
+	CMove *GetMove() { return m_pMove; }							// 移動情報の取得
 
 #ifdef _DEBUG
 	void SetLine();																						// ラインの設定
@@ -77,7 +78,6 @@ private:
 	//--------------------------------------------------------------------
 	CMove			*m_pMove;				// 移動情報
 	ACTION_TYPE		m_EAction;				// アクションタイプ
-	D3DXVECTOR3		m_move;					// 移動ベクトル
 	D3DXVECTOR3		m_rotDest;				// 目的の向き
 	float			m_fSpeed;				// 移動速度	
 	int				m_nNumMotion;			// 現在のモーション番号

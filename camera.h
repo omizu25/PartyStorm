@@ -94,7 +94,7 @@ public:
 	void SetPosR(const D3DXVECTOR3 posR);
 	void SetRot(const D3DXVECTOR3 rot, const int nShaft);
 	void SetCamera(const D3DXVECTOR3 posV, const D3DXVECTOR3 posR, const D3DXVECTOR3 rot);
-	void SetFollowTarget(CObject *pTarget, D3DXVECTOR3 posRAdd, float fDistance);
+	void SetFollowTarget(CObject *pTarget, D3DXVECTOR3 posRAdd, float fDistance, float fCoeffFllow);
 	void MotionReset(void);
 	void SetNumMotion(const int nNumMotion);
 
@@ -133,6 +133,7 @@ private:
 	VIEW_TYPE			m_viewType;			// 投影の種別
 	float				m_fDistance;		// 視点から注視点までの距離
 	float				m_fRotMove;			// 移動方向
+	float				m_fCoeffFllow;		// 追従の減衰係数
 	int					m_nCntFrame;		// フレームカウント
 	int					m_nCntKey;			// キーカウント
 	int					m_nMaxMotion;		// モーションの最大数

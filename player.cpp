@@ -56,7 +56,6 @@ CPlayer * CPlayer::Create()
 //=============================================================================
 CPlayer::CPlayer() : m_pMove(nullptr),
 m_EAction(NEUTRAL_ACTION),
-m_move(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
 m_nNumMotion(0)
@@ -95,6 +94,12 @@ HRESULT CPlayer::Init()
 	// 当たり判定の設定
 	SetColisonPos(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
 	SetColisonSize(D3DXVECTOR3(50.0f, 50.0f, 20.0f));
+
+	// カメラの追従設定(目標 : プレイヤー)
+	CApplication::GetCamera()->SetFollowTarget(this, D3DXVECTOR3(0.0f, 50.0f, 0.0f), 300.0f, 0.5f);
+
+	// オブジェクトタイプの設定
+	SetObjType(OBJTYPE_3DPLAYER);
 
 #ifdef _DEBUG
 	// ライン情報
@@ -206,13 +211,14 @@ void CPlayer::Update()
 	// 位置の取得
 	pos = GetPos();
 
-	// デバック表示
-	CDebugProc::Print("プレイヤーの位置 | X : %.3f | Y : %.3f | Z : %.3f |\n", pos.x, pos.y, pos.z);
-
 	// 更新
 	CMotionModel3D::Update();
 
 #ifdef _DEBUG
+	// デバック表示
+	CDebugProc::Print("プレイヤーの位置 | X : %.3f | Y : %.3f | Z : %.3f |\n", pos.x, pos.y, pos.z);
+
+	// ラインの更新
 	SetLine();
 #endif // _DEBUG
 }
@@ -395,7 +401,7 @@ void CPlayer::Collison()
 				if (!pObject->GetFlagDeath()
 					&& pObject->GetObjType() == OBJTYPE_3DMODEL)
 				{
-					ColisonRectangle3D(pObject, true);
+					//ColisonRectangle3D(pObject, true);
 				}
 
 				// 現在のオブジェクトの次のオブジェクトを更新

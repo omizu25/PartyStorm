@@ -305,10 +305,11 @@ bool CObject::ColisonRectangle3D(CObject * target, bool bExtrude)
 		&& (pos.x - size.x) < (posTarget.x + sizeTarget.x)
 		&& (pos.x + size.x) > (posTarget.x - sizeTarget.x))
 	{// モデル内にいる(XZ軸)
-   		bColision = true;
 		if ((posOld.y + size.y) <= (posTarget.y - sizeTarget.y)
 			&& (pos.y + size.y) > (posTarget.y - sizeTarget.y))
 		{
+			bColision = true;
+
 			if (bExtrude)
 			{
 				pos.y = posTarget.y - sizeTarget.y - size.y;
@@ -317,6 +318,8 @@ bool CObject::ColisonRectangle3D(CObject * target, bool bExtrude)
 		if ((posOld.y - size.y) >= (posTarget.y + sizeTarget.y)
 			&& (pos.y - size.y) < (posTarget.y + sizeTarget.y))
 		{
+			bColision = true;
+
 			if (bExtrude)
 			{
 				pos.y = posTarget.y + sizeTarget.y + size.y;
@@ -326,10 +329,13 @@ bool CObject::ColisonRectangle3D(CObject * target, bool bExtrude)
 	if ((pos.y - size.y) < (posTarget.y + sizeTarget.y)
 		&& (pos.y + size.y) > (posTarget.y - sizeTarget.y))
 	{// モデル内にいる(Y軸)
+		bool bColisionX = false;
+		bool bColisionZ = false;
+
 		if ((pos.z - size.z) < (posTarget.z + sizeTarget.z)
 			&& (pos.z + size.z) > (posTarget.z - sizeTarget.z))
 		{// モデル内にいる(Z軸)
-			bColision = true;
+			bColisionZ = true;
 			if ((posOld.x + size.z) <= (posTarget.x - sizeTarget.x)
 				&& (pos.x + size.z) > (posTarget.x - sizeTarget.x))
 			{
@@ -350,7 +356,7 @@ bool CObject::ColisonRectangle3D(CObject * target, bool bExtrude)
 		if ((pos.x - size.x) < (posTarget.x + sizeTarget.x)
 			&& (pos.x + size.x) > (posTarget.x - sizeTarget.x))
 		{// モデル内にいる(X軸)
-			bColision = true;
+			bColisionX = true;
 			if ((posOld.z + size.z) <= (posTarget.z - sizeTarget.z)
 				&& (pos.z + size.z) > (posTarget.z - sizeTarget.z))
 			{
@@ -367,6 +373,12 @@ bool CObject::ColisonRectangle3D(CObject * target, bool bExtrude)
 					pos.z = posTarget.z + sizeTarget.z + size.z;
 				}
 			}
+		}
+
+		if (bColisionX
+			&& bColisionZ)
+		{
+			bColision = true;
 		}
 	}
 
