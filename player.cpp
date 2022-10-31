@@ -93,7 +93,7 @@ HRESULT CPlayer::Init()
 
 	// 当たり判定の設定
 	SetColisonPos(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
-	SetColisonSize(D3DXVECTOR3(50.0f, 50.0f, 20.0f));
+	SetColisonSize(D3DXVECTOR3(20.0f, 50.0f, 20.0f));
 
 	// カメラの追従設定(目標 : プレイヤー)
 	CApplication::GetCamera()->SetFollowTarget(this, D3DXVECTOR3(0.0f, 50.0f, 0.0f), 300.0f, 0.5f);
@@ -401,7 +401,7 @@ void CPlayer::Collison()
 				if (!pObject->GetFlagDeath()
 					&& pObject->GetObjType() == OBJTYPE_3DMODEL)
 				{
-					//ColisonRectangle3D(pObject, true);
+					ColisonRectangle3D(pObject, true);
 				}
 
 				// 現在のオブジェクトの次のオブジェクトを更新

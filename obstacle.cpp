@@ -22,7 +22,7 @@ namespace
 {
 const int MODEL_TYPE = 21;				// モデルの種類
 const int POP_INTERVAL = 120;			// 出現の間隔
-const float MOVE_SPEED = 1.0f;			// 移動速度
+const float MOVE_SPEED = 5.0f;			// 移動速度
 const float POP_POS_Z = -1500.0f;		// 出現のZの位置
 const float RELEASE_POS_Z = 1500.0f;	// 解放のZの位置
 const D3DXVECTOR2 POP_POS_X[] =			// 出現のXの位置

@@ -85,35 +85,35 @@ HRESULT CGame::Init()
 	/*m_pMesh3D->SetWave(1.0f, 300.0f);*/
 	m_pMesh3D->LoadTex(-1);
 
-	//// スカイボックスの設定
-	//CSphere *pSphere = CSphere::Create();
-	//pSphere->SetRot(D3DXVECTOR3(D3DX_PI, 0.0f, 0.0f));
-	//pSphere->SetSize(D3DXVECTOR3(100.0f, 0, 100.0f));
-	//pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
-	//pSphere->SetRadius(50000.0f);
-	//pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
-	//pSphere->LoadTex(-1);
+	// スカイボックスの設定
+	CSphere *pSphere = CSphere::Create();
+	pSphere->SetRot(D3DXVECTOR3(D3DX_PI, 0.0f, 0.0f));
+	pSphere->SetSize(D3DXVECTOR3(100.0f, 0, 100.0f));
+	pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
+	pSphere->SetRadius(50000.0f);
+	pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
+	pSphere->LoadTex(-1);
 
 	// プレイヤーの設定
 	m_pPlayer = CPlayer::Create();
 	m_pPlayer->SetMotion("data/MOTION/motion.txt");
 	m_pPlayer->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	////サメ設定
-	//m_pEnemyShark = CEnemyShark::Create();
-	//m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
-	//m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
+	//サメ設定
+	m_pEnemyShark = CEnemyShark::Create();
+	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
+	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
 
-	//// スコアの生成
-	//m_pScore = CScore::Create(10, false);
-	//m_pScore->SetScore(0);
-	//m_pScore->SetPos(D3DXVECTOR3(1280.0f, m_pScore->GetSize().y / 2.0f, 0.0f));
+	// スコアの生成
+	m_pScore = CScore::Create(10, false);
+	m_pScore->SetScore(0);
+	m_pScore->SetPos(D3DXVECTOR3(1280.0f, m_pScore->GetSize().y / 2.0f, 0.0f));
 
 	// マウスカーソルを消す
-	//pMouse->SetShowCursor(false);
+	pMouse->SetShowCursor(false);
 
 	m_bGame = true;
 
