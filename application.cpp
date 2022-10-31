@@ -17,8 +17,11 @@
 
 #include "renderer.h"
 #include "debug_proc.h"
+
 #include "keyboard.h"
 #include "mouse.h"
+#include "inputcontroller.h"
+
 #include "texture.h"
 #include "camera_manager.h"
 #include "camera.h"
@@ -44,7 +47,10 @@ HWND CApplication::m_hWnd = nullptr;								// ウィンドウ
 CDebugProc *CApplication::m_pDebugProc = nullptr;					// デバック表示
 CRenderer *CApplication::m_pRenderer = nullptr;						// レンダラーインスタンス
 CKeyboard *CApplication::m_pKeyboard = {};							// キーボードインスタンス
+
 CMouse *CApplication::m_pMouse = {};								// マウスインスタンス
+CInputController *CApplication::m_pJoy = {};
+
 CTexture *CApplication::m_pTexture = nullptr;						// テクスチャインスタンス
 CCameraManager *CApplication::m_pCameraManager = nullptr;			// カメラマネージャークラス
 CCamera *CApplication::m_pCamera = nullptr;							// カメラインスタンス
@@ -243,6 +249,7 @@ CApplication::~CApplication()
 	assert(m_pRenderer == nullptr);
 	assert(m_pKeyboard == nullptr);
 	assert(m_pMouse == nullptr);
+
 	assert(m_pTexture == nullptr);
 	assert(m_pCameraManager == nullptr);
 	assert(m_pCamera == nullptr);
@@ -268,6 +275,12 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// 入力デバイスのメモリ確保
 	m_pKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
+	m_pJoy = new CInputController;
+
+	if (FAILED(m_pJoy->Init(hInstance, hWnd)))
+	{
+		return E_FAIL;
+	}
 
 	// 初期化処理
 	assert(m_pRenderer != nullptr);
@@ -383,6 +396,12 @@ void CApplication::Uninit()
 		delete m_pMouse;
 		m_pMouse = nullptr;
 	}
+	if (m_pJoy != nullptr)
+	{
+		m_pJoy->Uninit();
+		delete m_pJoy;
+		m_pJoy = nullptr;
+	}
 
 	if (m_pTexture != nullptr)
 	{// 終了処理
@@ -430,6 +449,8 @@ void CApplication::Update()
 
 	m_pKeyboard->Update();
 	m_pMouse->Update();
+	m_pJoy->Update();
+
 	m_pCamera->Update();
 
 	m_pRenderer->Update();

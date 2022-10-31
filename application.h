@@ -20,6 +20,8 @@ class CRenderer;
 class CDebugProc;
 class CKeyboard;
 class CMouse;
+class CInputController;
+
 class CTexture;
 class CCameraManager;
 class CCamera;
@@ -54,8 +56,14 @@ public:
 	//--------------------------------------------------------------------
 	static HWND GetWnd() { return m_hWnd; }												// ウィンドウの取得
 	static CRenderer *GetRenderer() { return m_pRenderer; }								// レンダラーのゲッター
+
 	static CKeyboard *GetKeyboard() { return m_pKeyboard; }								// キーボードのゲッター
 	static CMouse *GetMouse() { return m_pMouse; }										// マウスのゲッター
+
+	static CInputController *GetJoy() { return m_pJoy; }								// キーボードのゲッター
+
+	
+
 	static CTexture *GetTexture() { return m_pTexture; }								// テクスチャのゲッター
 	static CCameraManager *GetCameraManager() { return m_pCameraManager; }				// カメラマネージャーのゲッター
 	static CCamera *GetCamera() { return m_pCamera; }									// カメラのゲッター
@@ -91,6 +99,9 @@ private:
 	static CRenderer *m_pRenderer;				// rendererクラス
 	static CKeyboard *m_pKeyboard;				// キーボードクラス
 	static CMouse *m_pMouse;					// マウスクラス
+	static CInputController *m_pJoy;
+
+
 	static CTexture *m_pTexture;				// テクスチャクラス
 	static CCameraManager *m_pCameraManager;	// カメラマネージャークラス
 	static CCamera *m_pCamera;					// ゲームカメラクラス

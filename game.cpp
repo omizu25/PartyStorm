@@ -15,6 +15,8 @@
 #include "calculation.h"
 #include "keyboard.h"
 #include "mouse.h"
+#include "inputcontroller.h"
+
 #include "application.h"
 #include "camera_manager.h"
 #include "renderer.h"
@@ -115,7 +117,7 @@ HRESULT CGame::Init()
 
 	// カメラの追従設定(目標 : プレイヤー)
 	CApplication::GetCamera()->SetFollowTarget(m_pPlayer, D3DXVECTOR3(0.0f, 50.0f, 0.0f), 300.0f);
-	
+
 	// マウスカーソルを消す
 	pMouse->SetShowCursor(false);
 
@@ -148,11 +150,17 @@ void CGame::Uninit()
 void CGame::Update()
 {// キーボードの取得
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
-
 	if (pKeyboard->GetTrigger(DIK_F3))
 	{
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
+
+	CInputController *pjoy = CApplication::GetJoy();
+	if (pjoy->GetJoypadTrigger(CInputController::JOYKEY_A, 0))
+	{
+		CApplication::SetNextMode(CApplication::MODE_RESULT);
+	}
+
 }
 
 //=============================================================================
