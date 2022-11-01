@@ -54,14 +54,17 @@ CInputController *CApplication::m_pJoy = {};
 CTexture *CApplication::m_pTexture = nullptr;						// テクスチャインスタンス
 CCameraManager *CApplication::m_pCameraManager = nullptr;			// カメラマネージャークラス
 CCamera *CApplication::m_pCamera = nullptr;							// カメラインスタンス
-CApplication::SCENE_MODE CApplication::m_mode = MODE_GAME;			// 現在のモードの格納
-CApplication::SCENE_MODE CApplication::m_nextMode = MODE_GAME;		// 次のモードの格納
+CApplication::SCENE_MODE CApplication::m_mode = MODE_TITLE;			// 現在のモードの格納
+CApplication::SCENE_MODE CApplication::m_nextMode = MODE_TITLE;		// 次のモードの格納
 CSceneMode *CApplication::pSceneMode = nullptr;						// シーンモードを格納
 CFade *CApplication::m_pFade = nullptr;								// フェードクラス
 CLight *CApplication::m_pLight = nullptr;							// ライトクラス
 int CApplication::m_nPriority = 0;									// プライオリティ番号
 bool CApplication::m_bWireFrame = false;							// ワイヤーフレームを使うか
-																	
+
+int CApplication::PersonCount = 3;	//人数設定時のカウント
+
+
 //=============================================================================
 // スクリーン座標をワールド座標にキャストする
 // Author : 唐﨑結斗
@@ -226,6 +229,11 @@ void CApplication::SetMode(SCENE_MODE mode)
 	{
 		pSceneMode->Init();
 	}
+}
+
+void CApplication::SetPersonCount(int PersonCnt)
+{
+	PersonCount = PersonCnt;
 }
 
 //=============================================================================

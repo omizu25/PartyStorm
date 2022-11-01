@@ -76,6 +76,8 @@ public:
 	static void SetMode(SCENE_MODE mode);												// モードの設定
 	static SCENE_MODE GetMode() { return m_mode; }										// モードの取得
 
+	static int GetPersonCount() { return PersonCount; }
+	static void SetPersonCount(int PersonCnt);
 	//--------------------------------------------------------------------
 	// コンストラクタとデストラクタ
 	//--------------------------------------------------------------------
@@ -112,6 +114,9 @@ private:
 	static CLight *m_pLight;					// ライトクラス
 	static int m_nPriority;						// プライオリティ番号
 	static bool m_bWireFrame;					// ワイヤーフレームを使うか
+
+	static 	int PersonCount;	//人数設定時のカウント
+
 };
 
 #endif

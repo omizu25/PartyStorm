@@ -37,7 +37,7 @@
 //*****************************************************************************
 // 静的メンバ変数宣言
 //*****************************************************************************
-CPlayer *CGame::m_pPlayer = nullptr;					// プレイヤークラス
+CPlayer **CGame::m_pPlayer = nullptr;					// プレイヤークラス
 CEnemyShark *CGame::m_pEnemyShark = nullptr;			// Enemy
 CScore *CGame::m_pScore = nullptr;						// スコアクラス
 CMesh3D *CGame::m_pMesh3D;								// メッシュクラス
@@ -95,14 +95,21 @@ HRESULT CGame::Init()
 	pSphere->LoadTex(-1);
 
 	// プレイヤーの設定
-	m_pPlayer = CPlayer::Create();
-	m_pPlayer->SetMotion("data/MOTION/motion.txt");
-	m_pPlayer->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	int nMaxPlayer = CApplication::GetPersonCount();
+	m_pPlayer = new CPlayer*[nMaxPlayer];
+	assert(m_pPlayer != nullptr);
 
-	//サメ設定
-	m_pEnemyShark = CEnemyShark::Create();
-	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
-	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
+	for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
+	{// プレイヤーの生成
+		m_pPlayer[nCntPlayer] = CPlayer::Create();
+		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
+		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-100.0f + 100.0f * nCntPlayer, 0.0f, 0.0f));
+	}
+
+	////サメ設定
+	//m_pEnemyShark = CEnemyShark::Create();
+	//m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
+	//m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
@@ -131,6 +138,18 @@ void CGame::Uninit()
 
 	// マウスカーソルを出す
 	pMouse->SetShowCursor(true);
+
+	if (m_pPlayer != nullptr)
+	{
+		int nMaxPlayer = CApplication::GetPersonCount();
+
+		for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
+		{// プレイヤーの生成
+			m_pPlayer[nCntPlayer]->Uninit();
+		}
+
+		delete m_pPlayer;
+	}
 
 	// スコアの解放
 	Release();

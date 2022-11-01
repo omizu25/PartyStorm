@@ -44,7 +44,7 @@ public:
 	//--------------------------------------------------------------------
 	// 静的メンバ変数
 	//--------------------------------------------------------------------
-	static CPlayer *m_pPlayer;					// プレイヤークラス
+	static CPlayer **m_pPlayer;					// プレイヤークラス
 	static CEnemyShark *m_pEnemyShark;			// サメ敵
 	static CMesh3D *m_pMesh3D;					// メッシュクラス
 	static CScore *m_pScore;					// スコアクラス

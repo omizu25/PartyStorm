@@ -15,13 +15,16 @@
 
 #include "application.h"
 #include "keyboard.h"
+#include "debug_proc.h"
+
+
 
 //=============================================================================
 // コンストラクタ
 // Author : 唐﨑結斗
 // 概要 : インスタンス生成時に行う処理
 //=============================================================================
-CTitle::CTitle()
+CTitle::CTitle() :Cnt(0)
 {
 
 }
@@ -43,6 +46,8 @@ CTitle::~CTitle()
 //=============================================================================
 HRESULT CTitle::Init()
 {
+	Cnt = 1;
+
 	return S_OK;
 }
 
@@ -71,6 +76,31 @@ void CTitle::Update()
 	{
 		CApplication::SetNextMode(CApplication::MODE_GAME);
 	}
+
+	//ゲット
+	CDebugProc::Print("PersonCount Q or E: %d\n", Cnt);
+
+
+	if (pKeyboard->GetTrigger(DIK_Q))
+	{
+		Cnt++;
+	}
+	if (pKeyboard->GetTrigger(DIK_E))
+	{
+		Cnt--;
+	}
+
+	if (Cnt > 4)	//4を越えないよう
+	{
+		Cnt = 1;
+	}
+	if (Cnt < 1)	//マイナス設定無し
+	{
+		Cnt = 4;
+	}
+
+	CApplication::SetPersonCount(Cnt);
+
 }
 
 //=============================================================================
