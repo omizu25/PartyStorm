@@ -75,6 +75,7 @@ HRESULT CGame::Init()
 	// d—Í‚Ì’l‚ðÝ’è
 	CCalculation::SetGravity(10.0f);
 
+
 	// ’n–Ê‚ÌÝ’è
 	m_pMesh3D = CMesh3D::Create();
 	m_pMesh3D->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
