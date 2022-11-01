@@ -20,7 +20,7 @@
 
 #include "keyboard.h"
 #include "mouse.h"
-#include "inputcontroller.h"
+#include "joypad.h"
 
 #include "texture.h"
 #include "camera_manager.h"
@@ -49,7 +49,7 @@ CRenderer *CApplication::m_pRenderer = nullptr;						// レンダラーインスタンス
 CKeyboard *CApplication::m_pKeyboard = {};							// キーボードインスタンス
 
 CMouse *CApplication::m_pMouse = {};								// マウスインスタンス
-CInputController *CApplication::m_pJoy = {};
+CJoypad *CApplication::m_pJoy = {};
 
 CTexture *CApplication::m_pTexture = nullptr;						// テクスチャインスタンス
 CCameraManager *CApplication::m_pCameraManager = nullptr;			// カメラマネージャークラス
@@ -283,9 +283,9 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// 入力デバイスのメモリ確保
 	m_pKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
-	m_pJoy = new CInputController;
+	m_pJoy = new CJoypad;
 
-	if (FAILED(m_pJoy->Init(hInstance, hWnd)))
+	if (FAILED(m_pJoy->Init(hInstance, hWnd, 4)))
 	{
 		return E_FAIL;
 	}
@@ -464,8 +464,9 @@ void CApplication::Update()
 	m_pRenderer->Update();
 
 #ifdef _DEBUG
-	CDebugProc::Print("FPS : %d\n", GetFps());
+	CDebugProc::Print("FPS : %d\n", GetFps()); 
 	CDebugProc::Print("現在のシーン : %d\n", (int)m_mode);
+	CDebugProc::Print("コントローラーの使用数 : %d\n", m_pJoy->GetUseJoyPad());
 
 	if (m_pKeyboard->GetTrigger(DIK_F2))
 	{

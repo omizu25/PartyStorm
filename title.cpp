@@ -16,7 +16,7 @@
 #include "application.h"
 #include "keyboard.h"
 #include "debug_proc.h"
-
+#include "joypad.h"
 
 
 //=============================================================================
@@ -72,6 +72,9 @@ void CTitle::Update()
 	// 入力情報の取得
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 
+	// ジョイパッド 情報の取得
+	CJoypad *pJoy = CApplication::GetJoy();
+
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
 		CApplication::SetNextMode(CApplication::MODE_GAME);
@@ -80,6 +83,7 @@ void CTitle::Update()
 	//ゲット
 	CDebugProc::Print("PersonCount Q or E: %d\n", Cnt);
 
+	int nMaxPlayer = pJoy->GetUseJoyPad();
 
 	if (pKeyboard->GetTrigger(DIK_Q))
 	{
@@ -90,13 +94,13 @@ void CTitle::Update()
 		Cnt--;
 	}
 
-	if (Cnt > 4)	//4を越えないよう
+	if (Cnt > nMaxPlayer)	//4を越えないよう
 	{
 		Cnt = 1;
 	}
 	if (Cnt < 1)	//マイナス設定無し
 	{
-		Cnt = 4;
+		Cnt = nMaxPlayer;
 	}
 
 	CApplication::SetPersonCount(Cnt);

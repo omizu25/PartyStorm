@@ -25,6 +25,7 @@
 #include "bullet3D.h"
 #include "debug_proc.h"
 #include "line.h"
+#include "joypad.h"
 
 //=============================================================================
 // インスタンス生成
@@ -355,6 +356,15 @@ D3DXVECTOR3 CPlayer::Move()
 	{// 移動方向の正規化
 		m_rotDest.y += D3DX_PI * 2;
 	}
+
+
+	//コントローラー
+	CJoypad *pJoy = CApplication::GetJoy();
+	if (pJoy->GetTrigger(CJoypad::JOYKEY_A, 0))
+	{
+
+	}
+
 
 	return moveing;
 }

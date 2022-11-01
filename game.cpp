@@ -15,7 +15,7 @@
 #include "calculation.h"
 #include "keyboard.h"
 #include "mouse.h"
-#include "inputcontroller.h"
+#include "joypad.h"
 
 #include "application.h"
 #include "camera_manager.h"
@@ -173,11 +173,13 @@ void CGame::Update()
 	}
 
 	//コントローラー使用の確認
-	CInputController *pjoy = CApplication::GetJoy();
-	if (pjoy->GetJoypadTrigger(CInputController::JOYKEY_A, 0))
+	CJoypad *pJoy = CApplication::GetJoy();
+	if (pJoy->GetTrigger(CJoypad::JOYKEY_A, 0))
 	{
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
+
+
 
 }
 
