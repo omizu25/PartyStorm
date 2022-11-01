@@ -71,7 +71,7 @@ HRESULT CRenderer::Init(HWND hWnd, bool bWindow)
 	d3dpp.BackBufferFormat = d3ddm.Format;								// カラーモードの指定
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;							// 映像信号に同期してフリップする
 	d3dpp.EnableAutoDepthStencil = TRUE;								// デプスバッファ（Ｚバッファ）とステンシルバッファを作成
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8/*D3DFMT_D16*/;							// デプスバッファとして16bitを使う
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8/*D3DFMT_D16*/;			// デプスバッファとして24bit、ステンシルバッファとして8bitを使う
 	d3dpp.Windowed = bWindow;											// ウィンドウモード
 	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;			// リフレッシュレート
 	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;			// インターバル
@@ -202,7 +202,7 @@ void CRenderer::Draw()
 //=============================================================================
 // ステンシルの設定
 // Author : 唐﨑結斗
-// 概要 :　
+// 概要 : ステンシルテストを有効にして、参照値の判定を行う
 //=============================================================================
 void CRenderer::SetStencil(const int nStencilTest, D3DCMPFUNC EStencilFunc)
 {
@@ -226,9 +226,13 @@ void CRenderer::SetStencil(const int nStencilTest, D3DCMPFUNC EStencilFunc)
 	m_pD3DDevice->SetRenderState(D3DRS_STENCILFUNC, EStencilFunc);
 
 	// ステンシルテストの結果に対しての反映設定
-	m_pD3DDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_REPLACE);
-	m_pD3DDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_KEEP);
-	m_pD3DDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);
+	m_pD3DDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_REPLACE);		// Zテスト＆ステンシルテスト成功時
+	m_pD3DDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_KEEP);			// Zテスト＆ステンシルテスト失敗時
+	m_pD3DDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);		// Zテストのみ失敗時
+
+	// D3DSTENCILOP_REPLACE => 置き換え
+	// D3DSTENCILOP_KEEP => 変更なし
+	// D3DSTENCILOP_INCR => +1
 }
 
 //=============================================================================
