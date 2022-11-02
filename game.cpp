@@ -175,12 +175,16 @@ void CGame::Update()
 
 	//コントローラー使用の確認
 	CJoypad *pJoy = CApplication::GetJoy();
-	if (pJoy->GetTrigger(CJoypad::JOYKEY_A, 0))
+	if (pJoy->GetTrigger(CJoypad::JOYKEY_A, 1))
 	{
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
 
-
+	if (pKeyboard->GetTrigger(DIK_RETURN))
+	{
+		pJoy->Vibration(120, 50000, 1);
+		pJoy->Vibration(120, 50000, 2);
+	}
 
 }
 
