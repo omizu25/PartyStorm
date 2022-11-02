@@ -255,6 +255,38 @@ D3DXVECTOR3 CPlayer::Move()
 	//ƒRƒ“ƒgƒ[ƒ‰[
 	CJoypad *pJoy = CApplication::GetJoy();
 
+	// ˆÚ“®•ûŒü‚ÌŽæ“¾
+	if (pJoy->Stick(CJoypad::JOYKEY_LEFT_STICK, m_nNum, 0.5f))
+	{// Œü‚«‚ÌŒvŽZ
+		m_rotDest.y = pJoy->GetStickAngle(CJoypad::JOYKEY_LEFT_STICK, m_nNum);
+
+		// ƒJƒƒ‰î•ñ‚ÌŽæ“¾
+		CCamera *pCamera = CApplication::GetCamera();
+
+		// ˆÚ“®•ûŒü‚ÌŽZo
+		m_rotDest.y += pCamera->GetRot().y;
+
+		// ˆÚ“®•ûŒü‚Ì³‹K‰»
+		m_rotDest.y = CCalculation::RotNormalization(m_rotDest.y);
+
+		// ˆÚ“®—Ê‚ÌŒvŽZ
+		move = D3DXVECTOR3(sinf(m_rotDest.y), 0.0f, cosf(m_rotDest.y));
+
+		// Šp“x‚Ì³‹K‰»
+		m_rotDest.y -= D3DX_PI;
+
+		if (m_EAction == NEUTRAL_ACTION)
+		{
+			m_EAction = MOVE_ACTION;
+
+			if (pMotion != nullptr)
+			{
+				pMotion->SetNumMotion(MOVE_ACTION);
+			}
+		}
+	}
+	
+
 	if (pJoy->GetPress(CJoypad::JOYKEY_UP, m_nNum)		//w
 		|| pJoy->GetPress(CJoypad::JOYKEY_LEFT, m_nNum)	//a
 		|| pJoy->GetPress(CJoypad::JOYKEY_RIGHT, m_nNum)	//s 
