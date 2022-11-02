@@ -60,6 +60,7 @@ public:
 	void Draw() override;											// 描画
 	void SetSpeed(const float fSpeed) { m_fSpeed = fSpeed; }		// 移動速度の設定
 	CMove *GetMove() { return m_pMove; }							// 移動情報の取得
+	void SetNum(const int nNum) { m_nNum = nNum; }					// 識別番号の設定
 
 #ifdef _DEBUG
 	void SetLine();																						// ラインの設定
@@ -81,7 +82,7 @@ private:
 	D3DXVECTOR3		m_rotDest;				// 目的の向き
 	float			m_fSpeed;				// 移動速度	
 	int				m_nNumMotion;			// 現在のモーション番号
-
+	int				m_nNum;					// プレイヤー識別番号
 #ifdef _DEBUG
 	CLine **m_pLine;		// ライン情報
 #endif // _DEBUG

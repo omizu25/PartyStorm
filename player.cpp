@@ -59,7 +59,8 @@ CPlayer::CPlayer() : m_pMove(nullptr),
 m_EAction(NEUTRAL_ACTION),
 m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
-m_nNumMotion(0)
+m_nNumMotion(0),
+m_nNum(-1)
 {
 #ifdef _DEBUG
 	// ƒ‰ƒCƒ“î•ñ

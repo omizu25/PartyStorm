@@ -105,6 +105,7 @@ HRESULT CGame::Init()
 		m_pPlayer[nCntPlayer] = CPlayer::Create();
 		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
 		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-100.0f + 100.0f * nCntPlayer, 0.0f, 0.0f));
+		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
 	}
 
 	////ƒTƒİ’è
