@@ -180,10 +180,12 @@ void CGame::Update()
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
 
+
+
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
+		pJoy->Vibration(120, 50000, 0);
 		pJoy->Vibration(120, 50000, 1);
-		pJoy->Vibration(120, 50000, 2);
 	}
 
 }

@@ -70,10 +70,11 @@ public:
 	{
 		XINPUT_STATE		press;				// ジョイパットのプレス情報
 		XINPUT_STATE		trigger;			// ジョイパットのトリガー情報
-		D3DXVECTOR3			joyStickPos;		// ジョイスティックの傾き
 		XINPUT_VIBRATION	vibration;			// ジョイパッドのバイブレーション
+		D3DXVECTOR3			joyStickPos;		// ジョイスティックの傾き
 		WORD				wStrength;			// 振動の強さ (0 - 65535)
 		int					nTime;				// 振動持続時間
+		float				fStickAngle;		// スティックの向き
 	};
 
 	//--------------------------------------------------------------------
@@ -94,6 +95,7 @@ public:
 	int GetTriggerPedal(JOYKEY Key, int nPlayer);						// ジョイパッドトリガーペダル処理
 	void Vibration(int nTime, WORD nStrength, int nPlayer);				// ジョイパッド振動制御
 	int GetUseJoyPad() { return m_nUseJoyPad; }							// コントローラーの使用数の取得
+	float GetStickAngle(JOYKEY Key, int nPlayer);						// スティックの傾きの取得
 
 private:	
 	//--------------------------------------------------------------------

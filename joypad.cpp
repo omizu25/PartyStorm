@@ -161,6 +161,7 @@ D3DXVECTOR3 CJoypad::GetStick(JOYKEY Key, int nPlayer)
 	{
 	case JOYKEY_LEFT_STICK:
 		m_pJoyPad[nPlayer].joyStickPos = D3DXVECTOR3(m_pJoyPad[nPlayer].press.Gamepad.sThumbLX / 32767.0f, - m_pJoyPad[nPlayer].press.Gamepad.sThumbLY / 32767.0f, 0.0f);
+
 		break;
 	case JOYKEY_RIGHT_STICK:
 		m_pJoyPad[nPlayer].joyStickPos = D3DXVECTOR3(m_pJoyPad[nPlayer].press.Gamepad.sThumbRX / 32767.0f, - m_pJoyPad[nPlayer].press.Gamepad.sThumbRY / 32767.0f, 0.0f);
@@ -200,4 +201,26 @@ void  CJoypad::Vibration(int nTime, WORD nStrength, int nPlayer)
 {
 	m_pJoyPad[nPlayer].nTime = nTime;			// 振動持続時間
 	m_pJoyPad[nPlayer].wStrength = nStrength;	// 振動の強さ
+}
+
+//=============================================================================
+// ジョイスティックの傾き取得処理
+// Author : 唐﨑結斗
+// 概要 : ジョイスティックの傾き取得を返す
+//=============================================================================
+float CJoypad::GetStickAngle(JOYKEY Key, int nPlayer)
+{
+	switch (Key)
+	{
+	case JOYKEY_LEFT_STICK:
+		// スティックの角度
+		m_pJoyPad[nPlayer].fStickAngle = atan2f(m_pJoyPad[nPlayer].press.Gamepad.sThumbLX / 32767.0f, -m_pJoyPad[nPlayer].press.Gamepad.sThumbLY / 32767.0f);
+
+		break;
+	case JOYKEY_RIGHT_STICK:
+		m_pJoyPad[nPlayer].fStickAngle = atan2f(m_pJoyPad[nPlayer].press.Gamepad.sThumbRX / 32767.0f, -m_pJoyPad[nPlayer].press.Gamepad.sThumbRY / 32767.0f);
+		break;
+	}
+	
+	return m_pJoyPad[nPlayer].fStickAngle;
 }
