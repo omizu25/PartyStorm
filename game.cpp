@@ -75,25 +75,35 @@ HRESULT CGame::Init()
 	// 重力の値を設定
 	CCalculation::SetGravity(10.0f);
 
-
 	// 地面の設定
 	m_pMesh3D = CMesh3D::Create();
 	m_pMesh3D->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	m_pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pMesh3D->SetSize(D3DXVECTOR3(5000.0f, 0, 5000.0f));
+	m_pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
 	m_pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(10, 10));
 	m_pMesh3D->SetSplitTex(true);
-	/*m_pMesh3D->SetWave(1.0f, 300.0f);*/
-	m_pMesh3D->LoadTex(-1);
+	m_pMesh3D->SetScrollTex(D3DXVECTOR2(0.0f, 0.01f), true);
+	m_pMesh3D->LoadTex(2);
+
+	// メッシュの生成
+	CMesh3D *pMesh3D = CMesh3D::Create();
+	pMesh3D->SetPos(D3DXVECTOR3(0.0f, 11.0f, 0.0f));
+	pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
+	pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(1, 300));
+	pMesh3D->SetSplitTex(false);
+	pMesh3D->SetWave(7.0f, 10.0f);
+	pMesh3D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
+	pMesh3D->LoadTex(3);
 
 	// スカイボックスの設定
 	CSphere *pSphere = CSphere::Create();
 	pSphere->SetRot(D3DXVECTOR3(D3DX_PI, 0.0f, 0.0f));
 	pSphere->SetSize(D3DXVECTOR3(100.0f, 0, 100.0f));
 	pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
-	pSphere->SetRadius(50000.0f);
+	pSphere->SetRadius(5000.0f);
 	pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
-	pSphere->LoadTex(-1);
+	pSphere->LoadTex(4);
 
 	// プレイヤーの設定
 	int nMaxPlayer = CApplication::GetPersonCount();

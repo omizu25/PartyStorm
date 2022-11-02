@@ -285,7 +285,6 @@ D3DXVECTOR3 CPlayer::Move()
 			}
 		}
 	}
-	
 
 	if (pJoy->GetPress(CJoypad::JOYKEY_UP, m_nNum)		//w
 		|| pJoy->GetPress(CJoypad::JOYKEY_LEFT, m_nNum)	//a
@@ -513,9 +512,22 @@ void CPlayer::Collison()
 				CObject *pObjectNext = pObject->GetNext();
 
 				if (!pObject->GetFlagDeath()
-					&& pObject->GetObjType() == OBJTYPE_3DMODEL)
+					&& (pObject->GetObjType() == OBJTYPE_3DMODEL
+					|| pObject->GetObjType() == OBJTYPE_3DPLAYER)
+					&& pObject != this)
 				{
-					ColisonRectangle3D(pObject, true);
+					if (ColisonRectangle3D(pObject, true))
+					{
+						if (pObject->GetObjType() == OBJTYPE_3DPLAYER)
+						{// プレイヤーの移動
+							CPlayer *pPlayer = dynamic_cast<CPlayer*>(pObject);
+							CMove *pMove = GetMove();
+							CMove *pMoveTarget = pPlayer->GetMove();
+							D3DXVECTOR3 pos = pPlayer->GetPos();
+							pos += pMove->GetMove() - pMoveTarget->GetMove();
+							pPlayer->SetPos(pos);
+						}	
+					}
 				}
 
 				// 現在のオブジェクトの次のオブジェクトを更新
