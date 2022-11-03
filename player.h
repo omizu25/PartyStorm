@@ -18,7 +18,6 @@
 // 前方宣言
 //*****************************************************************************
 class CMove;
-class CShadow;
 class CLine;
 
 //=============================================================================
@@ -61,9 +60,9 @@ public:
 	void SetSpeed(const float fSpeed) { m_fSpeed = fSpeed; }		// 移動速度の設定
 	CMove *GetMove() { return m_pMove; }							// 移動情報の取得
 	void SetNum(const int nNum) { m_nNum = nNum; }					// 識別番号の設定
-
+	bool GetDead() { return m_bDead; }								// 死亡状況の取得
 #ifdef _DEBUG
-	void SetLine();																						// ラインの設定
+	void SetLine();					// ラインの設定
 #endif // _DEBUG
 	
 private:
@@ -83,6 +82,7 @@ private:
 	float			m_fSpeed;				// 移動速度	
 	int				m_nNumMotion;			// 現在のモーション番号
 	int				m_nNum;					// プレイヤー識別番号
+	bool			m_bDead;				// 死ぬかどうか
 #ifdef _DEBUG
 	CLine **m_pLine;		// ライン情報
 #endif // _DEBUG

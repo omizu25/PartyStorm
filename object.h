@@ -46,7 +46,6 @@ public:
 		OBJTYPE_NONE = 0,			// タイプ無し
 		OBJTYPE_3DPLAYER,			// 3Dプレイヤー
 		OBJTYPE_3DENEMY,			// 3Dエネミー
-		OBJTYPE_3DBULLET,			// 3Dバレット
 		OBJTYPE_3DMODEL,			// 3Dモデル
 		OBJTYPE_FADE,				// フェード
 		MAX_OBJTYPE,				// 種別の最大数

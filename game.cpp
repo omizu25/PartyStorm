@@ -90,7 +90,7 @@ HRESULT CGame::Init()
 	pMesh3D->SetPos(D3DXVECTOR3(0.0f, 11.0f, 0.0f));
 	pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
-	pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(1, 300));
+	pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(1, 3000));
 	pMesh3D->SetSplitTex(false);
 	pMesh3D->SetWave(7.0f, 10.0f);
 	pMesh3D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
@@ -118,10 +118,10 @@ HRESULT CGame::Init()
 		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
 	}
 
-	////サメ設定
-	//m_pEnemyShark = CEnemyShark::Create();
-	//m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
-	//m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, 0.0f, 200.0f));
+	//サメ設定
+	m_pEnemyShark = CEnemyShark::Create();
+	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
+	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -100.0f, 1500.0f));
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
@@ -157,10 +157,15 @@ void CGame::Uninit()
 
 		for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
 		{// プレイヤーの生成
-			m_pPlayer[nCntPlayer]->Uninit();
+			if (m_pPlayer[nCntPlayer] != nullptr
+				|| !m_pPlayer[nCntPlayer]->GetDead())
+			{
+				m_pPlayer[nCntPlayer]->Uninit();
+			}	
 		}
 
 		delete m_pPlayer;
+		m_pPlayer = nullptr;
 	}
 
 	// スコアの解放

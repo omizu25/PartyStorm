@@ -60,7 +60,8 @@ CPlayer::CPlayer() : m_pMove(nullptr),
 m_EAction(NEUTRAL_ACTION),
 m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
-m_nNumMotion(0)
+m_nNumMotion(0),
+m_bDead(false)
 {
 #ifdef _DEBUG
 	// ライン情報
@@ -179,15 +180,6 @@ void CPlayer::Update()
 	// 回転
 	Rotate();
 
-	if (pKeyboard->GetPress(DIK_SPACE))
-	{
-		pos.y += 1.0f;
-	}
-	if (pKeyboard->GetPress(DIK_DOWN))
-	{
-		pos.y -= 1.0f;
-	}
-
 	// ニュートラルモーションの設定
 	if (pMotion != nullptr
 		&& !pMotion->GetMotion())
@@ -223,6 +215,11 @@ void CPlayer::Update()
 	// ラインの更新
 	SetLine();
 #endif // _DEBUG
+
+	if (m_bDead)
+	{// 終了
+		Uninit();
+	}
 }
 
 //=============================================================================
@@ -513,7 +510,8 @@ void CPlayer::Collison()
 
 				if (!pObject->GetFlagDeath()
 					&& (pObject->GetObjType() == OBJTYPE_3DMODEL
-					|| pObject->GetObjType() == OBJTYPE_3DPLAYER)
+					|| pObject->GetObjType() == OBJTYPE_3DPLAYER
+					|| pObject->GetObjType() == OBJTYPE_3DENEMY)
 					&& pObject != this)
 				{
 					if (ColisonRectangle3D(pObject, true))
@@ -527,6 +525,10 @@ void CPlayer::Collison()
 							pos += pMove->GetMove() - pMoveTarget->GetMove();
 							pPlayer->SetPos(pos);
 						}	
+						if (pObject->GetObjType() == OBJTYPE_3DENEMY)
+						{
+							m_bDead = true;
+						}
 					}
 				}
 

@@ -576,7 +576,7 @@ void CMesh3D::Wave()
 			m_fVtxHeight[nCntVtx] += m_fAddWave;
 
 			// í∏ì_ç¿ïWÇÃê›íË
-			pVtx[nCntVtx].pos.y = sinf(m_fVtxHeight[nCntVtx]) * m_fAmplitude * 20;
+			pVtx[nCntVtx].pos.y = sinf(m_fVtxHeight[nCntVtx]) * m_fAmplitude;
 		}
 	}
 
