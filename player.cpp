@@ -331,6 +331,9 @@ D3DXVECTOR3 CPlayer::Move()
 		}
 	}
 
+	pJoy->GetStick(CJoypad::JOYKEY_LEFT_STICK,m_nNum);
+
+
 	//キーボード
 	if (pKeyboard->GetPress(DIK_W)
 		|| pKeyboard->GetPress(DIK_A)
