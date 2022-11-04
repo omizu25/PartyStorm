@@ -18,7 +18,7 @@
 // 前方宣言
 //*****************************************************************************
 class CMove;
-class CShadow;
+class CLine;
 
 class CEnemyShark : public CMotionModel3D
 {
@@ -58,19 +58,26 @@ private:
 	//--------------------------------------------------------------------
 	// メンバ関数
 	//--------------------------------------------------------------------
-	D3DXVECTOR3 Move();		// 移動
-	void Rotate();			// 回転
+	//D3DXVECTOR3 Move();		// 移動
+	//void Rotate();			// 回転
+
+#ifdef _DEBUG
+	void SetLine();					// ラインの設定
+#endif // _DEBUG
 
 	//--------------------------------------------------------------------
 	// メンバ変数
 	//--------------------------------------------------------------------
 	CMove			*m_pMove;				// 移動情報
-	CShadow			*m_pShadow;				// 影の情報
 	ACTION_TYPE		m_EAction;				// アクションタイプ
 	D3DXVECTOR3		m_move;					// 移動ベクトル
 	D3DXVECTOR3		m_rotDest;				// 目的の向き
 	float			m_fSpeed;				// 移動速度	
 	int				m_nNumMotion;			// 現在のモーション番号
+
+#ifdef _DEBUG
+	CLine **m_pLine;		// ライン情報
+#endif // _DEBUG
 };
 
 #endif

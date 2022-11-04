@@ -12,6 +12,7 @@
 //-----------------------------------------------------------------------------
 #include <assert.h>
 #include "joypad.h"
+#include "debug_proc.h"
 
 //=============================================================================
 // コンストラクタ
@@ -161,6 +162,7 @@ D3DXVECTOR3 CJoypad::GetStick(JOYKEY Key, int nPlayer)
 	{
 	case JOYKEY_LEFT_STICK:
 		m_pJoyPad[nPlayer].joyStickPos = D3DXVECTOR3(m_pJoyPad[nPlayer].press.Gamepad.sThumbLX / 32767.0f, - m_pJoyPad[nPlayer].press.Gamepad.sThumbLY / 32767.0f, 0.0f);
+
 		break;
 	case JOYKEY_RIGHT_STICK:
 		m_pJoyPad[nPlayer].joyStickPos = D3DXVECTOR3(m_pJoyPad[nPlayer].press.Gamepad.sThumbRX / 32767.0f, - m_pJoyPad[nPlayer].press.Gamepad.sThumbRY / 32767.0f, 0.0f);
@@ -200,4 +202,64 @@ void  CJoypad::Vibration(int nTime, WORD nStrength, int nPlayer)
 {
 	m_pJoyPad[nPlayer].nTime = nTime;			// 振動持続時間
 	m_pJoyPad[nPlayer].wStrength = nStrength;	// 振動の強さ
+}
+
+//=============================================================================
+// ジョイスティックの傾き取得処理
+// Author : 唐﨑結斗
+// 概要 : ジョイスティックの傾き取得を返す
+//=============================================================================
+float CJoypad::GetStickAngle(JOYKEY Key, int nPlayer)
+{
+	switch (Key)
+	{
+	case JOYKEY_LEFT_STICK:
+		// スティックの角度
+		m_pJoyPad[nPlayer].fStickAngle = atan2f(m_pJoyPad[nPlayer].press.Gamepad.sThumbLX / 32767.0f, m_pJoyPad[nPlayer].press.Gamepad.sThumbLY / 32767.0f);
+
+		break;
+	case JOYKEY_RIGHT_STICK:
+		m_pJoyPad[nPlayer].fStickAngle = atan2f(m_pJoyPad[nPlayer].press.Gamepad.sThumbRX / 32767.0f, m_pJoyPad[nPlayer].press.Gamepad.sThumbRY / 32767.0f);
+		break;
+	}
+	
+	return m_pJoyPad[nPlayer].fStickAngle;
+}
+
+//=============================================================================
+// ジョイスティックの使用状況取得処理
+// Author : 唐﨑結斗
+// 概要 : ジョイスティックの使用状況取を返す
+//=============================================================================
+bool CJoypad::Stick(JOYKEY Key, int nPlayer, float fDeadZone)
+{
+	// 変数宣言
+	bool bStick = false;
+	float fLength = 0.0f;
+	D3DXVECTOR2 stickVec;
+
+	switch (Key)
+	{
+	case JOYKEY_LEFT_STICK:
+		// スティックの傾きの大きさの取得
+		stickVec = D3DXVECTOR2(-m_pJoyPad[nPlayer].press.Gamepad.sThumbLX / 32767.0f, -m_pJoyPad[nPlayer].press.Gamepad.sThumbLY / 32767.0f);
+		break;
+
+	case JOYKEY_RIGHT_STICK:
+		// スティックの傾きの大きさの取得
+		stickVec = D3DXVECTOR2(-m_pJoyPad[nPlayer].press.Gamepad.sThumbRX / 32767.0f, -m_pJoyPad[nPlayer].press.Gamepad.sThumbRY / 32767.0f);
+		break;
+	}
+
+	if (D3DXVec2Length(&stickVec) >= fDeadZone)
+	{
+		bStick = true;
+	}
+
+#ifdef _DEBUG
+	CDebugProc::Print("傾きの大きさ : %f\n", D3DXVec2Length(&stickVec));
+#endif // _DEBUG
+
+
+	return bStick;
 }
