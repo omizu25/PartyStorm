@@ -28,6 +28,7 @@
 #include "Shark.h"
 #include "obstacle.h"
 
+#include "effect.h"
 #include "model3D.h"
 #include "mesh.h"
 #include "sphere.h"
@@ -170,6 +171,9 @@ void CGame::Uninit()
 
 	// スコアの解放
 	Release();
+
+	// エフェクトの終了
+	CEffect::ReleaseAll();
 }
 
 //=============================================================================
@@ -182,10 +186,17 @@ void CGame::Update()
 	// 障害物
 	CObstacle::Pop();
 
+	// エフェクトの更新
+	CEffect::UpdateAll();
+
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 	if (pKeyboard->GetTrigger(DIK_F3))
 	{
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
+	}
+	if (pKeyboard->GetTrigger(DIK_F4))
+	{
+		CEffect::Explosion(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
 	//コントローラー使用の確認

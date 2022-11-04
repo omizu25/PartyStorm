@@ -22,6 +22,7 @@
 #include "mouse.h"
 #include "joypad.h"
 
+#include "instancing.h"
 #include "texture.h"
 #include "camera_manager.h"
 #include "camera.h"
@@ -51,6 +52,7 @@ CKeyboard *CApplication::m_pKeyboard = {};							// キーボードインスタンス
 CMouse *CApplication::m_pMouse = {};								// マウスインスタンス
 CJoypad *CApplication::m_pJoy = {};
 
+CInstancing *CApplication::m_pInstancing = nullptr;					// インスタンシングスタンス
 CTexture *CApplication::m_pTexture = nullptr;						// テクスチャインスタンス
 CCameraManager *CApplication::m_pCameraManager = nullptr;			// カメラマネージャークラス
 CCamera *CApplication::m_pCamera = nullptr;							// カメラインスタンス
@@ -258,6 +260,7 @@ CApplication::~CApplication()
 	assert(m_pKeyboard == nullptr);
 	assert(m_pMouse == nullptr);
 
+	assert(m_pInstancing == nullptr);
 	assert(m_pTexture == nullptr);
 	assert(m_pCameraManager == nullptr);
 	assert(m_pCamera == nullptr);
@@ -277,6 +280,7 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	m_pRenderer = new CRenderer;
 	m_pDebugProc = new CDebugProc;
 	m_pTexture = new CTexture;
+	m_pInstancing = new CInstancing;
 	m_pCameraManager = new CCameraManager;
 	m_pCamera = new CCamera;
 
@@ -313,6 +317,10 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// 初期化処理
 	assert(m_pTexture != nullptr);
 	m_pTexture->Init();
+
+	// 初期化処理
+	assert(m_pInstancing != nullptr);
+	m_pInstancing->Init();
 
 	// 初期化処理
 	assert(m_pCameraManager != nullptr);
@@ -409,6 +417,15 @@ void CApplication::Uninit()
 		m_pJoy->Uninit();
 		delete m_pJoy;
 		m_pJoy = nullptr;
+	}
+
+	if (m_pInstancing != nullptr)
+	{// 終了処理
+		m_pInstancing->Uninit();
+
+		// メモリの解放
+		delete m_pInstancing;
+		m_pInstancing = nullptr;
 	}
 
 	if (m_pTexture != nullptr)

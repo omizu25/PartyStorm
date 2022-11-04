@@ -72,7 +72,7 @@ CObject2D * CObject2D::Create(int nPriority)
 // Author : 唐﨑結斗
 // 概要 : インスタンス生成時に行う処理
 //=============================================================================
-CObject2D::CObject2D(int nPriority/* = PRIORITY_LEVEL0*/) : CObject(nPriority)
+CObject2D::CObject2D(int nPriority/* = PRIORITY_2D*/) : CObject(nPriority)
 {
 	m_pVtxBuff = nullptr;								// 頂点バッファ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 位置

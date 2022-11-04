@@ -43,7 +43,7 @@ CObject3D * CObject3D::Create(void)
 // Author : 唐﨑結斗
 // 概要 : インスタンス生成時に行う処理
 //=============================================================================
-CObject3D::CObject3D()
+CObject3D::CObject3D(int nPriority/* = PRIORITY_3D*/) : CObject(nPriority)
 {
 	m_pVtxBuff = nullptr;								// 頂点バッファ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 位置

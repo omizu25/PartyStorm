@@ -16,14 +16,15 @@
 #include "renderer.h"
 #include "application.h"
 #include "camera.h"
+#include "instancing.h"
 
 //*****************************************************************************
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
 //*****************************************************************************
-CObject *CObject::m_pTop[MAX_LEVEL] = { nullptr };				// æ“ªƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
-CObject *CObject::m_pCurrent[MAX_LEVEL] = { nullptr };			// Œ»İ‚Ì(ˆê”ÔŒã‚ë)ƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
-int CObject::m_nMaxObject = 0;									// g—p”
-int CObject::m_nPriorityMaxObj[MAX_LEVEL] = { 0 };				// ƒvƒ‰ƒCƒIƒŠƒeƒB‚²‚Æ‚ÌƒIƒuƒWƒFƒNƒg”
+CObject *CObject::m_pTop[PRIORITY_MAX] = {};				// æ“ªƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
+CObject *CObject::m_pCurrent[PRIORITY_MAX] = {};			// Œ»İ‚Ì(ˆê”ÔŒã‚ë)ƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
+int CObject::m_nMaxObject = 0;								// g—p”
+int CObject::m_nPriorityMaxObj[PRIORITY_MAX] = {};			// ƒvƒ‰ƒCƒIƒŠƒeƒB‚²‚Æ‚ÌƒIƒuƒWƒFƒNƒg”
 
 //=============================================================================
 // ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì‰ğ•ú
@@ -32,7 +33,7 @@ int CObject::m_nPriorityMaxObj[MAX_LEVEL] = { 0 };				// ƒvƒ‰ƒCƒIƒŠƒeƒB‚²‚Æ‚ÌƒIƒ
 //=============================================================================
 void CObject::ReleaseAll(bool bPermanent)
 {
-	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		if (m_pTop[nCntPriority] != nullptr)
 		{// •Ï”éŒ¾
@@ -77,7 +78,7 @@ void CObject::UpdateAll(void)
 	// ƒIƒuƒWƒFƒNƒg‚Ìg—p”‚Ì•\¦
 	CDebugProc::Print("ƒIƒuƒWƒFƒNƒg‚Ìg—p” : %d\n", m_nMaxObject);
 
-	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		if (m_pTop[nCntPriority] != nullptr)
 		{// •Ï”éŒ¾
@@ -106,8 +107,14 @@ void CObject::UpdateAll(void)
 //=============================================================================
 void CObject::DrawAll()
 {
-	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
+		if (nCntPriority == PRIORITY_EFFECT)
+		{// ƒGƒtƒFƒNƒg
+			CApplication::GetInstancing()->Draw();
+			continue;
+		}
+
 		if (m_pTop[nCntPriority] != nullptr)
 		{// •Ï”éŒ¾
 			CObject *pObject = m_pTop[nCntPriority];
@@ -144,7 +151,7 @@ void CObject::DrawAll()
 //=============================================================================
 void CObject::ReleaseListAll()
 {
-	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		if (m_pTop[nCntPriority] != nullptr)
 		{// •Ï”éŒ¾
@@ -203,10 +210,10 @@ void CObject::RandomRelease(int nPriority)
 // Author : “‚ú±Œ‹“l
 // ŠT—v : ƒCƒ“ƒXƒ^ƒ“ƒX¶¬‚És‚¤ˆ—
 //=============================================================================
-CObject::CObject(int nPriority/* = PRIORITY_LEVEL0*/) : m_pPrev(nullptr),		// ‘O‚ÌƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
-m_pNext(nullptr),																// Ÿ‚ÌƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
-m_nLevPriority(nPriority),														// ƒvƒ‰ƒCƒIƒŠƒeƒB‚ÌƒŒƒxƒ‹
-m_bDeath(false)																	// €–Sƒtƒ‰ƒO
+CObject::CObject(int nPriority) : m_pPrev(nullptr),		// ‘O‚ÌƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
+m_pNext(nullptr),										// Ÿ‚ÌƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
+m_nLevPriority(nPriority),								// ƒvƒ‰ƒCƒIƒŠƒeƒB‚ÌƒŒƒxƒ‹
+m_bDeath(false)											// €–Sƒtƒ‰ƒO
 {
 	// g—p”‚ÌƒCƒ“ƒNƒŠƒƒ“ƒg
 	m_nMaxObject++;

@@ -22,6 +22,7 @@ class CKeyboard;
 class CMouse;
 class CJoypad;
 
+class CInstancing;
 class CTexture;
 class CCameraManager;
 class CCamera;
@@ -62,6 +63,7 @@ public:
 
 	static CJoypad *GetJoy() { return m_pJoy; }								// キーボードのゲッター
 
+	static CInstancing *GetInstancing() { return m_pInstancing; }						// インスタンシングのゲッター
 	static CTexture *GetTexture() { return m_pTexture; }								// テクスチャのゲッター
 	static CCameraManager *GetCameraManager() { return m_pCameraManager; }				// カメラマネージャーのゲッター
 	static CCamera *GetCamera() { return m_pCamera; }									// カメラのゲッター
@@ -101,7 +103,7 @@ private:
 	static CMouse *m_pMouse;					// マウスクラス
 	static CJoypad *m_pJoy;
 
-
+	static CInstancing *m_pInstancing;			// インスタンシングクラス
 	static CTexture *m_pTexture;				// テクスチャクラス
 	static CCameraManager *m_pCameraManager;	// カメラマネージャークラス
 	static CCamera *m_pCamera;					// ゲームカメラクラス

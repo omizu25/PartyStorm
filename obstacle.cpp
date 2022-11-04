@@ -168,7 +168,7 @@ void CObstacle::Draw()
 //=============================================================================
 void CObstacle::Collison()
 {
-	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		// •Ï”éŒ¾
 		CObject *pObject = CObject::GetTop(nCntPriority);

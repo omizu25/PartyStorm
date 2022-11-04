@@ -506,7 +506,7 @@ void CPlayer::Collison()
 	D3DXVECTOR3 pos = GetPos() + GetColisonPos();
 	D3DXVECTOR3 size = GetColisonSize();
 
-	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
+	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		CObject *pTop = CObject::GetTop(nCntPriority);
 

@@ -28,12 +28,12 @@ public:
 	//--------------------------------------------------------------------
 	enum PRIORITY_LEVEL
 	{
-		PRIORITY_LEVEL0 = 0,	// レベル0
-		PRIORITY_LEVEL1,		// レベル1
-		PRIORITY_LEVEL2,		// レベル2
-		PRIORITY_LEVEL3,		// レベル3
-		PRIORITY_LEVEL4,		// レベル4
-		MAX_LEVEL				// 最大レベル
+		PRIORITY_NONE = 0,	// その他
+		PRIORITY_3D,		// 3D
+		PRIORITY_EFFECT,	// エフェクト
+		PRIORITY_2D,		// 2D
+		PRIORITY_FADE,		// フェード
+		PRIORITY_MAX		// プライオリティの最大
 	};
 
 	//--------------------------------------------------------------------
@@ -70,7 +70,7 @@ public:
 	//--------------------------------------------------------------------
 	// コンストラクタとデストラクタ
 	//--------------------------------------------------------------------
-	explicit CObject(int nPriority = PRIORITY_LEVEL0);
+	explicit CObject(int nPriority = PRIORITY_NONE);
 	virtual ~CObject();
 
 	//--------------------------------------------------------------------
@@ -111,10 +111,10 @@ private:
 	//--------------------------------------------------------------------
 	// 静的メンバ変数
 	//--------------------------------------------------------------------
-	static CObject *m_pTop[MAX_LEVEL];				// 先頭オブジェクトへのポインタ
-	static CObject *m_pCurrent[MAX_LEVEL];			// 現在の(一番後ろ)オブジェクトへのポインタ
+	static CObject *m_pTop[PRIORITY_MAX];			// 先頭オブジェクトへのポインタ
+	static CObject *m_pCurrent[PRIORITY_MAX];		// 現在の(一番後ろ)オブジェクトへのポインタ
 	static int m_nMaxObject;						// 使用数
-	static int m_nPriorityMaxObj[MAX_LEVEL];		// プライオリティごとのオブジェクト数
+	static int m_nPriorityMaxObj[PRIORITY_MAX];		// プライオリティごとのオブジェクト数
 
 	//--------------------------------------------------------------------
 	// メンバ変数

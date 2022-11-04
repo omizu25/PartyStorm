@@ -158,9 +158,11 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="camera_manager.h" />
     <ClInclude Include="debug_proc.h" />
+    <ClInclude Include="effect.h" />
     <ClInclude Include="effect3D.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="instancing.h" />
     <ClInclude Include="joypad.h" />
     <ClInclude Include="line.h" />
     <ClInclude Include="model_obj.h" />
@@ -200,10 +202,12 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_manager.cpp" />
     <ClCompile Include="debug_proc.cpp" />
+    <ClCompile Include="effect.cpp" />
     <ClCompile Include="effect3D.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="instancing.cpp" />
     <ClCompile Include="joypad.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="light.cpp" />
@@ -233,6 +237,12 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="tex_anim.cpp" />
     <ClCompile Include="title.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="data\FILE\Effect.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

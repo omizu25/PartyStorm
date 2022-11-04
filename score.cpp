@@ -49,7 +49,7 @@ CScore *CScore::Create(int nMaxDigit, bool bAddDigit)
 // Author : 唐﨑結斗
 // 概要 : インスタンス生成時に行う処理
 //=============================================================================
-CScore::CScore(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority)
+CScore::CScore()
 {
 	m_pNumber = nullptr;								// ナンバー
 	m_pos = D3DXVECTOR3(0.0f,0.0f,0.0f);				// 位置
