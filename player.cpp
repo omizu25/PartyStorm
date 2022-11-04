@@ -541,6 +541,22 @@ void CPlayer::Collison()
 			}
 		}
 	}
+
+	if (pos.x - size.x < -250.0f)
+	{
+		pos.x = -250.0f + size.x + GetColisonPos().x;
+	}
+	else if (pos.x + size.x > 250.0f)
+	{
+		pos.x = 250.0f - size.x + GetColisonPos().x;
+	}
+	if (pos.z - size.z < -550.0f)
+	{
+		pos.z = -550.0f + size.z + GetColisonPos().z;
+	}
+
+	// ˆÊ’u‚ÌÝ’è
+	SetPos(pos - GetColisonPos());
 }
 
 #ifdef _DEBUG
