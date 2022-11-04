@@ -27,6 +27,7 @@
 #include "player.h"
 #include "Shark.h"
 #include "obstacle.h"
+#include "move.h"
 
 #include "effect.h"
 #include "model3D.h"
@@ -74,7 +75,13 @@ HRESULT CGame::Init()
 	CMouse *pMouse = CApplication::GetMouse();
 
 	// 重力の値を設定
-	CCalculation::SetGravity(10.0f);
+	//CCalculation::SetGravity(4.0f);
+
+	// カメラの位置変更
+	CCamera *pCamera = CApplication::GetCamera();
+	pCamera->SetPosV(D3DXVECTOR3(0.0f, 300.0f, -1600.0f));
+	pCamera->SetPosR(D3DXVECTOR3(0.0f, 90.0f, 0.0f));
+	pCamera->SetViewing(20.0f);
 
 	// 地面の設定
 	m_pMesh3D = CMesh3D::Create();
@@ -115,14 +122,19 @@ HRESULT CGame::Init()
 	{// プレイヤーの生成
 		m_pPlayer[nCntPlayer] = CPlayer::Create();
 		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
-		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-100.0f + 100.0f * nCntPlayer, 0.0f, 0.0f));
+		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-100.0f + 100.0f * nCntPlayer, 0.0f, -300.0f));
 		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
+
+		// 移動情報の設定
+		CMove *pMove = m_pPlayer[nCntPlayer]->GetMove();
+		pMove->SetMoving(1.0f, 5.0f, 0.5f, 0.1f);
 	}
 
 	//サメ設定
 	m_pEnemyShark = CEnemyShark::Create();
 	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
-	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -100.0f, 1500.0f));
+	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
+	m_pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
@@ -206,14 +218,27 @@ void CGame::Update()
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
 
-
-
 	if (pKeyboard->GetTrigger(DIK_RETURN))
 	{
 		pJoy->Vibration(120, 50000, 0);
 		pJoy->Vibration(120, 50000, 1);
 	}
 
+	int nMaxPlayer = CApplication::GetPersonCount();
+	int nCntDead = 0;
+
+	for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
+	{
+		if (m_pPlayer[nCntPlayer]->GetDead())
+		{
+			nCntDead++;
+		}
+	}
+
+	if (nCntDead >= nMaxPlayer)
+	{
+		CApplication::SetNextMode(CApplication::MODE_RESULT);
+	}
 }
 
 //=============================================================================

@@ -95,6 +95,7 @@ public:
 	void SetRot(const D3DXVECTOR3 rot, const int nShaft);
 	void SetCamera(const D3DXVECTOR3 posV, const D3DXVECTOR3 posR, const D3DXVECTOR3 rot);
 	void SetFollowTarget(CObject *pTarget, D3DXVECTOR3 posRAdd, float fDistance, float fCoeffFllow);
+	void SetViewing(const float fViewing) { m_fViewing = fViewing; }
 	void MotionReset(void);
 	void SetNumMotion(const int nNumMotion);
 
@@ -132,6 +133,7 @@ private:
 	D3DXVECTOR3			m_posRAdd;			// 注視点の追加位置
 	VIEW_TYPE			m_viewType;			// 投影の種別
 	float				m_fDistance;		// 視点から注視点までの距離
+	float				m_fViewing;			// 視野角
 	float				m_fRotMove;			// 移動方向
 	float				m_fCoeffFllow;		// 追従の減衰係数
 	int					m_nCntFrame;		// フレームカウント
