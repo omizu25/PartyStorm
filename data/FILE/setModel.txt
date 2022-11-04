@@ -4,7 +4,7 @@
 #------------------------------------------------------------------------------
 MODELSET
 	TYPE = 22					# Ží—Þ
-	POS = -100.30 0.0 300.0		# ˆÊ’u(‚w/‚x/‚y)
+	POS = -330.30 0.0 300.0		# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 10.0 50.0			# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
@@ -17,6 +17,15 @@ END_MODELSET
 MODELSET
 	TYPE = 23						# Ží—Þ
 	POS = 0.0 10.0 0.0				# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
+	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
+	COLISON_POS = 0.0 10.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
+END_MODELSET
+
+
+MODELSET
+	TYPE = 24						# Ží—Þ
+	POS = 550.0 10.0 0.0				# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
 	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
 	COLISON_POS = 0.0 10.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
