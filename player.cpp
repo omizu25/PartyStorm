@@ -195,7 +195,6 @@ void CPlayer::Update()
 
 		// 当たり判定
 		Collison();
-
 		// メッシュの当たり判定
 		CMesh3D *pMesh = CGame::GetMesh();
 
@@ -207,6 +206,10 @@ void CPlayer::Update()
 		// 位置の取得
 		pos = GetPos();
 
+		if (GetDead())
+		{
+			CApplication::SetNextMode(CApplication::MODE_RESULT);
+		}
 		// 更新
 		CMotionModel3D::Update();
 
