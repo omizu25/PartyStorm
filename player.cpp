@@ -98,9 +98,6 @@ HRESULT CPlayer::Init()
 	SetColisonPos(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
 	SetColisonSize(D3DXVECTOR3(20.0f, 50.0f, 20.0f));
 
-	// カメラの追従設定(目標 : プレイヤー)
-	CApplication::GetCamera()->SetFollowTarget(this, D3DXVECTOR3(0.0f, 50.0f, 0.0f), 300.0f, 0.5f);
-
 	// オブジェクトタイプの設定
 	SetObjType(OBJTYPE_3DPLAYER);
 
@@ -170,14 +167,13 @@ void CPlayer::Update()
 		if (pKeyboard->GetTrigger(DIK_RETURN)
 			&& pMotion != nullptr)
 		{
-			pMotion->SetNumMotion(ATTACK_ACTION);
 			m_EAction = ATTACK_ACTION;
+			pMotion->SetNumMotion(m_EAction);
 		}
 
 		// 移動
+		pos.z += CCalculation::Gravity();
 		pos += Move();
-
-		//pos.y -= CCalculation::Gravity();
 
 		// 回転
 		Rotate();
@@ -186,8 +182,8 @@ void CPlayer::Update()
 		if (pMotion != nullptr
 			&& !pMotion->GetMotion())
 		{
-			pMotion->SetNumMotion(NEUTRAL_ACTION);
 			m_EAction = NEUTRAL_ACTION;
+			pMotion->SetNumMotion(m_EAction);
 		}
 
 		// 位置の設定
@@ -195,6 +191,7 @@ void CPlayer::Update()
 
 		// 当たり判定
 		Collison();
+
 		// メッシュの当たり判定
 		CMesh3D *pMesh = CGame::GetMesh();
 
@@ -206,10 +203,6 @@ void CPlayer::Update()
 		// 位置の取得
 		pos = GetPos();
 
-		if (GetDead())
-		{
-			CApplication::SetNextMode(CApplication::MODE_RESULT);
-		}
 		// 更新
 		CMotionModel3D::Update();
 
@@ -502,10 +495,6 @@ void CPlayer::Rotate()
 //=============================================================================
 void CPlayer::Collison()
 {
-	// プレイヤー情報の取得
-	D3DXVECTOR3 pos = GetPos() + GetColisonPos();
-	D3DXVECTOR3 size = GetColisonSize();
-
 	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
 	{
 		CObject *pTop = CObject::GetTop(nCntPriority);
@@ -547,6 +536,10 @@ void CPlayer::Collison()
 			}
 		}
 	}
+
+	// プレイヤー情報の取得
+	D3DXVECTOR3 pos = GetPos() + GetColisonPos();
+	D3DXVECTOR3 size = GetColisonSize();
 
 	if (pos.x - size.x < -250.0f)
 	{

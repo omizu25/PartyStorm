@@ -21,6 +21,7 @@
 #include "move.h"
 #include "calculation.h"
 #include "object.h"
+#include "debug_proc.h"
 
 //*****************************************************************************
 // 定数定義
@@ -148,16 +149,22 @@ void CCamera::Update(void)
 
 		if (m_bFllow)
 		{
-			Follow();
+			Follow();	// 追従
 		}
 		else
 		{
-			Action();
-			Move();
+			Action();	// アクション
+			//Move();		// 移動
 		}
 
-		Zoom();
+		//Zoom();
 	}
+
+#ifdef _DEBUG
+	CDebugProc::Print("カメラの視点 | X : %.3f | Y : %.3f | Z : %.3f |\n", m_posV.x, m_posV.y, m_posV.z);
+	CDebugProc::Print("カメラの	注視点 | X : %.3f | Y : %.3f | Z : %.3f |\n", m_posR.x, m_posR.y, m_posR.z);
+#endif // _DEBUG
+
 }
 
 //=============================================================================
@@ -189,7 +196,7 @@ void CCamera::Set()
 	case TYPE_CLAIRVOYANCE:
 		// プロジェクションマトリックスの作成(透視投影)
 		D3DXMatrixPerspectiveFovLH(&m_mtxProj,											// プロジェクションマトリックス
-			D3DXToRadian(45.0f),														// 視野角
+			D3DXToRadian(20.0f),														// 視野角
 			(float)CRenderer::SCREEN_WIDTH / (float)CRenderer::SCREEN_HEIGHT,			// アスペクト比
 			CAMERA_NEAR,																// ニア
 			CAMERA_FUR);																// ファー
