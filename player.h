@@ -61,6 +61,7 @@ public:
 	CMove *GetMove() { return m_pMove; }							// ˆÚ“®î•ñ‚Ìæ“¾
 	void SetNum(const int nNum) { m_nNum = nNum; }					// ¯•Ê”Ô†‚Ìİ’è
 	bool GetDead() { return m_bDead; }								// €–Só‹µ‚Ìæ“¾
+
 #ifdef _DEBUG
 	void SetLine();					// ƒ‰ƒCƒ“‚Ìİ’è
 #endif // _DEBUG

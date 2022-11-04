@@ -153,72 +153,70 @@ void CPlayer::Uninit()
 // 概要 : 2D更新を行う
 //=============================================================================
 void CPlayer::Update()
-{// キーボードの取得
-	CKeyboard *pKeyboard = CApplication::GetKeyboard();
+{
+	if (!m_bDead)
+	{// キーボードの取得
+		CKeyboard *pKeyboard = CApplication::GetKeyboard();
 
-	// モーション情報の取得
-	CMotion *pMotion = CMotionModel3D::GetMotion();
+		// モーション情報の取得
+		CMotion *pMotion = CMotionModel3D::GetMotion();
 
-	// 位置の取得
-	D3DXVECTOR3 pos = GetPos();
-	D3DXVECTOR3 rot = GetRot();
-	SetPosOld(pos);
+		// 位置の取得
+		D3DXVECTOR3 pos = GetPos();
+		D3DXVECTOR3 rot = GetRot();
+		SetPosOld(pos);
 
-	// 攻撃
-	if (pKeyboard->GetTrigger(DIK_RETURN)
-		&& pMotion != nullptr)
-	{
-		pMotion->SetNumMotion(ATTACK_ACTION);
-		m_EAction = ATTACK_ACTION;
-	}
+		// 攻撃
+		if (pKeyboard->GetTrigger(DIK_RETURN)
+			&& pMotion != nullptr)
+		{
+			pMotion->SetNumMotion(ATTACK_ACTION);
+			m_EAction = ATTACK_ACTION;
+		}
 
-	// 移動
-	pos += Move();
+		// 移動
+		pos += Move();
 
-	//pos.y -= CCalculation::Gravity();
+		//pos.y -= CCalculation::Gravity();
 
-	// 回転
-	Rotate();
+		// 回転
+		Rotate();
 
-	// ニュートラルモーションの設定
-	if (pMotion != nullptr
-		&& !pMotion->GetMotion())
-	{
-		pMotion->SetNumMotion(NEUTRAL_ACTION);
-		m_EAction = NEUTRAL_ACTION;
-	}
+		// ニュートラルモーションの設定
+		if (pMotion != nullptr
+			&& !pMotion->GetMotion())
+		{
+			pMotion->SetNumMotion(NEUTRAL_ACTION);
+			m_EAction = NEUTRAL_ACTION;
+		}
 
-	// 位置の設定
-	SetPos(pos);
+		// 位置の設定
+		SetPos(pos);
 
-	// 当たり判定
-	Collison();
+		// 当たり判定
+		Collison();
 
-	// メッシュの当たり判定
-	CMesh3D *pMesh = CGame::GetMesh();
+		// メッシュの当たり判定
+		CMesh3D *pMesh = CGame::GetMesh();
 
-	if (pMesh != nullptr)
-	{
-		pMesh->Collison(this);
-	}
-	
-	// 位置の取得
-	pos = GetPos();
+		if (pMesh != nullptr)
+		{
+			pMesh->Collison(this);
+		}
 
-	// 更新
-	CMotionModel3D::Update();
+		// 位置の取得
+		pos = GetPos();
+
+		// 更新
+		CMotionModel3D::Update();
 
 #ifdef _DEBUG
-	// デバック表示
-	CDebugProc::Print("プレイヤーの位置 | X : %.3f | Y : %.3f | Z : %.3f |\n", pos.x, pos.y, pos.z);
+		// デバック表示
+		CDebugProc::Print("プレイヤーの位置 | X : %.3f | Y : %.3f | Z : %.3f |\n", pos.x, pos.y, pos.z);
 
-	// ラインの更新
-	SetLine();
+		// ラインの更新
+		SetLine();
 #endif // _DEBUG
-
-	if (m_bDead)
-	{// 終了
-		Uninit();
 	}
 }
 
@@ -229,8 +227,10 @@ void CPlayer::Update()
 //=============================================================================
 void CPlayer::Draw()
 {
-	// 描画
-	CMotionModel3D::Draw();
+	if (!m_bDead)
+	{// 描画
+		CMotionModel3D::Draw();
+	}
 }
 
 //=============================================================================
@@ -496,6 +496,10 @@ void CPlayer::Rotate()
 //=============================================================================
 void CPlayer::Collison()
 {
+	// プレイヤー情報の取得
+	D3DXVECTOR3 pos = GetPos() + GetColisonPos();
+	D3DXVECTOR3 size = GetColisonSize();
+
 	for (int nCntPriority = 0; nCntPriority < MAX_LEVEL; nCntPriority++)
 	{
 		CObject *pTop = CObject::GetTop(nCntPriority);
@@ -526,7 +530,7 @@ void CPlayer::Collison()
 							pPlayer->SetPos(pos);
 						}	
 						if (pObject->GetObjType() == OBJTYPE_3DENEMY)
-						{
+						{// 敵との当たり判定
 							m_bDead = true;
 						}
 					}
