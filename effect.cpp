@@ -16,8 +16,10 @@
 //==================================================
 // 定義
 //==================================================
+const int CEffect::MAX_EXPLOSION = 3000;
 const int CEffect::MAX_LIFE = 100;
 const float CEffect::STD_SIZE = 12.0f;
+const float CEffect::STD_MOVE = 100.0f;
 
 //==================================================
 // 静的メンバ変数
@@ -108,19 +110,14 @@ void CEffect::Explosion(const D3DXVECTOR3& pos)
 {
 	D3DXCOLOR col = D3DXCOLOR(1.0f, 0.2f, 0.1f, 1.0f);
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	float rot = 0.0f;
-	float random = 0.0f;
+	
+	int max = STD_MOVE * 2;
 
-	for (int i = 0; i < 3000; i++)
+	for (int i = 0; i < MAX_EXPLOSION; i++)
 	{
-		rot = (D3DX_PI * 2.0f) / 3000 * i;
-
-		// 角度の正規化
-		rot = CCalculation::RotNormalization(rot);
-
-		move.x = sinf(rot) * ((float)((rand() % 201) - 100) / 10.0f + 10.0f);
-		move.y = cosf(rot) * ((float)((rand() % 201) - 100) / 10.0f + 10.0f);
-		move.z = ((float)((rand() % 201) - 100) / 10.0f + 10.0f);
+		move.x = ((float)(rand() % max) - STD_MOVE);
+		move.y = ((float)(rand() % max) - STD_MOVE);
+		move.z = ((float)(rand() % max) - STD_MOVE);
 
 		// 生成
 		CEffect::Create(pos, move, col);

@@ -27,6 +27,7 @@
 #include "line.h"
 #include "joypad.h"
 #include "title.h"
+#include "effect.h"
 
 //=============================================================================
 // インスタンス生成
@@ -527,6 +528,7 @@ void CPlayer::Collison()
 						if (pObject->GetObjType() == OBJTYPE_3DENEMY)
 						{// 敵との当たり判定
 							m_bDead = true;
+							CEffect::Explosion(GetPos());
 						}
 					}
 				}
