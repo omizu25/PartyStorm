@@ -74,12 +74,13 @@ HRESULT CGame::Init()
 	CMouse *pMouse = CApplication::GetMouse();
 
 	// 重力の値を設定
-	CCalculation::SetGravity(4.0f);
+	//CCalculation::SetGravity(4.0f);
 
 	// カメラの位置変更
 	CCamera *pCamera = CApplication::GetCamera();
 	pCamera->SetPosV(D3DXVECTOR3(0.0f, 300.0f, -1600.0f));
 	pCamera->SetPosR(D3DXVECTOR3(0.0f, 90.0f, 0.0f));
+	pCamera->SetViewing(20.0f);
 
 	// 地面の設定
 	m_pMesh3D = CMesh3D::Create();

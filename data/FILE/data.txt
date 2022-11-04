@@ -1,5 +1,5 @@
 // モデルの最大数
-MAX_TYPE = 25
+MAX_TYPE = 26
 
 //***************************
 // Xファイル名の読み込み
@@ -29,3 +29,5 @@ MODEL_FILENAME = data/MODEL/cube.x						# [21]
 MODEL_FILENAME = data/MODEL/ship.x						# [22]
 MODEL_FILENAME = data/MODEL/Bship.x						# [23]
 MODEL_FILENAME = data/MODEL/woodBox000.x				# [24]
+MODEL_FILENAME = data/MODEL/fence000.x					# [25]
+

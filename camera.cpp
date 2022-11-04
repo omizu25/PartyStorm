@@ -53,6 +53,7 @@ CCamera::CCamera()
 	m_posRAdd = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 注視点の追加位置
 	m_viewType = TYPE_CLAIRVOYANCE;					// 投影の種別
 	m_fDistance = 0.0f;								// 視点から注視点までの距離
+	m_fViewing = 0.0f;								// 視野角
 	m_fRotMove = 0.0f;								// 移動方向
 	m_fCoeffFllow = 0.0f;							// 追従の減衰係数
 	m_nCntFrame = 0;								// フレームカウント
@@ -111,6 +112,9 @@ HRESULT CCamera::Init()
 	// 視点の算出
 	SetPosV();
 
+	// 視野角の初期値の代入
+	m_fViewing = 45.0f;
+
 	return S_OK;
 }
 
@@ -145,7 +149,7 @@ void CCamera::Update(void)
 {
 	if(m_viewType == TYPE_CLAIRVOYANCE)
 	{
-		Rotate();
+		//Rotate();
 
 		if (m_bFllow)
 		{
@@ -196,7 +200,7 @@ void CCamera::Set()
 	case TYPE_CLAIRVOYANCE:
 		// プロジェクションマトリックスの作成(透視投影)
 		D3DXMatrixPerspectiveFovLH(&m_mtxProj,											// プロジェクションマトリックス
-			D3DXToRadian(20.0f),														// 視野角
+			D3DXToRadian(m_fViewing),													// 視野角
 			(float)CRenderer::SCREEN_WIDTH / (float)CRenderer::SCREEN_HEIGHT,			// アスペクト比
 			CAMERA_NEAR,																// ニア
 			CAMERA_FUR);																// ファー
