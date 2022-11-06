@@ -56,6 +56,7 @@ public:
 	void SetMtxWorld(D3DXMATRIX mtxWorld) { m_mtxWorld = mtxWorld; }				// ワールドマトリックスのセッター
 	D3DXMATRIX GetMtxWorld() { return m_mtxWorld; }									// ワールドマトリックスのゲッター
 	void SetMotion(const char *pName);												// モーション情報の設定
+	void SetMotion(const char *pName, const int nNumMotion);						// モーション情報の設定(オーバーロード)
 	CMotion *GetMotion() { return m_pMotion; }										// モーション情報の取得
 
 private:

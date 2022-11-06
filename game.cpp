@@ -35,6 +35,7 @@
 #include "sphere.h"
 #include "model_obj.h"
 #include "score.h"
+#include "sound.h"
 
 //*****************************************************************************
 // 静的メンバ変数宣言
@@ -74,8 +75,14 @@ HRESULT CGame::Init()
 {// マウスの取得
 	CMouse *pMouse = CApplication::GetMouse();
 
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
+
+	// ゲームBGMの再生
+	pSound->PlaySound(CSound::SOUND_LABEL_GAMEBGM);
+
 	// 重力の値を設定
-	//CCalculation::SetGravity(4.0f);
+	CCalculation::SetGravity(4.0f);
 
 	// カメラの位置変更
 	CCamera *pCamera = CApplication::GetCamera();
@@ -132,7 +139,7 @@ HRESULT CGame::Init()
 
 	//サメ設定
 	m_pEnemyShark = CEnemyShark::Create();
-	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
+	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
 	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
 	m_pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
 
@@ -163,6 +170,12 @@ void CGame::Uninit()
 
 	// マウスカーソルを出す
 	pMouse->SetShowCursor(true);
+
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
+
+	// サウンド終了
+	pSound->StopSound();
 
 	if (m_pPlayer != nullptr)
 	{

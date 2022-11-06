@@ -17,6 +17,7 @@
 #include "keyboard.h"
 #include "debug_proc.h"
 #include "joypad.h"
+#include "sound.h"
 
 //=============================================================================
 // コンストラクタ
@@ -45,6 +46,11 @@ CTitle::~CTitle()
 //=============================================================================
 HRESULT CTitle::Init()
 {
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
+
+	// タイトルBGMの再生
+	pSound->PlaySound(CSound::SOUND_LABEL_TITELBGM);
 
 	return S_OK;
 }
@@ -56,6 +62,12 @@ HRESULT CTitle::Init()
 //=============================================================================
 void CTitle::Uninit()
 {
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
+
+	// サウンド終了
+	pSound->StopSound();
+
 	// スコアの解放
 	Release();
 }

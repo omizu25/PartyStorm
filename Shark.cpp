@@ -24,6 +24,7 @@
 #include "bullet3D.h"
 #include "debug_proc.h"
 #include "line.h"
+#include "sound.h"
 
 CEnemyShark * CEnemyShark::Create()
 {
@@ -109,20 +110,16 @@ void CEnemyShark::Update()
 	// モーション情報の取得
 	CMotion *pMotion = CMotionModel3D::GetMotion();
 
-	// 攻撃
-	if (pKeyboard->GetTrigger(DIK_RETURN)
-		&& pMotion != nullptr)
-	{
-		pMotion->SetNumMotion(ATTACK_ACTION);
-		m_EAction = ATTACK_ACTION;
-	}
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
 
 	// ニュートラルモーションの設定
 	if (pMotion != nullptr
 		&& !pMotion->GetMotion())
 	{
-		pMotion->SetNumMotion(ATTACK_ACTION);
 		m_EAction = ATTACK_ACTION;
+		pMotion->SetNumMotion(m_EAction);
+		pSound->PlaySound(CSound::SOUND_LABEL_SE_BITING);
 	}
 
 	// 更新

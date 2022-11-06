@@ -27,6 +27,7 @@
 #include "camera_manager.h"
 #include "camera.h"
 #include "light.h"
+#include "sound.h"
 #include "object.h"
 #include "object2D.h"
 #include "object3D.h"
@@ -61,6 +62,7 @@ CApplication::SCENE_MODE CApplication::m_nextMode = MODE_TITLE;		// 次のモードの
 CSceneMode *CApplication::pSceneMode = nullptr;						// シーンモードを格納
 CFade *CApplication::m_pFade = nullptr;								// フェードクラス
 CLight *CApplication::m_pLight = nullptr;							// ライトクラス
+CSound *CApplication::m_pSound = nullptr;							// サウンドインスタンス
 int CApplication::m_nPriority = 0;									// プライオリティ番号
 bool CApplication::m_bWireFrame = false;							// ワイヤーフレームを使うか
 
@@ -264,6 +266,7 @@ CApplication::~CApplication()
 	assert(m_pTexture == nullptr);
 	assert(m_pCameraManager == nullptr);
 	assert(m_pCamera == nullptr);
+	assert(m_pSound == nullptr);
 }
 
 //=============================================================================
@@ -283,6 +286,7 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	m_pInstancing = new CInstancing;
 	m_pCameraManager = new CCameraManager;
 	m_pCamera = new CCamera;
+	m_pSound = new CSound;
 
 	// 入力デバイスのメモリ確保
 	m_pKeyboard = new CKeyboard;
@@ -330,6 +334,10 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	assert(m_pCamera != nullptr);
 	m_pCamera->Init();
 	m_pCamera->SetViewType(CCamera::TYPE_CLAIRVOYANCE);
+
+	// 初期化処理
+	assert(m_pSound != nullptr);
+	m_pSound->Init(m_hWnd);
 
 	// 初期化
 	assert(m_pDebugProc != nullptr);
@@ -444,6 +452,15 @@ void CApplication::Uninit()
 		// メモリの解放
 		delete m_pCameraManager;
 		m_pCameraManager = nullptr;
+	}
+
+	if (m_pSound != nullptr)
+	{// 終了処理
+		m_pSound->Uninit();
+
+		// メモリの解放
+		delete m_pSound;
+		m_pSound = nullptr;
 	}
 
 	if (m_pCamera != nullptr)

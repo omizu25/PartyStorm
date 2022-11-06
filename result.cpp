@@ -14,6 +14,7 @@
 #include "result.h"
 #include "keyboard.h"
 #include "object2D.h"
+#include "sound.h"
 
 //=============================================================================
 // コンストラクタ
@@ -45,6 +46,12 @@ HRESULT CResult::Init()
 	// 次に行くモードの設定
 	m_nextMode = CApplication::MODE_TITLE;
 
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
+
+	// リザルトBGMの再生
+	pSound->PlaySound(CSound::SOUND_LABEL_RESULTBGM);
+
 	return S_OK;
 }
 
@@ -55,6 +62,12 @@ HRESULT CResult::Init()
 //=============================================================================
 void CResult::Uninit()
 {
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
+
+	// サウンド終了
+	pSound->StopSound();
+
 	// スコアの解放
 	Release();
 }

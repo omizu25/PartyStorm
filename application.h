@@ -29,6 +29,7 @@ class CCamera;
 class CSceneMode;
 class CFade;
 class CLight;
+class CSound;
 
 //=============================================================================
 // アプリケーションクラス
@@ -61,13 +62,14 @@ public:
 	static CKeyboard *GetKeyboard() { return m_pKeyboard; }								// キーボードのゲッター
 	static CMouse *GetMouse() { return m_pMouse; }										// マウスのゲッター
 
-	static CJoypad *GetJoy() { return m_pJoy; }								// キーボードのゲッター
+	static CJoypad *GetJoy() { return m_pJoy; }											// ジョイパッドのゲッター
 
 	static CInstancing *GetInstancing() { return m_pInstancing; }						// インスタンシングのゲッター
 	static CTexture *GetTexture() { return m_pTexture; }								// テクスチャのゲッター
 	static CCameraManager *GetCameraManager() { return m_pCameraManager; }				// カメラマネージャーのゲッター
 	static CCamera *GetCamera() { return m_pCamera; }									// カメラのゲッター
 	static CLight *GetLight() { return m_pLight; }										// ライトの取得
+	static CSound *GetSound() { return m_pSound; }										// サウンドのゲッター
 	static D3DXVECTOR3 ScreenCastWorld(const D3DXVECTOR3 &pos);							// ワールド座標をスクリーン座標にキャストする
 	static D3DXVECTOR3 WorldCastScreen(const D3DXVECTOR3 &pos);							// ワールド座標をスクリーン座標にキャストする
 	static float RotNormalization(float fRot);											// 角度の設定
@@ -112,6 +114,7 @@ private:
 	static CSceneMode *pSceneMode;				// シーンモードを格納
 	static CFade *m_pFade;						// フェードクラス
 	static CLight *m_pLight;					// ライトクラス
+	static CSound *m_pSound;					// サウンドクラス
 	static int m_nPriority;						// プライオリティ番号
 	static bool m_bWireFrame;					// ワイヤーフレームを使うか
 

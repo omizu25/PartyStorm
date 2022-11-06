@@ -172,3 +172,30 @@ void CMotionModel3D::SetMotion(const char * pName)
 	// モーション番号の設定
 	m_pMotion->SetNumMotion(0);
 }
+
+//=============================================================================
+// モーションの設定
+// Author : 唐﨑結斗
+// 概要 : モーションの読み込みを行い、引数で指定されたモーションに設定する
+//=============================================================================
+void CMotionModel3D::SetMotion(const char * pName, const int nNumMotion)
+{
+	if (m_pMotion != nullptr)
+	{// 終了処理
+		m_pMotion->Uninit();
+
+		// メモリの解放
+		delete m_pMotion;
+		m_pMotion = nullptr;
+	}
+
+	// モーション情報
+	m_pMotion = new CMotion(pName);
+	assert(m_pMotion != nullptr);
+
+	// モーションの初期設定
+	m_pMotion->SetMotion(nNumMotion);
+
+	// モーション番号の設定
+	m_pMotion->SetNumMotion(nNumMotion);
+}

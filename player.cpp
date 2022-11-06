@@ -28,6 +28,7 @@
 #include "joypad.h"
 #include "title.h"
 #include "effect.h"
+#include "sound.h"
 
 //=============================================================================
 // インスタンス生成
@@ -496,6 +497,9 @@ void CPlayer::Rotate()
 //=============================================================================
 void CPlayer::Collison()
 {
+	// サウンド情報の取得
+	CSound *pSound = CApplication::GetSound();
+
 	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		CObject *pTop = CObject::GetTop(nCntPriority);
@@ -529,6 +533,7 @@ void CPlayer::Collison()
 						{// 敵との当たり判定
 							m_bDead = true;
 							CEffect::Explosion(GetPos());
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_EAT);
 						}
 					}
 				}
