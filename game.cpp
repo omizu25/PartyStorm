@@ -206,10 +206,6 @@ void CGame::Update()
 	{
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
-	if (pKeyboard->GetTrigger(DIK_F4))
-	{
-		CEffect::Explosion(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	}
 
 	//コントローラー使用の確認
 	CJoypad *pJoy = CApplication::GetJoy();
