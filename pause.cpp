@@ -19,6 +19,13 @@
 #include "sound.h"
 #include "fade.h"
 
+//--------------------------------------------------------------------
+// 定数定義
+//--------------------------------------------------------------------
+const D3DXCOLOR CPause::BASE_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// ベース色
+const D3DXCOLOR CPause::SELECT_COLOR = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	// セレクト色
+const D3DXCOLOR CPause::BACK_COLOR = D3DXCOLOR(0.7f, 0.2f, 0.2f, 0.5f);		// 背景色
+
 //=============================================================================
 // インスタンス生成
 // Author : 唐﨑結斗
@@ -48,7 +55,7 @@ CPause *CPause::Create()
 //=============================================================================
 CPause::CPause(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority)
 {
-	m_nextMode = MODE_RETURN;								// 次のモード
+	m_nextMode = MODE_RETURN;							// 次のモード
 	m_pPauseBGObj = nullptr;							// ポーズ背景オブジェクト
 	m_pReturnObj = nullptr;								// リターンオブジェクト
 	m_pNewGameObj = nullptr;							// ニューゲームオブジェクト
@@ -239,32 +246,32 @@ void CPause::SetPause(const bool bPause)
 		m_pPauseBGObj = CObject2D::Create();
 		m_pPauseBGObj->SetSize(m_size);
 		m_pPauseBGObj->SetPos(m_pos);
-		m_pPauseBGObj->LoadTex(26);
-		m_pPauseBGObj->SetCol(D3DXCOLOR(0.7f, 0.5f, 0.2f, 0.5f));
+		m_pPauseBGObj->LoadTex(10);
+		m_pPauseBGObj->SetCol(BACK_COLOR);
 		m_pPauseBGObj->SetObjType(CObject::OBJTYPE_PAUSE);
 
 		// リターンオブジェクト
 		m_pReturnObj = CObject2D::Create();					
 		m_pReturnObj->SetSize(D3DXVECTOR3(300.0f, 100.0f, 0.0f));
 		m_pReturnObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y - m_pReturnObj->GetSize().y - 20.0f, 0.0f));
-		m_pReturnObj->LoadTex(25);
-		m_pReturnObj->SetCol(D3DXCOLOR(0.25f, 0.1f, 0.8f, 1.0f));
+		m_pReturnObj->LoadTex(12);
+		m_pReturnObj->SetCol(SELECT_COLOR);
 		m_pReturnObj->SetObjType(CObject::OBJTYPE_PAUSE);
 
 		// ニューゲームオブジェクト
 		m_pNewGameObj = CObject2D::Create();
 		m_pNewGameObj->SetPos(m_pos);
 		m_pNewGameObj->SetSize(D3DXVECTOR3(400.0f, 100.0f, 0.0f));
-		m_pNewGameObj->LoadTex(19);
-		m_pNewGameObj->SetCol(D3DXCOLOR(0.25f, 0.1f, 0.8f, 1.0f));
+		m_pNewGameObj->LoadTex(11);
+		m_pNewGameObj->SetCol(SELECT_COLOR);
 		m_pNewGameObj->SetObjType(CObject::OBJTYPE_PAUSE);
 
 		// タイトルオブジェクト
 		m_pTitleObj = CObject2D::Create();
 		m_pTitleObj->SetSize(D3DXVECTOR3(300.0f, 100.0f, 0.0f));
 		m_pTitleObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y + m_pTitleObj->GetSize().y + 20.0f, 0.0f));
-		m_pTitleObj->LoadTex(18);
-		m_pTitleObj->SetCol(D3DXCOLOR(0.25f, 0.1f, 0.8f, 1.0f));
+		m_pTitleObj->LoadTex(-1);
+		m_pTitleObj->SetCol(SELECT_COLOR);
 		m_pTitleObj->SetObjType(CObject::OBJTYPE_PAUSE);
 	}
 	else
@@ -308,20 +315,20 @@ void CPause::FlashObj()
 	{
 	case MODE_RETURN:
 		pObj = m_pReturnObj;
-		m_pNewGameObj->SetCol(D3DXCOLOR(0.3f, 0.1f, 1.0f, 1.0f));
-		m_pTitleObj->SetCol(D3DXCOLOR(0.3f, 0.1f, 1.0f, 1.0f));
+		m_pNewGameObj->SetCol(BASE_COLOR);
+		m_pTitleObj->SetCol(BASE_COLOR);
 		break;
 
 	case MODE_GAME:
 		pObj = m_pNewGameObj;
-		m_pReturnObj->SetCol(D3DXCOLOR(0.3f, 0.1f, 1.0f, 1.0f));
-		m_pTitleObj->SetCol(D3DXCOLOR(0.3f, 0.1f, 1.0f, 1.0f));
+		m_pReturnObj->SetCol(BASE_COLOR);
+		m_pTitleObj->SetCol(BASE_COLOR);
 		break;
 
 	case MODE_TITLE:
 		pObj = m_pTitleObj;
-		m_pReturnObj->SetCol(D3DXCOLOR(0.3f, 0.1f, 1.0f, 1.0f));
-		m_pNewGameObj->SetCol(D3DXCOLOR(0.3f, 0.1f, 1.0f, 1.0f));
+		m_pReturnObj->SetCol(BASE_COLOR);
+		m_pNewGameObj->SetCol(BASE_COLOR);
 		break;
 
 	default:
@@ -329,7 +336,7 @@ void CPause::FlashObj()
 		break;
 	}
 
-	pObj->SetCol(D3DXCOLOR(0.25f, 0.1f, 0.8f, sinf(m_fAddAlpha) * 3.0f));
+	pObj->SetCol(D3DXCOLOR(SELECT_COLOR.r, SELECT_COLOR.g, SELECT_COLOR.b, sinf(m_fAddAlpha) * 3.0f));
 }
 
 //=============================================================================

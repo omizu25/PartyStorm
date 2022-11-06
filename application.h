@@ -21,7 +21,7 @@ class CDebugProc;
 class CKeyboard;
 class CMouse;
 class CJoypad;
-
+class CPause;
 class CInstancing;
 class CTexture;
 class CCameraManager;
@@ -69,6 +69,7 @@ public:
 	static CCameraManager *GetCameraManager() { return m_pCameraManager; }				// カメラマネージャーのゲッター
 	static CCamera *GetCamera() { return m_pCamera; }									// カメラのゲッター
 	static CLight *GetLight() { return m_pLight; }										// ライトの取得
+	static CFade *GetFade() { return m_pFade; }											// フェードのゲッター
 	static CSound *GetSound() { return m_pSound; }										// サウンドのゲッター
 	static D3DXVECTOR3 ScreenCastWorld(const D3DXVECTOR3 &pos);							// ワールド座標をスクリーン座標にキャストする
 	static D3DXVECTOR3 WorldCastScreen(const D3DXVECTOR3 &pos);							// ワールド座標をスクリーン座標にキャストする
@@ -77,6 +78,7 @@ public:
 	static void SetNextMode(SCENE_MODE mode) { m_nextMode = mode; }						// 次のモードの設定
 	static void SetMode(SCENE_MODE mode);												// モードの設定
 	static SCENE_MODE GetMode() { return m_mode; }										// モードの取得
+	static CPause *GetPause() { return m_pPause; }										// ポーズの取得
 
 	static int GetPersonCount() { return PersonCount; }
 	static void SetPersonCount(int PersonCnt);
@@ -115,11 +117,10 @@ private:
 	static CFade *m_pFade;						// フェードクラス
 	static CLight *m_pLight;					// ライトクラス
 	static CSound *m_pSound;					// サウンドクラス
+	static CPause *m_pPause;					// ポーズクラス
 	static int m_nPriority;						// プライオリティ番号
 	static bool m_bWireFrame;					// ワイヤーフレームを使うか
-
-	static 	int PersonCount;	//人数設定時のカウント
-
+	static int PersonCount;						// 人数設定時のカウント
 };
 
 #endif

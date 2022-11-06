@@ -28,6 +28,7 @@
 #include "camera.h"
 #include "light.h"
 #include "sound.h"
+#include "pause.h"
 #include "object.h"
 #include "object2D.h"
 #include "object3D.h"
@@ -63,6 +64,7 @@ CSceneMode *CApplication::pSceneMode = nullptr;						// シーンモードを格納
 CFade *CApplication::m_pFade = nullptr;								// フェードクラス
 CLight *CApplication::m_pLight = nullptr;							// ライトクラス
 CSound *CApplication::m_pSound = nullptr;							// サウンドインスタンス
+CPause *CApplication::m_pPause = nullptr;							// ポーズクラス
 int CApplication::m_nPriority = 0;									// プライオリティ番号
 bool CApplication::m_bWireFrame = false;							// ワイヤーフレームを使うか
 
@@ -342,6 +344,10 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// 初期化
 	assert(m_pDebugProc != nullptr);
 	m_pDebugProc->Init();
+
+	// ポーズの生成
+	m_pPause = CPause::Create();
+	m_pPause->SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));
 
 	// 初期化処理
 	assert(m_pKeyboard != nullptr);

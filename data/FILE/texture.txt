@@ -1,5 +1,6 @@
 // テクスチャの最大数
-MAX_TEXTURE = 9
+MAX_TEXTURE = 15
+
 //***************************
 // TEXTUREファイル名の読み込み
 //***************************
@@ -12,3 +13,11 @@ TEXTURE_FILENAME = data/TEXTURE/woodBox.jpg			# [5]
 TEXTURE_FILENAME = data/TEXTURE/wood000.jpg			# [6]
 TEXTURE_FILENAME = data/TEXTURE/wood001.jpg			# [7]
 TEXTURE_FILENAME = data/TEXTURE/Effect.png			# [8]
+TEXTURE_FILENAME = data/TEXTURE/pressEnter.png		# [9]
+TEXTURE_FILENAME = data/TEXTURE/pause.png			# [10]
+TEXTURE_FILENAME = data/TEXTURE/playAgain.png		# [11]
+TEXTURE_FILENAME = data/TEXTURE/quit.png			# [12]
+TEXTURE_FILENAME = data/TEXTURE/restart.png			# [13]
+TEXTURE_FILENAME = data/TEXTURE/pause100.png		# [14]
+
+

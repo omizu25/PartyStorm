@@ -56,6 +56,10 @@ HRESULT CSound::Init(HWND hWnd)
 	m_aParam[SOUND_LABEL_RESULTBGM] = SetSoundParam("data/BGM/result.wav", -1);
 	m_aParam[SOUND_LABEL_SE_BITING] = SetSoundParam("data/SE/biting.wav", 0);
 	m_aParam[SOUND_LABEL_SE_EAT] = SetSoundParam("data/SE/eat.wav", 0);
+	m_aParam[SOUND_LABEL_SE_DECIDE] = SetSoundParam("data/SE/decide000.wav", 0);
+	m_aParam[SOUND_LABEL_SE_SELECT] = SetSoundParam("data/SE/select000.wav", 0);
+	m_aParam[SOUND_LABEL_SE_PAUSE] = SetSoundParam("data/SE/pause000.wav", 0);
+
 
 	// COMÉâÉCÉuÉâÉäÇÃèâä˙âª
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);

@@ -25,6 +25,7 @@ CObject *CObject::m_pTop[PRIORITY_MAX] = {};				// 先頭オブジェクトへのポインタ
 CObject *CObject::m_pCurrent[PRIORITY_MAX] = {};			// 現在の(一番後ろ)オブジェクトへのポインタ
 int CObject::m_nMaxObject = 0;								// 使用数
 int CObject::m_nPriorityMaxObj[PRIORITY_MAX] = {};			// プライオリティごとのオブジェクト数
+bool CObject::m_bPause = false;								// ポーズを使用しているかどうか
 
 //=============================================================================
 // インスタンスの解放
@@ -52,7 +53,8 @@ void CObject::ReleaseAll(bool bPermanent)
 				else
 				{
 					if (!pObject->m_bDeath
-						&& pObject->m_objectType != CObject::OBJTYPE_FADE)
+						&& pObject->m_objectType != CObject::OBJTYPE_FADE
+						&& pObject->m_objectType != OBJTYPE_PAUSE)
 					{// オブジェクトの解放
 						pObject->Release();
 					}
@@ -88,8 +90,15 @@ void CObject::UpdateAll(void)
 			{// 現在のオブジェクトの次のオブジェクトを保管
 				CObject *pObjectNext = pObject->m_pNext;
 
-				if (!pObject->m_bDeath)
+				if (!pObject->m_bDeath
+					&& !m_bPause)
 				{// オブジェクトの更新
+					pObject->Update();
+				}
+				else if (!pObject->m_bDeath
+					&& m_bPause
+					&& pObject->m_objectType == OBJTYPE_PAUSE)
+				{// オブジェクト更新処理
 					pObject->Update();
 				}
 				

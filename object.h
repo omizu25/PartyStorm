@@ -48,6 +48,7 @@ public:
 		OBJTYPE_3DENEMY,			// 3Dエネミー
 		OBJTYPE_3DMODEL,			// 3Dモデル
 		OBJTYPE_FADE,				// フェード
+		OBJTYPE_PAUSE,				// ポーズ
 		MAX_OBJTYPE,				// 種別の最大数
 	};
 
@@ -60,6 +61,7 @@ public:
 	static void ReleaseListAll();													// すべてのオブジェクトのリスト解除
 	static CObject *GetTop(int nPriority) { return m_pTop[nPriority]; }				// 先頭オブジェクトへのポインタのゲッター
 	static CObject *GetCurrent(int nPriority) { return m_pCurrent[nPriority]; }		// 現在の(一番後ろ)オブジェクトへのポインタのゲッター
+	static void SetPause(const bool bPause) { m_bPause = bPause; }					// ポーズ状態のセッター
 
 #ifdef _DEBUG
 	static void ReleaseTop(int nPriority);
@@ -115,6 +117,7 @@ private:
 	static CObject *m_pCurrent[PRIORITY_MAX];		// 現在の(一番後ろ)オブジェクトへのポインタ
 	static int m_nMaxObject;						// 使用数
 	static int m_nPriorityMaxObj[PRIORITY_MAX];		// プライオリティごとのオブジェクト数
+	static bool m_bPause;							// ポーズを使用しているかどうか
 
 	//--------------------------------------------------------------------
 	// メンバ変数
