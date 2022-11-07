@@ -192,7 +192,7 @@ void CPlayer::Update()
 		SetPos(pos);
 
 		// “–‚½‚è”»’è
-		//Collison();
+		Collison();
 
 		// ƒƒbƒVƒ…‚Ì“–‚½‚è”»’è
 		CMesh3D *pMesh = CGame::GetMesh();
