@@ -56,6 +56,8 @@ CTime::CTime(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority)
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 過去の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 向き
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 大きさ
+	m_nTime = 0;										// 時間
+	m_nCntFrame = 0;									// フレームカウント
 }
 
 //=============================================================================
@@ -118,20 +120,24 @@ void CTime::Uninit()
 //=============================================================================
 void CTime::Update()
 {
-	// 時間の取得
-	int nTime = GetTime();
+	if (m_nTime > 0)
+	{// フレームカウント
+		m_nCntFrame++;
 
-	// デクリメント
-	nTime--;
+		if (m_nCntFrame % 60 == 0)
+		{// 時間の設定
+			m_pScore->AddScore(-1);
 
-	if (nTime <= 0)
-	{
-		nTime = 0;
-		CGame::SetGame(false);
-	}
+			// 時間の取得
+			m_nTime--;
 
-	// 時間の設定
-	SetTime(nTime);
+			if (m_nTime <= 0)
+			{
+				m_nTime = 0;
+				CGame::SetGame(false);
+			}
+		}
+	}	
 }
 
 //=============================================================================
@@ -180,14 +186,14 @@ void CTime::SetSize(const D3DXVECTOR3 & size)
 	m_size = size;
 
 	m_pObject2D->SetSize(m_size);
-	m_pScore->SetWholeSize(D3DXVECTOR3(m_size.x, size.y / 3.0f, size.z));
-	m_pScore->SetSize(D3DXVECTOR3(m_size.x / 3.0f, size.y / 3.0f, size.z));
+	m_pScore->SetWholeSize(D3DXVECTOR3(m_size.x, size.y / 2.0f, size.z));
+	m_pScore->SetSize(D3DXVECTOR3(m_size.x / 2.5f, size.y / 2.5f, size.z));
 }
 
 //=============================================================================
-// 大きさのセッター
+// ナンバーのセッター
 // Author : 唐﨑結斗
-// 概要 : 大きさのメンバ変数に引数を代入
+// 概要 : ナンバーのメンバ変数に引数を代入
 //=============================================================================
 void CTime::SetTime(const int nTime)
 {// 時間の設定
@@ -195,5 +201,6 @@ void CTime::SetTime(const int nTime)
 
 	// スコアの設定
 	m_pScore->SetScore(m_nTime);
-	m_pScore->AddScore(m_nTime);
+	m_pScore->SetDestScore(m_nTime);
+	m_pScore->AddDigit();
 }
