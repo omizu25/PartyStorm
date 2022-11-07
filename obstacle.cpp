@@ -23,20 +23,21 @@ namespace
 const int MODEL_TYPE = 24;				// モデルの種類
 const int POP_INTERVAL = 120;			// 出現の間隔
 const float MOVE_SPEED = 5.0f;			// 移動速度
-const float POP_POS_Z = -1500.0f;		// 出現のZの位置
-const float RELEASE_POS_Z = 1500.0f;	// 解放のZの位置
+const float POP_POS_Z = -1000.0f;		// 出現のZの位置
+const float POS_Y = -30.0f;				// Yの位置
+const float RELEASE_POS_Z = 1250.0f;	// 解放のZの位置
 const D3DXVECTOR2 POP_POS_X[] =			// 出現のXの位置
 {
-	D3DXVECTOR2(-60.0f, -30.0f),
-	D3DXVECTOR2(-60.0f, 0.0f),
-	D3DXVECTOR2(-60.0f, 30.0f),
-	D3DXVECTOR2(-60.0f, 60.0f),
-	D3DXVECTOR2(-30.0f, 0.0f),
-	D3DXVECTOR2(-30.0f, 30.0f),
-	D3DXVECTOR2(-30.0f, 60.0f),
-	D3DXVECTOR2(0.0f, 30.0f),
-	D3DXVECTOR2(0.0f, 60.0f),
-	D3DXVECTOR2(30.0f, 60.0f),
+	D3DXVECTOR2(-200.0f, -100.0f),
+	D3DXVECTOR2(-200.0f, 0.0f),
+	D3DXVECTOR2(-200.0f, 100.0f),
+	D3DXVECTOR2(-200.0f, 200.0f),
+	D3DXVECTOR2(-100.0f, 0.0f),
+	D3DXVECTOR2(-100.0f, 100.0f),
+	D3DXVECTOR2(-100.0f, 200.0f),
+	D3DXVECTOR2(0.0f, 100.0f),
+	D3DXVECTOR2(0.0f, 200.0f),
+	D3DXVECTOR2(100.0f, 200.0f),
 };
 const int POP_MAX = sizeof(POP_POS_X) / sizeof(POP_POS_X[0]);	// 出現位置の最大数
 }
@@ -51,21 +52,21 @@ int CObstacle::m_time = 0;
 //=============================================================================
 void CObstacle::Pop()
 {
-	m_time++;
-
 	if (m_time % POP_INTERVAL == 0)
-	{
+	{// 一定間隔
 		int randam = rand() % POP_MAX;
 
-		Create(POP_POS_X[randam].x);
-		Create(POP_POS_X[randam].y);
+		Create(POP_POS_X[randam].x, -1.0f);
+		Create(POP_POS_X[randam].y, 1.0f);
 	}
+
+	m_time++;
 }
 
 //=============================================================================
 // 生成
 //=============================================================================
-CObstacle* CObstacle::Create(float posX)
+CObstacle* CObstacle::Create(float posX, float inverse)
 {
 	// オブジェクトインスタンス
 	CObstacle* pObstacle = new CObstacle;
@@ -79,6 +80,8 @@ CObstacle* CObstacle::Create(float posX)
 	// 位置の設定
 	pObstacle->SetPos(D3DXVECTOR3(posX, 0.0f, POP_POS_Z));
 
+	pObstacle->m_inverse = inverse;
+
 	// インスタンスを返す
 	return pObstacle;
 }
@@ -86,7 +89,8 @@ CObstacle* CObstacle::Create(float posX)
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CObstacle::CObstacle()
+CObstacle::CObstacle() :
+	m_waveTime(0)
 {
 }
 
@@ -114,6 +118,8 @@ HRESULT CObstacle::Init()
 	SetColisonSize(size);
 	SetColisonPos(D3DXVECTOR3(0.0f, size.y / 2.0f, 0.0f));
 
+	m_waveTime = 0;
+
 	return E_NOTIMPL;
 }
 
@@ -136,8 +142,22 @@ void CObstacle::Update()
 
 	pos.z += MOVE_SPEED;
 
+	m_waveTime++;
+
+	pos.y = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * 25.0f;
+
+	pos.y += POS_Y;
+
 	// 位置の設定
 	CModelObj::SetPos(pos);
+
+	// 向きの取得
+	D3DXVECTOR3 rot = CModelObj::GetRot();
+
+	rot.z = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * (D3DX_PI * 0.03f * m_inverse);
+
+	// 向きの設定
+	CModelObj::SetRot(rot);
 
 	if (pos.z >= RELEASE_POS_Z)
 	{// 解放する位置を越した
@@ -198,5 +218,3 @@ void CObstacle::Collison()
 		}
 	}
 }
-
-

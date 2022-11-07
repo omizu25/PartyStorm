@@ -811,4 +811,3 @@ void CMesh3D::SetWave(const float fAddWave, const float fAmplitude)
 	// –@ü‚ÌŒvZ
 	Normal();
 }
-
