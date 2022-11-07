@@ -95,7 +95,7 @@ HRESULT CGame::Init()
 	// ƒ^ƒCƒ€‚Ìİ’è
 	CTime *pTime = CTime::Create();
 	pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
-	pTime->SetTime(10000);
+	pTime->SetTime(60);
 
 	// ’n–Ê‚Ìİ’è
 	m_pMesh3D = CMesh3D::Create();

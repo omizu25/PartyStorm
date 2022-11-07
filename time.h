@@ -68,6 +68,7 @@ private:
 	D3DXVECTOR3			m_rot;				// 向き
 	D3DXVECTOR3			m_size;				// 大きさ
 	int					m_nTime;			// 時間
+	int					m_nCntFrame;		// フレームカウント
 };
 
 #endif
