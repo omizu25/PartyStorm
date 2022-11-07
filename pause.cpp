@@ -270,7 +270,7 @@ void CPause::SetPause(const bool bPause)
 		m_pTitleObj = CObject2D::Create();
 		m_pTitleObj->SetSize(D3DXVECTOR3(300.0f, 100.0f, 0.0f));
 		m_pTitleObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y + m_pTitleObj->GetSize().y + 20.0f, 0.0f));
-		m_pTitleObj->LoadTex(-1);
+		m_pTitleObj->LoadTex(15);
 		m_pTitleObj->SetCol(SELECT_COLOR);
 		m_pTitleObj->SetObjType(CObject::OBJTYPE_PAUSE);
 	}

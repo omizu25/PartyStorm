@@ -95,6 +95,11 @@ void CTitle::Update()
 
 	int nMaxPlayer = pJoy->GetUseJoyPad();
 
+	if (nMaxPlayer >= 0)
+	{
+		nMaxPlayer = 1;
+	}
+
 	if (pKeyboard->GetTrigger(DIK_Q))
 	{
 		Cnt++;
@@ -104,11 +109,11 @@ void CTitle::Update()
 		Cnt--;
 	}
 
-	if (Cnt > nMaxPlayer)	//4を越えないよう
+	if (Cnt > nMaxPlayer)	// 4を越えないよう
 	{
 		Cnt = 1;
 	}
-	if (Cnt < 1)	//マイナス設定無し
+	if (Cnt < 1)	// マイナス設定無し
 	{
 		Cnt = nMaxPlayer;
 	}

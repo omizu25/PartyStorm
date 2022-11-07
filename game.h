@@ -20,6 +20,7 @@ class CPlayer;
 class CEnemyShark;
 class CMesh3D;
 class CScore;
+class CTime;
 
 //=============================================================================
 // ゲームクラス
@@ -48,6 +49,7 @@ public:
 	static CEnemyShark *m_pEnemyShark;			// サメ敵
 	static CMesh3D *m_pMesh3D;					// メッシュクラス
 	static CScore *m_pScore;					// スコアクラス
+	static CTime *m_pTime;						// タイムクラス
 	static bool m_bGame;						// ゲームの状況
 
 	//--------------------------------------------------------------------
@@ -57,6 +59,11 @@ public:
 	void Uninit() override;						// 終了
 	void Update() override;						// 更新
 	void Draw() override;						// 描画
+
+	//--------------------------------------------------------------------
+	// メンバ変数
+	//--------------------------------------------------------------------
+	int m_nCntFrame;		// フレームカウント
 };
 
 #endif

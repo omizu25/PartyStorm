@@ -35,6 +35,7 @@
 #include "sphere.h"
 #include "model_obj.h"
 #include "score.h"
+#include "time.h"
 #include "sound.h"
 
 //*****************************************************************************
@@ -43,6 +44,7 @@
 CPlayer **CGame::m_pPlayer = nullptr;					// プレイヤークラス
 CEnemyShark *CGame::m_pEnemyShark = nullptr;			// Enemy
 CScore *CGame::m_pScore = nullptr;						// スコアクラス
+CTime *CGame::m_pTime = nullptr;						// タイムクラス
 CMesh3D *CGame::m_pMesh3D;								// メッシュクラス
 bool CGame::m_bGame = false;							// ゲームの状況
 
@@ -51,7 +53,7 @@ bool CGame::m_bGame = false;							// ゲームの状況
 // Author : 唐﨑結斗
 // 概要 : インスタンス生成時に行う処理
 //=============================================================================
-CGame::CGame()
+CGame::CGame() : m_nCntFrame(0)
 {
 
 }
@@ -89,6 +91,11 @@ HRESULT CGame::Init()
 	pCamera->SetPosV(D3DXVECTOR3(0.0f, 300.0f, -1600.0f));
 	pCamera->SetPosR(D3DXVECTOR3(0.0f, 90.0f, 0.0f));
 	pCamera->SetViewing(20.0f);
+
+	// タイムの設定
+	CTime *pTime = CTime::Create();
+	pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
+	pTime->SetTime(10000);
 
 	// 地面の設定
 	m_pMesh3D = CMesh3D::Create();
@@ -146,10 +153,10 @@ HRESULT CGame::Init()
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
 
-	// スコアの生成
-	m_pScore = CScore::Create(10, false);
-	m_pScore->SetScore(0);
-	m_pScore->SetPos(D3DXVECTOR3(1280.0f, m_pScore->GetSize().y / 2.0f, 0.0f));
+	//// スコアの生成
+	//m_pScore = CScore::Create(10, false);
+	//m_pScore->SetScore(0);
+	//m_pScore->SetPos(D3DXVECTOR3(1280.0f, m_pScore->GetSize().y / 2.0f, 0.0f));
 
 	// マウスカーソルを消す
 	pMouse->SetShowCursor(false);
@@ -245,8 +252,18 @@ void CGame::Update()
 	}
 
 	if (nCntDead >= nMaxPlayer)
+	{// ゲームを終わる
+		m_bGame = false;
+	}
+
+	if (!m_bGame)
 	{
-		CApplication::SetNextMode(CApplication::MODE_RESULT);
+		m_nCntFrame++;
+
+		if (m_nCntFrame % 120 == 0)
+		{// リザルト画面へ
+			CApplication::SetNextMode(CApplication::MODE_RESULT);
+		}
 	}
 }
 
