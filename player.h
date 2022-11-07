@@ -19,6 +19,7 @@
 //*****************************************************************************
 class CMove;
 class CLine;
+class CObject3D;
 
 //=============================================================================
 // プレイヤークラス
@@ -64,7 +65,7 @@ public:
 	void Draw() override;											// 描画
 	void SetSpeed(const float fSpeed) { m_fSpeed = fSpeed; }		// 移動速度の設定
 	CMove *GetMove() { return m_pMove; }							// 移動情報の取得
-	void SetNum(const int nNum) { m_nNum = nNum; }					// 識別番号の設定
+	void SetNum(const int nNum);									// 識別番号の設定
 	bool GetDead() { return m_bDead; }								// 死亡状況の取得
 
 #ifdef _DEBUG
@@ -83,6 +84,7 @@ private:
 	// メンバ変数
 	//--------------------------------------------------------------------
 	CMove			*m_pMove;				// 移動情報
+	CObject3D		*m_pIdx;				// プレイヤー番号
 	ACTION_TYPE		m_EAction;				// アクションタイプ
 	D3DXVECTOR3		m_rotDest;				// 目的の向き
 	float			m_fSpeed;				// 移動速度	

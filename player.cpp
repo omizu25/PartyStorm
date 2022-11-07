@@ -29,6 +29,18 @@
 #include "title.h"
 #include "effect.h"
 #include "sound.h"
+#include "object3D.h"
+
+namespace
+{
+const int texIdx[4]
+{
+	16,
+	17,
+	18,
+	19
+};
+}
 
 //=============================================================================
 // インスタンス生成
@@ -59,6 +71,7 @@ CPlayer * CPlayer::Create()
 // 概要 : インスタンス生成時に行う処理
 //=============================================================================
 CPlayer::CPlayer() : m_pMove(nullptr),
+m_pIdx(nullptr),
 m_EAction(NEUTRAL_ACTION),
 m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
@@ -90,6 +103,10 @@ HRESULT CPlayer::Init()
 {
 	// 初期化
 	CMotionModel3D::Init();
+
+	m_pIdx =CObject3D::Create();
+	m_pIdx->SetSize(D3DXVECTOR3(15.0f, 15.0f, 0.0f));
+	m_pIdx->SetBillboard(true);
 
 	// 移動クラスのメモリ確保
 	m_pMove = new CMove;
@@ -133,6 +150,12 @@ void CPlayer::Uninit()
 		m_pMove = nullptr;
 	}
 
+	if (m_pIdx != nullptr)
+	{// 終了処理
+		m_pIdx->Uninit();
+		m_pIdx = nullptr;
+	}
+	  
 #ifdef _DEBUG
 	for (int nCntLine = 0; nCntLine < 12; nCntLine++)
 	{
@@ -204,6 +227,12 @@ void CPlayer::Update()
 
 		// 位置の取得
 		pos = GetPos();
+
+		if (m_pIdx != nullptr)
+		{// nullチェック
+			// 位置の更新
+			m_pIdx->SetPos(D3DXVECTOR3(pos.x, pos.y + 100.0f, pos.z));
+		}
 
 		// 更新
 		CMotionModel3D::Update();
@@ -534,6 +563,12 @@ void CPlayer::Collison()
 							m_bDead = true;
 							CEffect::Explosion(GetPos());
 							pSound->PlaySound(CSound::SOUND_LABEL_SE_EAT);
+
+							if (m_pIdx != nullptr)
+							{// 終了処理
+								m_pIdx->Uninit();
+								m_pIdx = nullptr;
+							}
 						}
 					}
 				}
@@ -563,6 +598,18 @@ void CPlayer::Collison()
 
 	// 位置の設定
 	SetPos(pos - GetColisonPos());
+}
+
+//=============================================================================
+// 識別番号の設定
+// Author : 香月瑞輝
+// 概要 : 識別番号の設定
+//=============================================================================
+void CPlayer::SetNum(const int nNum)
+{
+	m_nNum = nNum;
+
+	m_pIdx->LoadTex(texIdx[nNum]);
 }
 
 #ifdef _DEBUG
