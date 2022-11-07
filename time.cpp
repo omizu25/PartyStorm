@@ -58,6 +58,7 @@ CTime::CTime(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority)
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 大きさ
 	m_nTime = 0;										// 時間
 	m_nCntFrame = 0;									// フレームカウント
+	m_bStop = false;									// 停止判定
 }
 
 //=============================================================================
@@ -120,7 +121,8 @@ void CTime::Uninit()
 //=============================================================================
 void CTime::Update()
 {
-	if (m_nTime > 0)
+	if (m_nTime > 0
+		&& !m_bStop)
 	{// フレームカウント
 		m_nCntFrame++;
 
