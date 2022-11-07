@@ -93,9 +93,9 @@ HRESULT CGame::Init()
 	pCamera->SetViewing(20.0f);
 
 	// タイムの設定
-	CTime *pTime = CTime::Create();
-	pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
-	pTime->SetTime(60);
+	m_pTime = CTime::Create();
+	m_pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
+	m_pTime->SetTime(60);
 
 	// 地面の設定
 	m_pMesh3D = CMesh3D::Create();
@@ -234,12 +234,6 @@ void CGame::Update()
 		CApplication::SetNextMode(CApplication::MODE_RESULT);
 	}
 
-	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{
-		pJoy->Vibration(120, 50000, 0);
-		pJoy->Vibration(120, 50000, 1);
-	}
-
 	int nMaxPlayer = CApplication::GetPersonCount();
 	int nCntDead = 0;
 
@@ -254,6 +248,7 @@ void CGame::Update()
 	if (nCntDead >= nMaxPlayer)
 	{// ゲームを終わる
 		m_bGame = false;
+		m_pTime->StopTime(true);
 	}
 
 	if (!m_bGame)

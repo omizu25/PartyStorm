@@ -56,6 +56,7 @@ public:
 	D3DXVECTOR3 GetSize()  override { return m_size; }								// 大きさのゲッター
 	int GetTime() { return m_nTime; }												// 時間のゲッター
 	CScore *GetScore() { return m_pScore; }											// スコアのゲッター
+	void StopTime(bool bStop) { m_bStop = bStop; }									// 時間停止
 
 private:
 	//--------------------------------------------------------------------
@@ -69,6 +70,7 @@ private:
 	D3DXVECTOR3			m_size;				// 大きさ
 	int					m_nTime;			// 時間
 	int					m_nCntFrame;		// フレームカウント
+	bool				m_bStop;			// 停止判定
 };
 
 #endif
