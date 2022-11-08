@@ -593,9 +593,9 @@ void CPlayer::Collison()
 	{
 		pos.x = 250.0f - size.x + GetColisonPos().x;
 	}
-	if (pos.z - size.z < -550.0f)
+	if (pos.z - size.z < -700.0f)
 	{
-		pos.z = -550.0f + size.z + GetColisonPos().z;
+		pos.z = -700.0f + size.z + GetColisonPos().z;
 	}
 
 	// ˆÊ’u‚ÌÝ’è
