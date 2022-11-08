@@ -496,6 +496,8 @@ D3DXVECTOR3 CPlayer::Move()
 		m_rotDest.y += D3DX_PI * 2;
 	}
 
+	moveing.x *= 0.5f;
+
 	return moveing;
 }
 

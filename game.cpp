@@ -143,7 +143,7 @@ HRESULT CGame::Init()
 
 		// ˆÚ“®î•ñ‚Ìİ’è
 		CMove *pMove = m_pPlayer[nCntPlayer]->GetMove();
-		pMove->SetMoving(1.0f, 5.0f, 0.5f, 0.1f);
+		pMove->SetMoving(1.0f, 7.5f, 0.5f, 0.1f);
 	}
 
 	//ƒTƒİ’è
