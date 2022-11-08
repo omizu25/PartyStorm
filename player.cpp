@@ -115,7 +115,7 @@ HRESULT CPlayer::Init()
 
 	// 当たり判定の設定
 	SetColisonPos(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
-	SetColisonSize(D3DXVECTOR3(20.0f, 50.0f, 20.0f));
+	SetColisonSize(D3DXVECTOR3(40.0f, 50.0f, 130.0f));
 
 	// オブジェクトタイプの設定
 	SetObjType(OBJTYPE_3DPLAYER);
