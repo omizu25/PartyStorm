@@ -76,8 +76,6 @@ CGame::~CGame()
 //=============================================================================
 HRESULT CGame::Init()
 {// マウスの取得
-	CMouse *pMouse = CApplication::GetMouse();
-
 	// サウンド情報の取得
 	CSound *pSound = CApplication::GetSound();
 
@@ -168,9 +166,6 @@ HRESULT CGame::Init()
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
 
-	// マウスカーソルを消す
-	pMouse->SetShowCursor(false);
-
 	// 静的メンバ変数の初期化
 	CObstacle::InitStatic();
 
@@ -189,11 +184,6 @@ HRESULT CGame::Init()
 //=============================================================================
 void CGame::Uninit()
 {// マウスの取得
-	CMouse *pMouse = CApplication::GetMouse();
-
-	// マウスカーソルを出す
-	pMouse->SetShowCursor(true);
-
 	// サウンド情報の取得
 	CSound *pSound = CApplication::GetSound();
 

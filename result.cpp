@@ -23,6 +23,23 @@
 #include "model_obj.h"
 #include "move.h"
 #include "effect.h"
+#include "renderer.h"
+#include "score.h"
+
+//*****************************************************************************
+// 変数定義
+//*****************************************************************************
+namespace
+{
+const int POP_TIME = 240;	// 出現させる時間
+const int texIdx[4]
+{
+	16,
+	17,
+	18,
+	19
+};
+}
 
 //*****************************************************************************
 // 静的メンバ変数宣言
@@ -33,28 +50,23 @@ bool CResult::m_dead[4] = {};			// 死亡したかどうか
 
 //=============================================================================
 // コンストラクタ
-// Author : 唐﨑結斗
-// 概要 : インスタンス生成時に行う処理
 //=============================================================================
-CResult::CResult()
+CResult::CResult() :
+	m_nextMode(CApplication::MODE_NONE),
+	m_time(0),
+	m_pop(false)
 {
-	m_nextMode = CApplication::MODE_NONE;	// 次に設定するモード
 }
 
 //=============================================================================
 // デストラクタ
-// Author : 唐﨑結斗
-// 概要 : インスタンス終了時に行う処理
 //=============================================================================
 CResult::~CResult()
 {
-
 }
 
 //=============================================================================
 // スコアの設定
-// Author : 香月瑞輝
-// 概要 : スコアの設定
 //=============================================================================
 void CResult::SetScore(int score)
 {
@@ -63,8 +75,6 @@ void CResult::SetScore(int score)
 
 //=============================================================================
 // 死亡の初期化
-// Author : 香月瑞輝
-// 概要 : 死亡の初期化
 //=============================================================================
 void CResult::InitDead()
 {
@@ -76,8 +86,6 @@ void CResult::InitDead()
 
 //=============================================================================
 // 死亡の設定
-// Author : 香月瑞輝
-// 概要 : 死亡の設定
 //=============================================================================
 void CResult::SetDead(int numPlayer)
 {
@@ -86,8 +94,6 @@ void CResult::SetDead(int numPlayer)
 
 //=============================================================================
 // 初期化
-// Author : 唐﨑結斗
-// 概要 : 頂点バッファを生成し、メンバ変数の初期値を設定
 //=============================================================================
 HRESULT CResult::Init()
 {
@@ -100,83 +106,145 @@ HRESULT CResult::Init()
 	// リザルトBGMの再生
 	pSound->PlaySound(CSound::SOUND_LABEL_RESULTBGM);
 
-	// カメラの位置変更
-	CCamera *pCamera = CApplication::GetCamera();
-	pCamera->SetPosV(D3DXVECTOR3(0.0f, 300.0f, -1600.0f));
-	pCamera->SetPosR(D3DXVECTOR3(0.0f, 90.0f, 0.0f));
-	pCamera->SetViewing(20.0f);
+	{// カメラの位置変更
+		CCamera *pCamera = CApplication::GetCamera();
+		pCamera->SetPosV(D3DXVECTOR3(0.0f, 300.0f, -1600.0f));
+		pCamera->SetPosR(D3DXVECTOR3(0.0f, 90.0f, 0.0f));
+		pCamera->SetViewing(20.0f);
+	}
 
-	// 地面の設定
-	CMesh3D *m_pMesh3D = CMesh3D::Create();
-	m_pMesh3D->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
-	m_pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(10, 10));
-	m_pMesh3D->SetSplitTex(true);
-	m_pMesh3D->SetScrollTex(D3DXVECTOR2(0.0f, 0.01f), true);
-	m_pMesh3D->LoadTex(2);
+	{// 地面の設定
+		CMesh3D *pMesh3D = CMesh3D::Create();
+		pMesh3D->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
+		pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(10, 10));
+		pMesh3D->SetSplitTex(true);
+		pMesh3D->SetScrollTex(D3DXVECTOR2(0.0f, 0.01f), true);
+		pMesh3D->LoadTex(2);
+	}
 
-	// メッシュの生成
-	CMesh3D *pMesh3D = CMesh3D::Create();
-	pMesh3D->SetPos(D3DXVECTOR3(0.0f, 11.0f, 0.0f));
-	pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
-	pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(1, 3000));
-	pMesh3D->SetSplitTex(false);
-	pMesh3D->SetWave(7.0f, 10.0f);
-	pMesh3D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
-	pMesh3D->LoadTex(3);
+	{// メッシュの生成
+		CMesh3D *pMesh3D = CMesh3D::Create();
+		pMesh3D->SetPos(D3DXVECTOR3(0.0f, 11.0f, 0.0f));
+		pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
+		pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(1, 3000));
+		pMesh3D->SetSplitTex(false);
+		pMesh3D->SetWave(7.0f, 10.0f);
+		pMesh3D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
+		pMesh3D->LoadTex(3);
+	}
 
-	// スカイボックスの設定
-	CSphere *pSphere = CSphere::Create();
-	pSphere->SetRot(D3DXVECTOR3(D3DX_PI, 0.0f, 0.0f));
-	pSphere->SetSize(D3DXVECTOR3(100.0f, 0, 100.0f));
-	pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
-	pSphere->SetRadius(5000.0f);
-	pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
-	pSphere->LoadTex(4);
+	{// スカイボックスの設定
+		CSphere *pSphere = CSphere::Create();
+		pSphere->SetRot(D3DXVECTOR3(D3DX_PI, 0.0f, 0.0f));
+		pSphere->SetSize(D3DXVECTOR3(100.0f, 0, 100.0f));
+		pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
+		pSphere->SetRadius(5000.0f);
+		pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
+		pSphere->LoadTex(4);
+	}
 
 	// プレイヤーの設定
-	int nMaxPlayer = CApplication::GetPersonCount();
-	m_pPlayer = new CPlayer*[nMaxPlayer];
+	int maxPlayer = CApplication::GetPersonCount();
+	m_pPlayer = new CPlayer*[maxPlayer];
 	assert(m_pPlayer != nullptr);
 
-	float posX = 500.0f / (nMaxPlayer + 1);
+	float posX = 500.0f / (maxPlayer + 1);
 
-	for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
+	for (int i = 0; i < maxPlayer; i++)
 	{// プレイヤーの生成
-		m_pPlayer[nCntPlayer] = CPlayer::Create();
-		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
-		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-250.0f + posX + (posX * nCntPlayer), 0.0f, -300.0f));
-		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
-		
-		if (m_dead[nCntPlayer])
-		{// 死んだプレイヤー
-			m_pPlayer[nCntPlayer]->SetAction(true);
-			m_pPlayer[nCntPlayer]->SetMove(false);
+		m_pPlayer[i] = CPlayer::Create();
+		m_pPlayer[i]->SetMotion("data/MOTION/motion.txt");
+		m_pPlayer[i]->SetPos(D3DXVECTOR3(-250.0f + posX + (posX * i), 0.0f, -300.0f));
+		m_pPlayer[i]->SetNum(i);
+
+		if (maxPlayer > 1)
+		{// マルチプレイ
+			if (m_dead[i])
+			{// 死んだプレイヤー
+				m_pPlayer[i]->SetAction(true);
+				m_pPlayer[i]->SetMove(false);
+			}
+			else
+			{// 生きてるプレイヤー
+				m_pPlayer[i]->SetAction(false);
+			}
 		}
 		else
-		{// 生きてるプレイヤー
-			m_pPlayer[nCntPlayer]->SetAction(false);
+		{// シングルプレイ
+			m_pPlayer[i]->SetAction(false);
 		}
 	}
 
-	//サメ設定
-	CEnemyShark *m_pEnemyShark = CEnemyShark::Create();
-	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
-	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
-	m_pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
-
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
+
+	m_time = 0;
+	m_pop = false;
+
+	bool gameclear = true;
+
+	if (maxPlayer > 1)
+	{// マルチプレイ
+		for (int i = 0; i < maxPlayer; i++)
+		{
+			if (m_dead[i])
+			{// 死亡した
+				gameclear = false;
+			}
+		}
+
+		if (gameclear)
+		{// ゲームクリア
+			CObject2D *pObj = CObject2D::Create();
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
+			pObj->LoadTex(24);
+
+			m_pop = true;
+		}
+	}
+	else
+	{// シングルプレイ
+		// スコアの生成
+		CScore *pScore = CScore::Create(10, false);
+		assert(pScore != nullptr);
+		pScore->SetScore(m_score);
+
+		// 大きさの設定
+		pScore->SetWholeSize(D3DXVECTOR3(1000.0f, 50.0f, 0.0f));
+		pScore->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+
+		// 位置の設定
+		pScore->SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));
+
+		// 向きの設定
+		pScore->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
+
+	{//サメ設定
+		CEnemyShark *pEnemyShark = CEnemyShark::Create();
+
+		if (gameclear)
+		{// ゲームクリア、シングルプレイ
+			pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
+		}
+		else
+		{// ゲームオーバー
+			pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
+		}
+
+		pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
+		pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
+	}
 
 	return S_OK;
 }
 
 //=============================================================================
 // 終了
-// Author : 唐﨑結斗
-// 概要 : テクスチャのポインタと頂点バッファの解放
 //=============================================================================
 void CResult::Uninit()
 {
@@ -185,6 +253,9 @@ void CResult::Uninit()
 
 	// サウンド終了
 	pSound->StopSound();
+
+	// エフェクトの終了
+	CEffect::ReleaseAll();
 
 	if (m_pPlayer != nullptr)
 	{
@@ -205,23 +276,42 @@ void CResult::Uninit()
 
 	// スコアの解放
 	Release();
-
-	// エフェクトの終了
-	CEffect::ReleaseAll();
 }
 
 //=============================================================================
 // 更新
-// Author : 唐﨑結斗
-// 概要 : 更新を行う
 //=============================================================================
 void CResult::Update()
+{
+	int maxPlayer = CApplication::GetPersonCount();
+	
+	if (maxPlayer > 1)
+	{// マルチプレイ
+		Multi();
+	}
+	else
+	{// シングルプレイ
+		Single();
+	}
+}
+
+//=============================================================================
+// 描画
+//=============================================================================
+void CResult::Draw()
+{
+}
+
+//=============================================================================
+// シングル
+//=============================================================================
+void CResult::Single()
 {
 	// 入力情報の取得
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 
 	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{
+	{// ENTERが押された
 		CApplication::SetNextMode(m_nextMode);
 	}
 
@@ -230,12 +320,73 @@ void CResult::Update()
 }
 
 //=============================================================================
-// 描画
-// Author : 唐﨑結斗
-// 概要 : 描画を行う
+// マルチ
 //=============================================================================
-void CResult::Draw()
+void CResult::Multi()
 {
+	// エフェクトの更新
+	CEffect::UpdateAll();
 
+	if (m_pop)
+	{// 出現した
+		// 入力情報の取得
+		CKeyboard *pKeyboard = CApplication::GetKeyboard();
+
+		if (pKeyboard->GetTrigger(DIK_RETURN))
+		{// ENTERが押された
+			CApplication::SetNextMode(m_nextMode);
+		}
+
+		return;
+	}
+
+	m_time++;
+
+	if (m_time >= POP_TIME)
+	{// 出現する時間を越した
+		int gameover = 0;
+		int maxPlayer = CApplication::GetPersonCount();
+
+		for (int i = 0; i < maxPlayer; i++)
+		{
+			if (m_dead[i])
+			{// 死亡した
+				gameover++;
+			}
+		}
+
+		if (gameover == maxPlayer)
+		{// 全員死亡
+			CObject2D *pObj = CObject2D::Create();
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
+			pObj->LoadTex(25);
+		}
+		else
+		{// 生き残りがいる
+			float posX = CRenderer::SCREEN_WIDTH / ((maxPlayer - gameover) + 1);
+			int count = 0;
+
+			for (int i = 0; i < maxPlayer; i++)
+			{// プレイヤーの生成
+				if (!m_dead[i])
+				{// 死亡していない
+					CObject2D *pObj = CObject2D::Create();
+					pObj->SetPos(D3DXVECTOR3(posX + (posX * count), 200.0f, 0.0f));
+					pObj->SetSize(D3DXVECTOR3(150.0f, 150.0f, 0.0f));
+					pObj->LoadTex(texIdx[i]);
+					count++;
+				}
+			}
+
+			assert(count == maxPlayer);
+
+			CObject2D *pObj = CObject2D::Create();
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.65f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(600.0f, 300.0f, 0.0f));
+			pObj->LoadTex(23);
+		}
+
+		m_pop = true;
+	}
 }
-
