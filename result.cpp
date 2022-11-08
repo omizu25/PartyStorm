@@ -103,6 +103,23 @@ HRESULT CResult::Init()
 	pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
 	pSphere->LoadTex(4);
 
+	// プレイヤーの設定
+	int nMaxPlayer = CApplication::GetPersonCount();
+	m_pPlayer = new CPlayer*[nMaxPlayer];
+	assert(m_pPlayer != nullptr);
+
+	for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
+	{// プレイヤーの生成
+		m_pPlayer[nCntPlayer] = CPlayer::Create();
+		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
+		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-100.0f + 100.0f * nCntPlayer, 0.0f, -300.0f));
+		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
+
+		// 移動情報の設定
+		CMove *pMove = m_pPlayer[nCntPlayer]->GetMove();
+		pMove->SetMoving(1.0f, 5.0f, 0.5f, 0.1f);
+	}
+
 	//サメ設定
 	m_pEnemyShark = CEnemyShark::Create();
 	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
