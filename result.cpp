@@ -105,7 +105,7 @@ HRESULT CResult::Init()
 
 	//ƒTƒÝ’è
 	m_pEnemyShark = CEnemyShark::Create();
-	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
+	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
 	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
 	m_pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
 
