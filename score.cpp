@@ -427,3 +427,16 @@ void CScore::AddDigit()
 		SetNumber();
 	}
 }
+
+//=============================================================================
+// テクスチャのセッター
+// Author : 唐﨑結斗
+// 概要 : テクスチャの設定を行う
+//=============================================================================
+void CScore::SetTexture(int texIdx)
+{
+	for (int nCntDigit = 0; nCntDigit < m_nDigit; nCntDigit++)
+	{
+		m_pNumber[nCntDigit]->LoadTex(texIdx);
+	}
+}

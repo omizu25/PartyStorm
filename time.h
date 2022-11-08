@@ -50,6 +50,7 @@ public:
 	void SetRot(const D3DXVECTOR3 &rot) override;									// 向きのセッター
 	void SetSize(const D3DXVECTOR3 &size) override;									// 大きさのセッター
 	void SetTime(const int nTime);													// 時間のセッター
+	void SetCountDown();															// カウントダウンのセッター
 	D3DXVECTOR3 GetPos() override { return m_pos; }									// 位置のゲッター
 	D3DXVECTOR3 GetPosOld()  override { return m_posOld; }							// 過去位置のゲッター
 	D3DXVECTOR3 GetRot()  override { return m_rot; }								// 向きのゲッター
@@ -62,7 +63,6 @@ private:
 	//--------------------------------------------------------------------
 	// メンバ変数
 	//--------------------------------------------------------------------
-	CObject2D			*m_pObject2D;		// 2Dオブジェクト
 	CScore				*m_pScore;			// スコア
 	D3DXVECTOR3			m_pos;				// 位置
 	D3DXVECTOR3			m_posOld;			// 過去の位置
@@ -71,6 +71,7 @@ private:
 	int					m_nTime;			// 時間
 	int					m_nCntFrame;		// フレームカウント
 	bool				m_bStop;			// 停止判定
+	bool				m_bCountDown;		// カウントダウン
 };
 
 #endif

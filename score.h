@@ -69,6 +69,7 @@ public:
 	void SetDestScore(const int nScore) { m_nDestScore = nScore; }					// 目的のスコアの設定
 	int GetScore() { return m_nDestScore; }											// スコアの取得
 	void AddDigit();																// 桁数を増やす
+	void SetTexture(int texIdx);													// テクスチャの設定
 
 private:
 	//--------------------------------------------------------------------

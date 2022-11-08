@@ -116,6 +116,7 @@ HRESULT CResult::Init()
 		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
 		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-250.0f + posX + (posX * nCntPlayer), 0.0f, -300.0f));
 		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
+		m_pPlayer[nCntPlayer]->SetAction(false);
 	}
 
 	//ƒTƒİ’è

@@ -20,6 +20,8 @@
 #include "application.h"
 #include "texture.h"
 #include "game.h"
+#include "player.h"
+#include "obstacle.h"
 
 //=============================================================================
 // インスタンス生成
@@ -50,7 +52,6 @@ CTime *CTime::Create()
 //=============================================================================
 CTime::CTime(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority)
 {
-	m_pObject2D = nullptr;								// 2Dオブジェクト
 	m_pScore = nullptr;									// スコア
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 過去の位置
@@ -59,6 +60,7 @@ CTime::CTime(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority)
 	m_nTime = 0;										// 時間
 	m_nCntFrame = 0;									// フレームカウント
 	m_bStop = false;									// 停止判定
+	m_bCountDown = false;								// カウントダウン
 }
 
 //=============================================================================
@@ -78,19 +80,14 @@ CTime::~CTime()
 //=============================================================================
 HRESULT CTime::Init()
 {
-	// 2Dオブジェクトの生成
-	m_pObject2D = CObject2D::Create();
-	assert(m_pObject2D != nullptr);
-	m_pObject2D->LoadTex(-1);
-	m_pObject2D->SetCol(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
-
 	// スコアの生成
-	m_pScore = CScore::Create(6, true);
+	m_pScore = CScore::Create(10, true);
 	assert(m_pScore != nullptr);
 	m_pScore->SetScore(0);
 
 	// 大きさの設定
-	SetSize(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	m_pScore->SetWholeSize(D3DXVECTOR3(1000.0f, 50.0f, 0.0f));
+	m_pScore->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
 
 	// 位置の設定
 	SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));
@@ -121,36 +118,86 @@ void CTime::Uninit()
 //=============================================================================
 void CTime::Update()
 {
-	if (m_nTime >= 0
-		&& !m_bStop)
-	{// フレームカウント
+	if (m_bCountDown)
+	{
 		m_nCntFrame++;
 
 		if (m_nCntFrame % 60 == 0)
 		{// 時間の設定
-			int nPlayer = CApplication::GetPersonCount();
 
-			if (nPlayer > 1)
-			{// マルチプレイ
+			m_pScore->AddScore(-1);
+
+			// 時間の取得
+			m_nTime--;
+
+			if (m_nTime <= 0)
+			{// 制限時間が来た
+				Uninit();
+				CPlayer** pPlayer = CGame::GetPlayer();
+
+				int max = CApplication::GetPersonCount();
+
+				for (int i = 0; i < max; i++)
+				{
+					pPlayer[i]->SetAction(true);
+				}
+
+
+				CTime* pTime = CGame::GetTime();
+
+				// 時間が進む
+				pTime->StopTime(false);
+
+				// 出現する
+				CObstacle::Stop(false);
+				return;
+			}
+		}
+
+		return;
+	}
+
+	if (m_nTime >= 0 && !m_bStop)
+	{// フレームカウント
+		int nPlayer = CApplication::GetPersonCount();
+
+		if (nPlayer > 1)
+		{// マルチプレイ
+			m_nCntFrame++;
+
+			if (m_nCntFrame % 60 == 0)
+			{// 時間の設定
+
 				m_pScore->AddScore(-1);
 
 				// 時間の取得
 				m_nTime--;
 
 				if (m_nTime <= 0)
-				{
+				{// 制限時間が来た
 					m_bStop = true;
 					m_nTime = 0;
+					m_pScore->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 					CGame::SetGame(false);
 				}
-			}
-			else
-			{// シングルプレイ
-				m_pScore->AddScore(1);
 
-				// 時間の取得
-				m_nTime++;
 			}
+
+			if (m_nTime <= 5)
+			{// マルチプレイで制限時間まで後少し
+				float sinCurve = (sinf((m_nCntFrame * 0.05f) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
+				float alpha = (sinCurve * 0.75f) + 0.25f;
+
+				// 色の設定
+				m_pScore->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, alpha));
+			}
+		}
+		else
+		{// シングルプレイ
+			m_pScore->AddScore(13);
+			
+			// 時間の取得
+			m_nTime += 13;
 		}
 	}	
 }
@@ -174,7 +221,6 @@ void CTime::SetPos(const D3DXVECTOR3 &pos)
 {
 	m_pos = pos;
 
-	m_pObject2D->SetPos(m_pos);
 	m_pScore->SetPos(m_pos);
 }
 
@@ -187,7 +233,6 @@ void CTime::SetRot(const D3DXVECTOR3 &rot)
 {
 	m_rot = rot;
 
-	m_pObject2D->SetRot(m_rot);
 	m_pScore->SetRot(m_rot);
 }
 
@@ -200,7 +245,6 @@ void CTime::SetSize(const D3DXVECTOR3 & size)
 {
 	m_size = size;
 
-	m_pObject2D->SetSize(m_size);
 	m_pScore->SetWholeSize(D3DXVECTOR3(m_size.x, size.y / 2.0f, size.z));
 	m_pScore->SetSize(D3DXVECTOR3(m_size.x / 2.5f, size.y / 2.5f, size.z));
 }
@@ -218,4 +262,47 @@ void CTime::SetTime(const int nTime)
 	m_pScore->SetScore(m_nTime);
 	m_pScore->SetDestScore(m_nTime);
 	m_pScore->AddDigit();
+}
+
+//=============================================================================
+// カウントダウンのセッター
+// Author : 香月瑞輝
+// 概要 : カウントダウン化する
+//=============================================================================
+void CTime::SetCountDown()
+{
+	m_bCountDown = true;
+
+	m_nTime = 3;
+
+	m_pScore->SetScore(3);
+	m_pScore->SetDestScore(3);
+	m_pScore->AddDigit();
+
+	// 大きさの設定
+	m_pScore->SetWholeSize(D3DXVECTOR3(1000.0f, 50.0f, 0.0f));
+	m_pScore->SetSize(D3DXVECTOR3(300.0f, 300.0f, 0.0f));
+
+	// 位置の設定
+	SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));
+
+	// テクスチャの設定
+	m_pScore->SetTexture(20);
+
+	CPlayer** pPlayer = CGame::GetPlayer();
+
+	int max = CApplication::GetPersonCount();
+
+	for (int i = 0; i < max; i++)
+	{
+		pPlayer[i]->SetAction(false);
+	}
+
+	CTime* pTime = CGame::GetTime();
+
+	// 時間の停止
+	pTime->StopTime(true);
+
+	// 出現の停止
+	CObstacle::Stop(true);
 }

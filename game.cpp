@@ -153,6 +153,10 @@ HRESULT CGame::Init()
 	{// シングルプレイ
 		m_pTime->SetTime(0);
 	}
+
+	// カウントダウンの設定
+	CTime* pCountDown = CTime::Create();
+	pCountDown->SetCountDown();
 	
 	//サメ設定
 	m_pEnemyShark = CEnemyShark::Create();
@@ -162,11 +166,6 @@ HRESULT CGame::Init()
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
-
-	//// スコアの生成
-	//m_pScore = CScore::Create(10, false);
-	//m_pScore->SetScore(0);
-	//m_pScore->SetPos(D3DXVECTOR3(1280.0f, m_pScore->GetSize().y / 2.0f, 0.0f));
 
 	// マウスカーソルを消す
 	pMouse->SetShowCursor(false);

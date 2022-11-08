@@ -76,7 +76,8 @@ m_EAction(NEUTRAL_ACTION),
 m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
 m_nNumMotion(0),
-m_bDead(false)
+m_bDead(false),
+m_bAction(false)
 {
 #ifdef _DEBUG
 	// ライン情報
@@ -119,6 +120,8 @@ HRESULT CPlayer::Init()
 
 	// オブジェクトタイプの設定
 	SetObjType(OBJTYPE_3DPLAYER);
+
+	m_bAction = true;
 
 #ifdef _DEBUG
 	// ライン情報
@@ -185,8 +188,8 @@ void CPlayer::Update()
 		// モーション情報の取得
 		CMotion *pMotion = CMotionModel3D::GetMotion();
 
-		if (scene != CApplication::MODE_RESULT)
-		{// リザルト以外
+		if (m_bAction)
+		{// 行動していい
 			// 位置の取得
 			D3DXVECTOR3 pos = GetPos();
 			D3DXVECTOR3 rot = GetRot();

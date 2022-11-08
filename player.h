@@ -67,6 +67,7 @@ public:
 	CMove *GetMove() { return m_pMove; }							// 移動情報の取得
 	void SetNum(const int nNum);									// 識別番号の設定
 	bool GetDead() { return m_bDead; }								// 死亡状況の取得
+	void SetAction(bool bAction) { m_bAction = bAction; }			// 行動できるかの設定
 
 #ifdef _DEBUG
 	void SetLine();					// ラインの設定
@@ -91,6 +92,7 @@ private:
 	int				m_nNumMotion;			// 現在のモーション番号
 	int				m_nNum;					// プレイヤー識別番号
 	bool			m_bDead;				// 死ぬかどうか
+	bool			m_bAction;				// 行動できるかどうか
 #ifdef _DEBUG
 	CLine **m_pLine;		// ライン情報
 #endif // _DEBUG

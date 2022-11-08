@@ -68,7 +68,7 @@ HRESULT CNumber::Init()
 	CObject2D::Init();
 
 	// テクスチャの設定
-	LoadTex(1);
+	LoadTex(21);
 
 	// テクスチャ座標の設定
 	SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f / 10, 1.0f));
