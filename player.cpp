@@ -176,6 +176,8 @@ void CPlayer::Uninit()
 //=============================================================================
 void CPlayer::Update()
 {
+	CApplication::SCENE_MODE scene = CApplication::GetMode();
+
 	if (!m_bDead)
 	{// キーボードの取得
 		CKeyboard *pKeyboard = CApplication::GetKeyboard();
@@ -183,25 +185,26 @@ void CPlayer::Update()
 		// モーション情報の取得
 		CMotion *pMotion = CMotionModel3D::GetMotion();
 
-		// 位置の取得
-		D3DXVECTOR3 pos = GetPos();
-		D3DXVECTOR3 rot = GetRot();
-		SetPosOld(pos);
+		if (scene != CApplication::MODE_RESULT)
+		{// リザルト以外
+			// 位置の取得
+			D3DXVECTOR3 pos = GetPos();
+			D3DXVECTOR3 rot = GetRot();
+			SetPosOld(pos);
 
-		// 攻撃
-		if (pKeyboard->GetTrigger(DIK_RETURN)
-			&& pMotion != nullptr)
-		{
-			m_EAction = ATTACK_ACTION;
-			pMotion->SetNumMotion(m_EAction);
+			// 移動
+			pos.z += CCalculation::Gravity();
+			pos += Move();
+
+			// 回転
+			Rotate();
+
+			// 位置の設定
+			SetPos(pos);
+
+			// 当たり判定
+			Collison();
 		}
-
-		// 移動
-		pos.z += CCalculation::Gravity();
-		pos += Move();
-
-		// 回転
-		Rotate();
 
 		// ニュートラルモーションの設定
 		if (pMotion != nullptr
@@ -211,22 +214,19 @@ void CPlayer::Update()
 			pMotion->SetNumMotion(m_EAction);
 		}
 
-		// 位置の設定
-		SetPos(pos);
+		if (scene == CApplication::MODE_GAME)
+		{// ゲーム中
+			// メッシュの当たり判定
+			CMesh3D *pMesh = CGame::GetMesh();
 
-		// 当たり判定
-		Collison();
-
-		// メッシュの当たり判定
-		CMesh3D *pMesh = CGame::GetMesh();
-
-		if (pMesh != nullptr)
-		{
-			pMesh->Collison(this);
+			if (pMesh != nullptr)
+			{
+				pMesh->Collison(this);
+			}
 		}
 
 		// 位置の取得
-		pos = GetPos();
+		D3DXVECTOR3 pos = GetPos();
 
 		if (m_pIdx != nullptr)
 		{// nullチェック
@@ -495,6 +495,8 @@ D3DXVECTOR3 CPlayer::Move()
 	{// 移動方向の正規化
 		m_rotDest.y += D3DX_PI * 2;
 	}
+
+	moveing.x *= 0.5f;
 
 	return moveing;
 }

@@ -121,22 +121,35 @@ void CTime::Uninit()
 //=============================================================================
 void CTime::Update()
 {
-	if (m_nTime > 0
+	if (m_nTime >= 0
 		&& !m_bStop)
 	{// フレームカウント
 		m_nCntFrame++;
 
 		if (m_nCntFrame % 60 == 0)
 		{// 時間の設定
-			m_pScore->AddScore(-1);
+			int nPlayer = CApplication::GetPersonCount();
 
-			// 時間の取得
-			m_nTime--;
+			if (nPlayer > 1)
+			{// マルチプレイ
+				m_pScore->AddScore(-1);
 
-			if (m_nTime <= 0)
-			{
-				m_nTime = 0;
-				CGame::SetGame(false);
+				// 時間の取得
+				m_nTime--;
+
+				if (m_nTime <= 0)
+				{
+					m_bStop = true;
+					m_nTime = 0;
+					CGame::SetGame(false);
+				}
+			}
+			else
+			{// シングルプレイ
+				m_pScore->AddScore(1);
+
+				// 時間の取得
+				m_nTime++;
 			}
 		}
 	}	
