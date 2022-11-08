@@ -132,11 +132,13 @@ HRESULT CGame::Init()
 	m_pPlayer = new CPlayer*[nMaxPlayer];
 	assert(m_pPlayer != nullptr);
 
+	float posX = 500.0f / (nMaxPlayer + 1);
+
 	for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
 	{// ƒvƒŒƒCƒ„[‚Ì¶¬
 		m_pPlayer[nCntPlayer] = CPlayer::Create();
 		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
-		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-100.0f + 100.0f * nCntPlayer, 0.0f, -300.0f));
+		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-250.0f + posX + (posX * nCntPlayer), 0.0f, -300.0f));
 		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
 
 		// ˆÚ“®î•ñ‚Ìİ’è
