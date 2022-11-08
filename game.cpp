@@ -92,11 +92,6 @@ HRESULT CGame::Init()
 	pCamera->SetPosR(D3DXVECTOR3(0.0f, 90.0f, 0.0f));
 	pCamera->SetViewing(20.0f);
 
-	// タイムの設定
-	m_pTime = CTime::Create();
-	m_pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
-	m_pTime->SetTime(60);
-
 	// 地面の設定
 	m_pMesh3D = CMesh3D::Create();
 	m_pMesh3D->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -146,6 +141,19 @@ HRESULT CGame::Init()
 		pMove->SetMoving(1.0f, 7.5f, 0.5f, 0.1f);
 	}
 
+	// タイムの設定
+	m_pTime = CTime::Create();
+	m_pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
+
+	if (nMaxPlayer > 1)
+	{// マルチプレイ
+		m_pTime->SetTime(60);
+	}
+	else
+	{// シングルプレイ
+		m_pTime->SetTime(0);
+	}
+	
 	//サメ設定
 	m_pEnemyShark = CEnemyShark::Create();
 	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
