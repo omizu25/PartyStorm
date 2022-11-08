@@ -81,7 +81,7 @@ HRESULT CTitle::Init()
 	m_pTitleLogo = CObject2D::Create();
 	m_pTitleLogo->SetPos(D3DXVECTOR3(640.0f, 280.0f, 0.0f));
 	m_pTitleLogo->SetSize(D3DXVECTOR3(800.0f, 300.0f, 0.0f));
-	m_pTitleLogo->LoadTex(20);
+	m_pTitleLogo->LoadTex(22);
 
 	// ƒJƒƒ‰‚ÌˆÊ’u•ÏX
 	CCamera *pCamera = CApplication::GetCamera();

@@ -35,6 +35,8 @@ public:
 	//--------------------------------------------------------------------
 	static void SetGame(const bool bGame) { m_bGame = bGame; }		// ゲームの状況の設定
 	static CMesh3D *GetMesh() { return m_pMesh3D; }					// メッシュのゲッター
+	static CTime *GetTime() { return m_pTime; }						// タイムのゲッター
+	static CPlayer **GetPlayer() { return m_pPlayer; }				// プレイヤーのゲッター
 
 	//--------------------------------------------------------------------
 	// コンストラクタとデストラクタ
