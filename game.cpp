@@ -161,6 +161,9 @@ HRESULT CGame::Init()
 	// マウスカーソルを消す
 	pMouse->SetShowCursor(false);
 
+	// 静的メンバ変数の初期化
+	CObstacle::InitStatic();
+
 	m_bGame = true;
 
 	return S_OK;

@@ -20,24 +20,22 @@
 //*****************************************************************************
 namespace
 {
-const int MODEL_TYPE = 24;				// ƒ‚ƒfƒ‹‚Ìí—Ş
+const int MODEL_TYPE = 16;				// ƒ‚ƒfƒ‹‚Ìí—Ş
 const int POP_INTERVAL = 120;			// oŒ»‚ÌŠÔŠu
+const int POP_INCREASE = 1200;			// oŒ»‚ª‘‚¦‚é
+const int MIN_POP = 2;					// oŒ»‚ÌÅ¬”
+const int MAX_POP = 4;					// oŒ»‚ÌÅ‘å”
 const float MOVE_SPEED = 5.0f;			// ˆÚ“®‘¬“x
 const float POP_POS_Z = -1000.0f;		// oŒ»‚ÌZ‚ÌˆÊ’u
 const float POS_Y = -30.0f;				// Y‚ÌˆÊ’u
 const float RELEASE_POS_Z = 1250.0f;	// ‰ğ•ú‚ÌZ‚ÌˆÊ’u
-const D3DXVECTOR2 POP_POS_X[] =			// oŒ»‚ÌX‚ÌˆÊ’u
+const float POP_POS_X[] =				// oŒ»‚ÌX‚ÌˆÊ’u
 {
-	D3DXVECTOR2(-200.0f, -100.0f),
-	D3DXVECTOR2(-200.0f, 0.0f),
-	D3DXVECTOR2(-200.0f, 100.0f),
-	D3DXVECTOR2(-200.0f, 200.0f),
-	D3DXVECTOR2(-100.0f, 0.0f),
-	D3DXVECTOR2(-100.0f, 100.0f),
-	D3DXVECTOR2(-100.0f, 200.0f),
-	D3DXVECTOR2(0.0f, 100.0f),
-	D3DXVECTOR2(0.0f, 200.0f),
-	D3DXVECTOR2(100.0f, 200.0f),
+	-200.0f,
+	-100.0f,
+	0.0f,
+	100.0f,
+	200.0f,
 };
 const int POP_MAX = sizeof(POP_POS_X) / sizeof(POP_POS_X[0]);	// oŒ»ˆÊ’u‚ÌÅ‘å”
 }
@@ -46,6 +44,16 @@ const int POP_MAX = sizeof(POP_POS_X) / sizeof(POP_POS_X[0]);	// oŒ»ˆÊ’u‚ÌÅ‘å
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
 //*****************************************************************************
 int CObstacle::m_time = 0;
+int CObstacle::m_pop = 0;
+
+//=============================================================================
+// Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
+//=============================================================================
+void CObstacle::InitStatic()
+{
+	m_time = 0;
+	m_pop = MIN_POP;
+}
 
 //=============================================================================
 // oŒ»
@@ -54,13 +62,57 @@ void CObstacle::Pop()
 {
 	if (m_time % POP_INTERVAL == 0)
 	{// ˆê’èŠÔŠu
-		int randam = rand() % POP_MAX;
+		int random[MAX_POP];
 
-		Create(POP_POS_X[randam].x, -1.0f);
-		Create(POP_POS_X[randam].y, 1.0f);
+		int count = 0;
+
+		while (true)
+		{
+			random[count] = rand() % POP_MAX;
+			bool same = false;
+
+			for (int i = 0; i < count; i++)
+			{
+				if (random[i] == random[count])
+				{// “¯‚¶’l‚ª‚ ‚é
+					same = true;
+					break;
+				}
+			}
+
+			if (!same)
+			{// “¯‚¶’l‚ª‚È‚©‚Á‚½
+				count++;
+			}
+
+			if (count >= m_pop)
+			{// oŒ»”‚Ìƒ‰ƒ“ƒ_ƒ€‚ªI‚í‚Á‚½
+				break;
+			}
+		}
+
+		float inverse = 1.0f;
+
+		for (int i = 0; i < m_pop; i++)
+		{
+			// ¶¬
+			Create(POP_POS_X[random[i]], inverse);
+
+			inverse *= -1.0f;
+		}
 	}
 
 	m_time++;
+
+	if (m_time % POP_INCREASE == 0)
+	{// ˆê’èŠÔŠu
+		m_pop++;
+
+		if (m_pop >= MAX_POP)
+		{// Å‘å”‚ğ‰z‚µ‚½
+			m_pop = MAX_POP;
+		}
+	}
 }
 
 //=============================================================================

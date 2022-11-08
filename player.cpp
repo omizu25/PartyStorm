@@ -199,11 +199,11 @@ void CPlayer::Update()
 			// 回転
 			Rotate();
 
-			// 当たり判定
-			Collison();
-
 			// 位置の設定
 			SetPos(pos);
+
+			// 当たり判定
+			Collison();
 		}
 
 		// ニュートラルモーションの設定
