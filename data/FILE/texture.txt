@@ -1,5 +1,5 @@
 // テクスチャの最大数
-MAX_TEXTURE = 22
+MAX_TEXTURE = 23
 
 //***************************
 // TEXTUREファイル名の読み込み
@@ -26,4 +26,5 @@ TEXTURE_FILENAME = data/TEXTURE/3P.png				# [18]
 TEXTURE_FILENAME = data/TEXTURE/4P.png				# [19]
 TEXTURE_FILENAME = data/TEXTURE/number000.png		# [20]
 TEXTURE_FILENAME = data/TEXTURE/number001.png		# [21]
+TEXTURE_FILENAME = data/TEXTURE/titleLogo.png		# [22]
 

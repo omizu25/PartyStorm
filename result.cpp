@@ -27,9 +27,9 @@
 //*****************************************************************************
 // 静的メンバ変数宣言
 //*****************************************************************************
-CPlayer **CResult::m_pPlayer = nullptr;					// プレイヤークラス
-CEnemyShark *CResult::m_pEnemyShark = nullptr;			// Enemy
-CMesh3D *CResult::m_pMesh3D;							// メッシュクラス
+CPlayer **CResult::m_pPlayer = nullptr;	// プレイヤークラス
+int CResult::m_score = 0;				// スコア
+bool CResult::m_dead[4] = {};			// 死亡したかどうか
 
 //=============================================================================
 // コンストラクタ
@@ -38,7 +38,7 @@ CMesh3D *CResult::m_pMesh3D;							// メッシュクラス
 //=============================================================================
 CResult::CResult()
 {
-	m_nextMode = CApplication::MODE_NONE;		// 次に設定するモード
+	m_nextMode = CApplication::MODE_NONE;	// 次に設定するモード
 }
 
 //=============================================================================
@@ -49,6 +49,39 @@ CResult::CResult()
 CResult::~CResult()
 {
 
+}
+
+//=============================================================================
+// スコアの設定
+// Author : 香月瑞輝
+// 概要 : スコアの設定
+//=============================================================================
+void CResult::SetScore(int score)
+{
+	m_score = score;
+}
+
+//=============================================================================
+// 死亡の初期化
+// Author : 香月瑞輝
+// 概要 : 死亡の初期化
+//=============================================================================
+void CResult::InitDead()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		m_dead[i] = false;
+	}
+}
+
+//=============================================================================
+// 死亡の設定
+// Author : 香月瑞輝
+// 概要 : 死亡の設定
+//=============================================================================
+void CResult::SetDead(int numPlayer)
+{
+	m_dead[numPlayer] = true;
 }
 
 //=============================================================================
@@ -74,7 +107,7 @@ HRESULT CResult::Init()
 	pCamera->SetViewing(20.0f);
 
 	// 地面の設定
-	m_pMesh3D = CMesh3D::Create();
+	CMesh3D *m_pMesh3D = CMesh3D::Create();
 	m_pMesh3D->SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	m_pMesh3D->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	m_pMesh3D->SetSize(D3DXVECTOR3(10000.0f, 0, 10000.0f));
@@ -116,12 +149,21 @@ HRESULT CResult::Init()
 		m_pPlayer[nCntPlayer]->SetMotion("data/MOTION/motion.txt");
 		m_pPlayer[nCntPlayer]->SetPos(D3DXVECTOR3(-250.0f + posX + (posX * nCntPlayer), 0.0f, -300.0f));
 		m_pPlayer[nCntPlayer]->SetNum(nCntPlayer);
-		m_pPlayer[nCntPlayer]->SetAction(false);
+		
+		if (m_dead[nCntPlayer])
+		{// 死んだプレイヤー
+			m_pPlayer[nCntPlayer]->SetAction(true);
+			m_pPlayer[nCntPlayer]->SetMove(false);
+		}
+		else
+		{// 生きてるプレイヤー
+			m_pPlayer[nCntPlayer]->SetAction(false);
+		}
 	}
 
 	//サメ設定
-	m_pEnemyShark = CEnemyShark::Create();
-	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt");
+	CEnemyShark *m_pEnemyShark = CEnemyShark::Create();
+	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
 	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
 	m_pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
 

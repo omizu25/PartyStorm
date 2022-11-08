@@ -30,6 +30,8 @@
 #include "effect.h"
 #include "sound.h"
 #include "object3D.h"
+#include "result.h"
+#include "time.h"
 
 namespace
 {
@@ -77,7 +79,8 @@ m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
 m_nNumMotion(0),
 m_bDead(false),
-m_bAction(false)
+m_bAction(false),
+m_bMove(false)
 {
 #ifdef _DEBUG
 	// ライン情報
@@ -122,6 +125,7 @@ HRESULT CPlayer::Init()
 	SetObjType(OBJTYPE_3DPLAYER);
 
 	m_bAction = true;
+	m_bMove = true;
 
 #ifdef _DEBUG
 	// ライン情報
@@ -270,6 +274,11 @@ void CPlayer::Draw()
 //=============================================================================
 D3DXVECTOR3 CPlayer::Move()
 {
+	if (!m_bMove)
+	{// 移動しない
+		return D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	}
+
 	// 変数宣言
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -574,6 +583,14 @@ void CPlayer::Collison()
 								m_pIdx->Uninit();
 								m_pIdx = nullptr;
 							}
+
+							// 死亡した
+							CResult::SetDead(m_nNum);
+
+							CTime* pTime = CGame::GetTime();
+
+							// スコアの設定
+							CResult::SetScore(pTime->GetTime());
 						}
 					}
 				}

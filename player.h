@@ -68,6 +68,7 @@ public:
 	void SetNum(const int nNum);									// 識別番号の設定
 	bool GetDead() { return m_bDead; }								// 死亡状況の取得
 	void SetAction(bool bAction) { m_bAction = bAction; }			// 行動できるかの設定
+	void SetMove(bool bMove) { m_bMove = bMove; }					// 移動できるかの設定
 
 #ifdef _DEBUG
 	void SetLine();					// ラインの設定
@@ -93,6 +94,7 @@ private:
 	int				m_nNum;					// プレイヤー識別番号
 	bool			m_bDead;				// 死ぬかどうか
 	bool			m_bAction;				// 行動できるかどうか
+	bool			m_bMove;				// 移動できるかどうか
 #ifdef _DEBUG
 	CLine **m_pLine;		// ライン情報
 #endif // _DEBUG

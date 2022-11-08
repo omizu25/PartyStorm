@@ -37,6 +37,7 @@
 #include "score.h"
 #include "time.h"
 #include "sound.h"
+#include "result.h"
 
 //*****************************************************************************
 // 静的メンバ変数宣言
@@ -172,6 +173,9 @@ HRESULT CGame::Init()
 
 	// 静的メンバ変数の初期化
 	CObstacle::InitStatic();
+
+	// 死亡の初期化
+	CResult::InitDead();
 
 	m_bGame = true;
 
