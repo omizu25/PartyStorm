@@ -25,6 +25,7 @@
 #include "effect.h"
 #include "renderer.h"
 #include "score.h"
+#include "ranking.h"
 
 //*****************************************************************************
 // 変数定義
@@ -45,7 +46,6 @@ const int texIdx[4]
 // 静的メンバ変数宣言
 //*****************************************************************************
 CPlayer **CResult::m_pPlayer = nullptr;	// プレイヤークラス
-int CResult::m_score = 0;				// スコア
 bool CResult::m_dead[4] = {};			// 死亡したかどうか
 
 //=============================================================================
@@ -63,14 +63,6 @@ CResult::CResult() :
 //=============================================================================
 CResult::~CResult()
 {
-}
-
-//=============================================================================
-// スコアの設定
-//=============================================================================
-void CResult::SetScore(int score)
-{
-	m_score = score;
 }
 
 //=============================================================================
@@ -185,7 +177,7 @@ HRESULT CResult::Init()
 	m_pop = false;
 
 	bool gameclear = true;
-
+	
 	if (maxPlayer > 1)
 	{// マルチプレイ
 		for (int i = 0; i < maxPlayer; i++)
@@ -208,20 +200,53 @@ HRESULT CResult::Init()
 	}
 	else
 	{// シングルプレイ
-		// スコアの生成
-		CScore *pScore = CScore::Create(10, false);
-		assert(pScore != nullptr);
-		pScore->SetScore(m_score);
+		{// 背景
+			CObject2D *pObj = CObject2D::Create();
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.75f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(650.0f, CRenderer::SCREEN_HEIGHT, 0.0f));
+			pObj->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
+			pObj->LoadTex(-1);
+		}
 
-		// 大きさの設定
-		pScore->SetWholeSize(D3DXVECTOR3(1000.0f, 50.0f, 0.0f));
-		pScore->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+		{// ランキングの生成
+			CRanking *pRanking = CRanking::Create();
+			assert(pRanking != nullptr);
+			float width = (float)CRenderer::SCREEN_WIDTH;
+			float height = (float)CRenderer::SCREEN_HEIGHT * 0.35f;
+			pRanking->Set(D3DXVECTOR3(width, height, 0.0f), 40.0f);
+		}
 
-		// 位置の設定
-		pScore->SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));
+		{// スコアの生成
+			CScore *pScore = CScore::Create(10, true);
+			assert(pScore != nullptr);
+			pScore->SetScore(0);
 
-		// 向きの設定
-		pScore->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			// 大きさの設定
+			pScore->SetWholeSize(D3DXVECTOR3(1000.0f, 50.0f, 0.0f));
+			pScore->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+
+			// 位置の設定
+			pScore->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.25f, 360.0f, 0.0f));
+
+			// 向きの設定
+			pScore->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+			pScore->SetDestScore(CRanking::Get(-1));
+		}
+
+		{// ランキングの文字
+			CObject2D *pObj = CObject2D::Create();
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.75f, CRenderer::SCREEN_HEIGHT * 0.15f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(600.0f, 150.0f, 0.0f));
+			pObj->LoadTex(26);
+		}
+
+		{// 自分のスコアの文字
+			CObject2D *pObj = CObject2D::Create();
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.25f, CRenderer::SCREEN_HEIGHT * 0.3f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(500.0f, 150.0f, 0.0f));
+			pObj->LoadTex(27);
+		}
 	}
 
 	{//サメ設定
@@ -346,7 +371,7 @@ void CResult::Multi()
 	{// 出現する時間を越した
 		int gameover = 0;
 		int maxPlayer = CApplication::GetPersonCount();
-
+		maxPlayer = 4;
 		for (int i = 0; i < maxPlayer; i++)
 		{
 			if (m_dead[i])
@@ -379,7 +404,7 @@ void CResult::Multi()
 				}
 			}
 
-			assert(count == maxPlayer);
+			assert(count == (maxPlayer - gameover));
 
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.65f, 0.0f));

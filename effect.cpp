@@ -67,6 +67,7 @@ void CEffect::ReleaseAll()
 		if (m_pEffect[i] != nullptr)
 		{// NULLチェック
 			m_pEffect[i]->Uninit();
+			m_pEffect[i] = nullptr;
 		}
 	}
 }

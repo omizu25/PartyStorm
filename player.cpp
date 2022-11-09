@@ -32,6 +32,7 @@
 #include "object3D.h"
 #include "result.h"
 #include "time.h"
+#include "ranking.h"
 
 namespace
 {
@@ -590,7 +591,7 @@ void CPlayer::Collison()
 							CTime* pTime = CGame::GetTime();
 
 							// ƒXƒRƒA‚ÌÝ’è
-							CResult::SetScore(pTime->GetTime());
+							CRanking::Set(pTime->GetTime());
 						}
 					}
 				}
