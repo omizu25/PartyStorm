@@ -33,6 +33,7 @@
 #include "result.h"
 #include "time.h"
 #include "ranking.h"
+#include "follow_model.h"
 
 namespace
 {
@@ -44,6 +45,13 @@ const int texIdx[4]
 	19
 };
 }
+
+//--------------------------------------------------------------------
+// 定数定義
+//--------------------------------------------------------------------
+const D3DXVECTOR2 CPlayer::MAX_VIB_RAND = D3DXVECTOR2(70.0f, 100.0f);		// 振動の幅
+const float CPlayer::VIB_SPEED = 20.0f;										// 振動の速度
+const float CPlayer::VIB_COEFFICIENT = 0.2f;								// 振動の減衰値
 
 //=============================================================================
 // インスタンス生成
@@ -79,6 +87,8 @@ m_EAction(NEUTRAL_ACTION),
 m_rotDest(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 m_fSpeed(0.0f),
 m_nNumMotion(0),
+m_nVibCount(0),
+m_bVib(false),
 m_bDead(false),
 m_bAction(false),
 m_bMove(false)
@@ -253,6 +263,18 @@ void CPlayer::Update()
 		SetLine();
 #endif // _DEBUG
 	}
+
+	if (m_bVib)
+	{
+		m_nVibCount++;
+
+		if (m_nVibCount >= 60)
+		{
+			CFollowModel *pCameraTarget = CGame::GetCameraTarget();
+			pCameraTarget->SetFollow(false);
+			pCameraTarget->SetPos(CGame::CAMERA_POSR);
+		}
+	}
 }
 
 //=============================================================================
@@ -400,7 +422,6 @@ D3DXVECTOR3 CPlayer::Move()
 	}
 
 	pJoy->GetStick(CJoypad::JOYKEY_LEFT_STICK,m_nNum);
-
 
 	//キーボード
 	if (pKeyboard->GetPress(DIK_W)
@@ -592,6 +613,20 @@ void CPlayer::Collison()
 
 							// スコアの設定
 							CRanking::Set(pTime->GetTime());
+
+							CFollowModel *pCameraTarget = CGame::GetCameraTarget();
+
+							if (pCameraTarget != nullptr)
+							{// カメラターゲット情報
+								D3DXVECTOR3 pos = pCameraTarget->GetPos();
+								D3DXVECTOR3 posDest = D3DXVECTOR3(pos.x + MAX_VIB_RAND.x - (float)(rand() % (int)(MAX_VIB_RAND.x * 2.0f)),
+									pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f)), 0.0f);
+								pCameraTarget->SetPos(posDest);
+								pCameraTarget->SetFollow(CGame::CAMERA_POSR);
+								pCameraTarget->SetSpeed(VIB_SPEED);
+								pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
+								m_bVib = true;
+							}
 						}
 					}
 				}

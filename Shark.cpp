@@ -25,14 +25,6 @@
 #include "debug_proc.h"
 #include "line.h"
 #include "sound.h"
-#include "follow_model.h"
-
-//--------------------------------------------------------------------
-// ’è”’è‹`
-//--------------------------------------------------------------------
-const D3DXVECTOR2 CEnemyShark::MAX_VIB_RAND = D3DXVECTOR2(20.0f, 50.0f);		// U“®‚Ì•
-const float CEnemyShark::VIB_SPEED = 5.0f;										// U“®‚Ì‘¬“x
-const float CEnemyShark::VIB_COEFFICIENT = 0.4f;								// U“®‚ÌŒ¸Š’l
 
 CEnemyShark * CEnemyShark::Create()
 {
@@ -129,19 +121,6 @@ void CEnemyShark::Update()
 		if (CApplication::GetMode() != CApplication::MODE_GAME)
 		{
 			return;
-		}
-
-		CFollowModel *pCameraTarget = CGame::GetCameraTarget();
-
-		if (pCameraTarget != nullptr)
-		{// ƒJƒƒ‰ƒ^[ƒQƒbƒgî•ñ
-			D3DXVECTOR3 pos = pCameraTarget->GetPos();
-			D3DXVECTOR3 posDest = D3DXVECTOR3(pos.x + MAX_VIB_RAND.x - (float)(rand() % (int)(MAX_VIB_RAND.x * 2.0f)),
-				pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f)), 0.0f);
-			pCameraTarget->SetPos(posDest);
-			pCameraTarget->SetFollow(CGame::CAMERA_POSR);
-			pCameraTarget->SetSpeed(VIB_SPEED);
-			pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
 		}
 	}
 
