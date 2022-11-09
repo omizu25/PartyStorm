@@ -129,14 +129,6 @@ void CFollowModel::Follow()
 		move.x = sinf(m_moveVec.x) * sinf(m_moveVec.y) * m_fSpeed;
 		move.y = cosf(m_moveVec.x) * m_fSpeed;
 
-		if (D3DXVec3Length(&distance) <= m_fSpeed)
-		{
-			m_bFollow = false;
-			SetPos(m_posDest);
-		}
-		else
-		{
-			SetPos(pos + move);
-		}
+		SetPos(pos + move);
 	}
 }
