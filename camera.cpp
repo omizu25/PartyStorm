@@ -63,6 +63,7 @@ CCamera::CCamera()
 	m_bAutoMove = false;							// 自動移動
 	m_bAction = false;								// アクションを行うか否か
 	m_bFllow = false;								// 追従を行うか
+	m_bLockPosV = false;							// 視点のロック
 }
 
 //=============================================================================
@@ -166,7 +167,8 @@ void CCamera::Update(void)
 
 #ifdef _DEBUG
 	CDebugProc::Print("カメラの視点 | X : %.3f | Y : %.3f | Z : %.3f |\n", m_posV.x, m_posV.y, m_posV.z);
-	CDebugProc::Print("カメラの	注視点 | X : %.3f | Y : %.3f | Z : %.3f |\n", m_posR.x, m_posR.y, m_posR.z);
+	CDebugProc::Print("カメラの注視点 | X : %.3f | Y : %.3f | Z : %.3f |\n", m_posR.x, m_posR.y, m_posR.z);
+	CDebugProc::Print("カメラの向き | X : %.3f | Y : %.3f | Z : %.3f |\n", m_rot.x, m_rot.y, m_rot.z);
 #endif // _DEBUG
 
 }
@@ -578,15 +580,19 @@ void CCamera::Follow(void)
 		m_posRDest.x = targetPos.x + sinf(targetRot.y);
 		m_posRDest.y = targetPos.y;
 
-		m_posVDest.z = targetPos.z - cosf(m_rot.y) * m_fDistance;
-		m_posVDest.x = targetPos.x - sinf(m_rot.y) * m_fDistance;
-		m_posVDest.y = 0.0f;
-
 		// 注視点の移動
 		m_posR += (m_posRDest - m_posR) * m_fCoeffFllow;
 
-		// 視点の移動
-		m_posV += (m_posVDest - m_posV) * m_fCoeffFllow;
+		if (!m_bLockPosV)
+		{
+			m_posVDest.z = targetPos.z - cosf(m_rot.y) * m_fDistance;
+			m_posVDest.x = targetPos.x - sinf(m_rot.y) * m_fDistance;
+			m_posVDest.y = m_posV.y;
+
+			// 視点の移動
+			m_posV += (m_posVDest - m_posV) * m_fCoeffFllow;
+		}
+		
 	}
 	else
 	{

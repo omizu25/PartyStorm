@@ -133,12 +133,7 @@ void CObject::DrawAll()
 				CObject *pObjectNext = pObject->m_pNext;
 
 				if (!pObject->m_bDeath)
-				{// レンダラーのゲット
-					//CRenderer *pRenderer = CApplication::GetRenderer();
-
-					// ステンシルの設定
-					//pRenderer->SetStencil(1, D3DCMP_EQUAL);
-
+				{
 					// オブジェクトの描画
 					pObject->Draw();
 				}

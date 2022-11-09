@@ -25,6 +25,12 @@
 #include "debug_proc.h"
 #include "line.h"
 #include "sound.h"
+#include "follow_model.h"
+
+//--------------------------------------------------------------------
+// 定数定義
+//--------------------------------------------------------------------
+const D3DXVECTOR2 CEnemyShark::MAX_VIB_RAND = D3DXVECTOR2(20.0f, 50.0f);		// 振動の幅
 
 CEnemyShark * CEnemyShark::Create()
 {
@@ -104,9 +110,6 @@ void CEnemyShark::Uninit()
 
 void CEnemyShark::Update()
 {
-	// キーボードの取得
-	CKeyboard *pKeyboard = CApplication::GetKeyboard();
-
 	// モーション情報の取得
 	CMotion *pMotion = CMotionModel3D::GetMotion();
 
@@ -120,6 +123,24 @@ void CEnemyShark::Update()
 		m_EAction = ATTACK_ACTION;
 		pMotion->SetNumMotion(m_EAction);
 		pSound->PlaySound(CSound::SOUND_LABEL_SE_BITING);
+
+		if (CApplication::GetMode() != CApplication::MODE_GAME)
+		{
+			return;
+		}
+
+		CFollowModel *pCameraTarget = CGame::GetCameraTarget();
+
+		if (pCameraTarget != nullptr)
+		{// カメラターゲット情報
+			D3DXVECTOR3 pos = pCameraTarget->GetPos();
+			D3DXVECTOR3 posDest = D3DXVECTOR3(pos.x + MAX_VIB_RAND.x - (float)(rand() % (int)(MAX_VIB_RAND.x * 2.0f)),
+				pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f)), 0.0f);
+			pCameraTarget->SetPos(posDest);
+			pCameraTarget->SetFollow(CGame::CAMERA_POSR);
+			pCameraTarget->SetSpeed(5.0f);
+			pCameraTarget->SetCoefficient(1.0f);
+		}
 	}
 
 	// 更新

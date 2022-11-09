@@ -21,6 +21,7 @@ class CEnemyShark;
 class CMesh3D;
 class CScore;
 class CTime;
+class CFollowModel;
 
 //=============================================================================
 // ゲームクラス
@@ -31,12 +32,19 @@ class CGame : public CSceneMode
 {
 public:
 	//--------------------------------------------------------------------
+	// 定数定義
+	//--------------------------------------------------------------------
+	static const D3DXVECTOR3 CAMERA_POSV;		// 視点
+	static const D3DXVECTOR3 CAMERA_POSR;		// 注視点
+
+	//--------------------------------------------------------------------
 	// 静的メンバ関数
 	//--------------------------------------------------------------------
-	static void SetGame(const bool bGame) { m_bGame = bGame; }		// ゲームの状況の設定
-	static CMesh3D *GetMesh() { return m_pMesh3D; }					// メッシュのゲッター
-	static CTime *GetTime() { return m_pTime; }						// タイムのゲッター
-	static CPlayer **GetPlayer() { return m_pPlayer; }				// プレイヤーのゲッター
+	static void SetGame(const bool bGame) { m_bGame = bGame; }				// ゲームの状況の設定
+	static CMesh3D *GetMesh() { return m_pMesh3D; }							// メッシュのゲッター
+	static CTime *GetTime() { return m_pTime; }								// タイムのゲッター
+	static CPlayer **GetPlayer() { return m_pPlayer; }						// プレイヤーのゲッター
+	static CFollowModel *GetCameraTarget() { return m_pCameraTarget; }		// カメラターゲットのゲッター
 
 	//--------------------------------------------------------------------
 	// コンストラクタとデストラクタ
@@ -52,6 +60,7 @@ public:
 	static CMesh3D *m_pMesh3D;					// メッシュクラス
 	static CScore *m_pScore;					// スコアクラス
 	static CTime *m_pTime;						// タイムクラス
+	static CFollowModel *m_pCameraTarget;		// カメラターゲット
 	static bool m_bGame;						// ゲームの状況
 
 	//--------------------------------------------------------------------

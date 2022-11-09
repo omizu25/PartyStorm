@@ -98,6 +98,7 @@ public:
 	void SetViewing(const float fViewing) { m_fViewing = fViewing; }
 	void MotionReset(void);
 	void SetNumMotion(const int nNumMotion);
+	void SetLockPosV(bool bLockPosV) { m_bLockPosV = bLockPosV; }	
 
 private:
 	//--------------------------------------------------------------------
@@ -143,6 +144,7 @@ private:
 	bool				m_bAutoMove;		// 自動移動
 	bool				m_bAction;			// アクションを行うか
 	bool				m_bFllow;			// 追従を行うか
+	bool				m_bLockPosV;		// 視点のロック
 };
 
 #endif

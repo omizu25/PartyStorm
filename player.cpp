@@ -119,7 +119,7 @@ HRESULT CPlayer::Init()
 
 	// 当たり判定の設定
 	SetColisonPos(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
-	SetColisonSize(D3DXVECTOR3(40.0f, 50.0f, 130.0f));
+	SetColisonSize(D3DXVECTOR3(40.0f, 50.0f, 40.0f));
 
 	// オブジェクトタイプの設定
 	SetObjType(OBJTYPE_3DPLAYER);
@@ -607,15 +607,15 @@ void CPlayer::Collison()
 
 	if (pos.x - size.x < -250.0f)
 	{
-		pos.x = -250.0f + size.x + GetColisonPos().x;
+		pos.x = -250.0f + size.x;
 	}
 	else if (pos.x + size.x > 250.0f)
 	{
-		pos.x = 250.0f - size.x + GetColisonPos().x;
+		pos.x = 250.0f - size.x;
 	}
 	if (pos.z - size.z < -700.0f)
 	{
-		pos.z = -700.0f + size.z + GetColisonPos().z;
+		pos.z = -700.0f + size.z;
 	}
 
 	// 位置の設定

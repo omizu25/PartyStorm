@@ -161,6 +161,7 @@
     <ClInclude Include="effect.h" />
     <ClInclude Include="effect3D.h" />
     <ClInclude Include="fade.h" />
+    <ClInclude Include="follow_model.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="instancing.h" />
     <ClInclude Include="joypad.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effect3D.cpp" />
     <ClCompile Include="fade.cpp" />
+    <ClCompile Include="follow_model.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="instancing.cpp" />

@@ -559,8 +559,45 @@ void CMotion::LoodSetMotion(const char *pFileName)
 //=============================================================================
 void CMotion::Uninit(void)
 {
+	if (m_pParts != nullptr)
+	{
+		for (int nCntParts = 0; nCntParts < m_nMaxParts; nCntParts++)
+		{// パーツ終了
+			m_pParts[nCntParts]->Uninit();
+		}
+
+		// メモリの解放
+		delete[] m_pParts;
+		m_pParts = nullptr;
+	}
+
 	if (m_motion != nullptr)
-	{// メモリの解放
+	{
+		//for (int nCntMotion = 0; nCntMotion < MAX_MOTION; nCntMotion++)
+		//{
+		//	if (m_motion[nCntMotion].pKeySet == nullptr)
+		//	{
+		//		continue;
+		//	}
+
+		//	for (int nCntNumKeySet = 0; nCntNumKeySet < m_motion[nCntMotion].nNumKey; nCntNumKeySet++)
+		//	{
+		//		if (m_motion[nCntMotion].pKeySet[nCntNumKeySet].pKey == nullptr)
+		//		{
+		//			continue;
+		//		}
+
+		//		// メモリの解放
+		//		delete m_motion[nCntMotion].pKeySet[nCntNumKeySet].pKey;
+		//		m_motion[nCntMotion].pKeySet[nCntNumKeySet].pKey = nullptr;
+		//	}
+
+		//	// メモリの解放
+		//	delete m_motion[nCntMotion].pKeySet;
+		//	m_motion[nCntMotion].pKeySet = nullptr;
+		//}
+
+		// メモリの解放
 		delete[] m_motion;
 		m_motion = nullptr;
 	}

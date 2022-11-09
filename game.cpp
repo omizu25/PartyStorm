@@ -24,6 +24,7 @@
 #include "object3D.h"
 
 //モデル
+#include "motion_model3D.h"
 #include "player.h"
 #include "Shark.h"
 #include "obstacle.h"
@@ -36,8 +37,15 @@
 #include "model_obj.h"
 #include "score.h"
 #include "time.h"
+#include "follow_model.h"
 #include "sound.h"
 #include "result.h"
+
+//--------------------------------------------------------------------
+// 定数定義
+//--------------------------------------------------------------------
+const D3DXVECTOR3 CGame::CAMERA_POSV = D3DXVECTOR3(0.0f, 300.0f, -1600.0f);		// 視点
+const D3DXVECTOR3 CGame::CAMERA_POSR = D3DXVECTOR3(0.0f, 90.0f, 0.0f);			// 注視点
 
 //*****************************************************************************
 // 静的メンバ変数宣言
@@ -47,6 +55,7 @@ CEnemyShark *CGame::m_pEnemyShark = nullptr;			// Enemy
 CScore *CGame::m_pScore = nullptr;						// スコアクラス
 CTime *CGame::m_pTime = nullptr;						// タイムクラス
 CMesh3D *CGame::m_pMesh3D;								// メッシュクラス
+CFollowModel *CGame::m_pCameraTarget = nullptr;			// カメラターゲット
 bool CGame::m_bGame = false;							// ゲームの状況
 
 //=============================================================================
@@ -89,9 +98,16 @@ HRESULT CGame::Init()
 
 	// カメラの位置変更
 	CCamera *pCamera = CApplication::GetCamera();
-	pCamera->SetPosV(D3DXVECTOR3(0.0f, 300.0f, -1600.0f));
-	pCamera->SetPosR(D3DXVECTOR3(0.0f, 90.0f, 0.0f));
+	pCamera->SetPosV(CAMERA_POSV);
+	pCamera->SetPosR(CAMERA_POSR);
 	pCamera->SetViewing(20.0f);
+
+	// カメラターゲットの設定
+	m_pCameraTarget = CFollowModel::Create();
+	m_pCameraTarget->SetPos(CAMERA_POSR);
+	pCamera->SetFollowTarget(m_pCameraTarget, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f, 1.0f);
+	pCamera->SetPosV(CAMERA_POSV);
+	pCamera->SetLockPosV(true);
 
 	// 地面の設定
 	m_pMesh3D = CMesh3D::Create();
@@ -164,6 +180,27 @@ HRESULT CGame::Init()
 	m_pEnemyShark->SetMotion("data/MOTION/motionShark.txt", 2);
 	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
 	m_pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
+
+	// モーションモデルの設定
+	CMotionModel3D *pSnake = CMotionModel3D::Create();
+	pSnake->SetMotion("data/MOTION/snake.txt");
+	pSnake->SetPos(D3DXVECTOR3(400.0f, 0.0f, 1000.0f));
+	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+	pSnake = CMotionModel3D::Create();
+	pSnake->SetMotion("data/MOTION/snake.txt");
+	pSnake->SetPos(D3DXVECTOR3(-400.0f, 0.0f, 1000.0f));
+	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+
+	pSnake = CMotionModel3D::Create();
+	pSnake->SetMotion("data/MOTION/snake.txt");
+	pSnake->SetPos(D3DXVECTOR3(600.0f, 0.0f, 1000.0f));
+	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+	pSnake = CMotionModel3D::Create();
+	pSnake->SetMotion("data/MOTION/snake.txt");
+	pSnake->SetPos(D3DXVECTOR3(-600.0f, 0.0f, 1000.0f));
+	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
