@@ -69,8 +69,6 @@ CTitle::~CTitle()
 //=============================================================================
 HRESULT CTitle::Init()
 {// マウスの取得
-	CMouse *pMouse = CApplication::GetMouse();
-
 	// サウンド情報の取得
 	CSound *pSound = CApplication::GetSound();
 
@@ -128,9 +126,6 @@ HRESULT CTitle::Init()
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
-
-	// マウスカーソルを消す
-	pMouse->SetShowCursor(false);
 
 	return S_OK;
 }

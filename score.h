@@ -56,7 +56,7 @@ public:
 	void SetRot(const D3DXVECTOR3 &rot) override;									// 向きのセッター
 	void SetSize(const D3DXVECTOR3 &size) override;									// 大きさのセッター
 	void SetWholeSize(const D3DXVECTOR3 &wholeSize);								// 全体の大きさのセッター
-	void SetColor(const D3DXCOLOR &col);										
+	void SetColor(const D3DXCOLOR &col);											// 色のセッター
 	D3DXVECTOR3 GetPos() override { return m_pos; }									// 位置のゲッター
 	D3DXVECTOR3 GetPosOld()  override { return m_posOld; }							// 過去位置のゲッター
 	D3DXVECTOR3 GetRot()  override { return m_rot; }								// 向きのゲッター
