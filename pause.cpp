@@ -68,6 +68,7 @@ CPause::CPause(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority
 	m_nCntFrame = 0;									// フレームカウント
 	m_bPressEnter = true;								// エンターキーを押せるかさ
 	m_bPause = false;									// ポーズしているか
+	m_bSelect = true;									// 選択していいか
 }
 
 //=============================================================================
@@ -113,6 +114,11 @@ void CPause::Uninit()
 //=============================================================================
 void CPause::Update()
 {
+	if (!m_bSelect)
+	{// 選択してはいけない
+		return;
+	}
+
 	// サウンド情報の取得
 	CSound *pSound = CApplication::GetSound();
 

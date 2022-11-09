@@ -22,6 +22,7 @@
 #include "game.h"
 #include "player.h"
 #include "obstacle.h"
+#include "pause.h"
 
 //=============================================================================
 // インスタンス生成
@@ -150,6 +151,10 @@ void CTime::Update()
 
 				// 出現する
 				CObstacle::Stop(false);
+
+				// ポーズできる
+				CApplication::GetPause()->SetSelect(true);
+
 				return;
 			}
 		}
@@ -305,4 +310,7 @@ void CTime::SetCountDown()
 
 	// 出現の停止
 	CObstacle::Stop(true);
+
+	// ポーズできなくする
+	CApplication::GetPause()->SetSelect(false);
 }

@@ -21,7 +21,8 @@
 namespace
 {
 const int MODEL_TYPE = 16;				// ÉÇÉfÉãÇÃéÌóﬁ
-const int POP_INTERVAL = 120;			// èoåªÇÃä‘äu
+const int MIN_INTERVAL = 60;			// ä‘äuÇÃç≈è¨íl
+const int MAX_INTERVAL = 120;			// ä‘äuÇÃç≈è¨íl
 const int POP_INCREASE = 1200;			// èoåªÇ™ëùÇ¶ÇÈ
 const int MIN_POP = 2;					// èoåªÇÃç≈è¨êî
 const int MAX_POP = 4;					// èoåªÇÃç≈ëÂêî
@@ -45,6 +46,8 @@ const int POP_MAX = sizeof(POP_POS_X) / sizeof(POP_POS_X[0]);	// èoåªà íuÇÃç≈ëÂê
 //*****************************************************************************
 int CObstacle::m_time = 0;
 int CObstacle::m_pop = 0;
+int CObstacle::m_interval = 0.;
+float CObstacle::m_move = 0.0f;
 bool CObstacle::m_stop = false;
 
 //=============================================================================
@@ -54,6 +57,8 @@ void CObstacle::InitStatic()
 {
 	m_time = 0;
 	m_pop = MIN_POP;
+	m_interval = MAX_INTERVAL;
+	m_move = 1.0f;
 }
 
 //=============================================================================
@@ -66,7 +71,7 @@ void CObstacle::Pop()
 		return;
 	}
 
-	if (m_time % POP_INTERVAL == 0)
+	if (m_time % m_interval == 0)
 	{// àÍíËä‘äu
 		int random[MAX_POP];
 
@@ -105,6 +110,14 @@ void CObstacle::Pop()
 			Create(POP_POS_X[random[i]], inverse);
 
 			inverse *= -1.0f;
+		}
+
+		m_move += 0.05f;
+		m_interval--;
+
+		if (m_interval <= MIN_INTERVAL)
+		{// ç≈è¨ílà»â∫
+			m_interval = MIN_INTERVAL;
 		}
 	}
 
@@ -206,7 +219,7 @@ void CObstacle::Update()
 	// à íuÇÃéÊìæ
 	D3DXVECTOR3 pos = CModelObj::GetPos();
 
-	pos.z += MOVE_SPEED;
+	pos.z += (MOVE_SPEED * m_move);
 
 	m_waveTime++;
 
