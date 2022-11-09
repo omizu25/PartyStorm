@@ -138,6 +138,28 @@ HRESULT CResult::Init()
 		pSphere->LoadTex(4);
 	}
 
+	{// モーションモデルの設定
+		CMotionModel3D *pSnake = CMotionModel3D::Create();
+		pSnake->SetMotion("data/MOTION/snake.txt");
+		pSnake->SetPos(D3DXVECTOR3(400.0f, 0.0f, 1000.0f));
+		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+		pSnake = CMotionModel3D::Create();
+		pSnake->SetMotion("data/MOTION/snake.txt");
+		pSnake->SetPos(D3DXVECTOR3(-400.0f, 0.0f, 1000.0f));
+		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+
+		pSnake = CMotionModel3D::Create();
+		pSnake->SetMotion("data/MOTION/snake.txt");
+		pSnake->SetPos(D3DXVECTOR3(600.0f, 0.0f, 1000.0f));
+		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+		pSnake = CMotionModel3D::Create();
+		pSnake->SetMotion("data/MOTION/snake.txt");
+		pSnake->SetPos(D3DXVECTOR3(-600.0f, 0.0f, 1000.0f));
+		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+	}
+
 	// プレイヤーの設定
 	int maxPlayer = CApplication::GetPersonCount();
 	m_pPlayer = new CPlayer*[maxPlayer];
