@@ -286,7 +286,7 @@ void CTime::SetCountDown()
 
 	// ëÂÇ´Ç≥ÇÃê›íË
 	m_pScore->SetWholeSize(D3DXVECTOR3(1000.0f, 50.0f, 0.0f));
-	m_pScore->SetSize(D3DXVECTOR3(300.0f, 300.0f, 0.0f));
+	m_pScore->SetSize(D3DXVECTOR3(400.0f, 400.0f, 0.0f));
 
 	// à íuÇÃê›íË
 	SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));

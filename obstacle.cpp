@@ -112,12 +112,15 @@ void CObstacle::Pop()
 			inverse *= -1.0f;
 		}
 
-		m_move += 0.05f;
-		m_interval--;
+		if (m_pop >= MAX_POP)
+		{// Å‘å”‚ğ‰z‚µ‚½
+			m_move += 0.05f;
+			m_interval--;
 
-		if (m_interval <= MIN_INTERVAL)
-		{// Å¬’lˆÈ‰º
-			m_interval = MIN_INTERVAL;
+			if (m_interval <= MIN_INTERVAL)
+			{// Å¬’lˆÈ‰º
+				m_interval = MIN_INTERVAL;
+			}
 		}
 	}
 
