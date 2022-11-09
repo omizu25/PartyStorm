@@ -31,6 +31,8 @@
 // ’è”’è‹`
 //--------------------------------------------------------------------
 const D3DXVECTOR2 CEnemyShark::MAX_VIB_RAND = D3DXVECTOR2(20.0f, 50.0f);		// U“®‚Ì•
+const float CEnemyShark::VIB_SPEED = 5.0f;										// U“®‚Ì‘¬“x
+const float CEnemyShark::VIB_COEFFICIENT = 0.4f;								// U“®‚ÌŒ¸Š’l
 
 CEnemyShark * CEnemyShark::Create()
 {
@@ -138,8 +140,8 @@ void CEnemyShark::Update()
 				pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f)), 0.0f);
 			pCameraTarget->SetPos(posDest);
 			pCameraTarget->SetFollow(CGame::CAMERA_POSR);
-			pCameraTarget->SetSpeed(5.0f);
-			pCameraTarget->SetCoefficient(1.0f);
+			pCameraTarget->SetSpeed(VIB_SPEED);
+			pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
 		}
 	}
 
