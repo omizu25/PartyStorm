@@ -54,7 +54,6 @@ bool CResult::m_dead[4] = {};			// 死亡したかどうか
 // コンストラクタ
 //=============================================================================
 CResult::CResult() :
-	m_nextMode(CApplication::MODE_NONE),
 	m_time(0),
 	m_pop(false)
 {
@@ -91,9 +90,6 @@ void CResult::SetDead(int numPlayer)
 //=============================================================================
 HRESULT CResult::Init()
 {
-	// 次に行くモードの設定
-	m_nextMode = CApplication::MODE_TITLE;
-
 	// サウンド情報の取得
 	CSound *pSound = CApplication::GetSound();
 
@@ -219,11 +215,11 @@ HRESULT CResult::Init()
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
-			pObj->LoadTex(21);
+			pObj->LoadTex(20);
 
 			m_pop = true;
 
-			D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.25f, (float)CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f);
+			D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.25f, (float)CRenderer::SCREEN_HEIGHT * 0.75f, 0.0f);
 			D3DXVECTOR3 size = D3DXVECTOR3(350.0f, 100.0f, 0.0f);
 
 			// メニューの生成
@@ -233,11 +229,11 @@ HRESULT CResult::Init()
 			m_pMenu->Set(pos, size, 2, 50.0f, true, true);
 
 			// 枠の設定
-			m_pMenu->SetFrame(D3DXVECTOR3(600.0f, (float)CRenderer::SCREEN_HEIGHT, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+			m_pMenu->SetFrame(D3DXVECTOR3(600.0f, 300.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
 
 			// テクスチャの設定
-			m_pMenu->SetTexture(0, 9);
-			m_pMenu->SetTexture(1, 12);
+			m_pMenu->SetTexture(0, 8);
+			m_pMenu->SetTexture(1, 11);
 		}
 	}
 	else
@@ -265,10 +261,10 @@ HRESULT CResult::Init()
 
 			// 大きさの設定
 			pScore->SetWholeSize(D3DXVECTOR3(1000.0f, 50.0f, 0.0f));
-			pScore->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+			pScore->SetSize(D3DXVECTOR3(60.0f, 60.0f, 0.0f));
 
 			// 位置の設定
-			pScore->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.25f, 360.0f, 0.0f));
+			pScore->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.25f, CRenderer::SCREEN_HEIGHT * 0.35f, 0.0f));
 
 			// 向きの設定
 			pScore->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -280,14 +276,32 @@ HRESULT CResult::Init()
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.75f, CRenderer::SCREEN_HEIGHT * 0.15f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(600.0f, 150.0f, 0.0f));
-			pObj->LoadTex(23);
+			pObj->LoadTex(22);
 		}
 
 		{// 自分のスコアの文字
 			CObject2D *pObj = CObject2D::Create();
-			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.25f, CRenderer::SCREEN_HEIGHT * 0.3f, 0.0f));
-			pObj->SetSize(D3DXVECTOR3(500.0f, 150.0f, 0.0f));
-			pObj->LoadTex(24);
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.25f, CRenderer::SCREEN_HEIGHT * 0.15f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(600.0f, 175.0f, 0.0f));
+			pObj->LoadTex(23);
+		}
+
+		{// メニューの生成
+			D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.25f, (float)CRenderer::SCREEN_HEIGHT * 0.75f, 0.0f);
+			D3DXVECTOR3 size = D3DXVECTOR3(350.0f, 100.0f, 0.0f);
+
+			// メニューの生成
+			m_pMenu = CMenu::Create();
+
+			// メニューの設定
+			m_pMenu->Set(pos, size, 2, 50.0f, true, true);
+
+			// 枠の設定
+			m_pMenu->SetFrame(D3DXVECTOR3(600.0f, 360.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
+
+			// テクスチャの設定
+			m_pMenu->SetTexture(0, 8);
+			m_pMenu->SetTexture(1, 11);
 		}
 	}
 
@@ -360,6 +374,29 @@ void CResult::Update()
 	{// シングルプレイ
 		Single();
 	}
+
+	if (m_pMenu != nullptr)
+	{// 選択
+		int select = m_pMenu->Select();
+
+		switch (select)
+		{
+		case -1:
+			break;
+
+		case 0:
+			CApplication::SetNextMode(CApplication::MODE_GAME);
+			break;
+
+		case 1:
+			CApplication::SetNextMode(CApplication::MODE_TITLE);
+			break;
+
+		default:
+			assert(false);
+			break;
+		}
+	}
 }
 
 //=============================================================================
@@ -374,14 +411,6 @@ void CResult::Draw()
 //=============================================================================
 void CResult::Single()
 {
-	// 入力情報の取得
-	CKeyboard *pKeyboard = CApplication::GetKeyboard();
-
-	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{// ENTERが押された
-		CApplication::SetNextMode(m_nextMode);
-	}
-
 	// エフェクトの更新
 	CEffect::UpdateAll();
 }
@@ -396,14 +425,6 @@ void CResult::Multi()
 
 	if (m_pop)
 	{// 出現した
-		// 入力情報の取得
-		CKeyboard *pKeyboard = CApplication::GetKeyboard();
-
-		if (pKeyboard->GetTrigger(DIK_RETURN))
-		{// ENTERが押された
-			CApplication::SetNextMode(m_nextMode);
-		}
-
 		return;
 	}
 
@@ -427,11 +448,11 @@ void CResult::Multi()
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
-			pObj->LoadTex(22);
+			pObj->LoadTex(21);
 		}
 		else
 		{// 生き残りがいる
-			float posX = CRenderer::SCREEN_WIDTH / ((maxPlayer - gameover) + 1);
+			float posX = (float)CRenderer::SCREEN_WIDTH / ((maxPlayer - gameover) + 1);
 			int count = 0;
 
 			for (int i = 0; i < maxPlayer; i++)
@@ -451,7 +472,7 @@ void CResult::Multi()
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.65f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(600.0f, 300.0f, 0.0f));
-			pObj->LoadTex(20);
+			pObj->LoadTex(19);
 		}
 
 		m_pop = true;

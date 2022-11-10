@@ -58,13 +58,6 @@ CMenu::CMenu() :
 //--------------------------------------------------
 CMenu::~CMenu()
 {
-	for (int i = 0; i < m_numUse; i++)
-	{
-		assert(m_pOption == nullptr);
-	}
-
-	assert(m_pFrame == nullptr);
-	assert(m_pCursor == nullptr);
 }
 
 //--------------------------------------------------
@@ -121,26 +114,6 @@ void CMenu::Uninit()
 //--------------------------------------------------
 void CMenu::Update()
 {
-	for (int i = 0; i < m_numUse; i++)
-	{
-		if (m_pOption[i] != nullptr)
-		{// nullチェック
-			// 更新
-			m_pOption[i]->Update();
-		}
-	}
-
-	if (m_pFrame != nullptr)
-	{// nullチェック
-		 // 更新
-		m_pFrame->Update();
-	}
-
-	if (m_pCursor != nullptr)
-	{// nullチェック
-		// 更新
-		m_pCursor->Update();
-	}
 }
 
 //--------------------------------------------------
@@ -311,7 +284,7 @@ void CMenu::Set(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, int numUse, flo
 		m_pCursor->SetSize(D3DXVECTOR3(cursorSize, cursorSize, 0.0f));
 
 		// テクスチャの設定
-		m_pCursor->LoadTex(-1);
+		m_pCursor->LoadTex(29);
 	}
 	else
 	{

@@ -39,10 +39,10 @@ namespace
 {
 const int texIdx[4]
 {
+	12,
 	13,
 	14,
-	15,
-	16
+	15
 };
 }
 
@@ -609,13 +609,14 @@ void CPlayer::Collison()
 							// 死亡した
 							CResult::SetDead(m_nNum);
 
-							CTime* pTime = CGame::GetTime();
-
-							// スコアの設定
-							CRanking::Set(pTime->GetTime());
-
 							if (CApplication::GetMode() == CApplication::MODE_GAME)
 							{
+
+								CTime* pTime = CGame::GetTime();
+
+								// スコアの設定
+								CRanking::Set(pTime->GetTime());
+
 								CFollowModel *pCameraTarget = CGame::GetCameraTarget();
 
 								if (pCameraTarget != nullptr)
