@@ -161,7 +161,7 @@ HRESULT CGame::Init()
 
 	if (nMaxPlayer > 1)
 	{// マルチプレイ
-		m_pTime->SetTime(5);
+		m_pTime->SetTime(60);
 	}
 	else
 	{// シングルプレイ

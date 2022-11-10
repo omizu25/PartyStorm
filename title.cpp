@@ -194,8 +194,8 @@ void CTitle::Update()
 
 	if (m_bPressEnter)
 	{
-		if (pJoy->GetUseJoyPad() > 1)
-		{
+		if (pJoy->GetUseJoyPad() > 0)
+		{// パッドが使用されている
 			for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
 			{
 				if (pJoy->AnyButton(nCntPlayer))
@@ -208,7 +208,7 @@ void CTitle::Update()
 			}
 		}
 		else
-		{
+		{// されていない
 			if (pKeyboard->GetUseAnyKey())
 			{
 				m_bPressEnter = false;

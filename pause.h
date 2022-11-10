@@ -96,7 +96,7 @@ private:
 	D3DXVECTOR3		m_posOld;			// 過去の位置
 	D3DXVECTOR3		m_rot;				// 向き
 	D3DXVECTOR3		m_size;				// 大きさ
-	float			m_fAddAlpha;		// フレーム数のカウント
+	float			m_fCycle;			// カーブの周期
 	int				m_nCntFrame;		// フレームカウント
 	bool			m_bPressEnter;		// エンターキーを押せるか
 	bool			m_bPause;			// ポーズしているか

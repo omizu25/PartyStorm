@@ -1,5 +1,5 @@
 // テクスチャの最大数
-MAX_TEXTURE = 37
+MAX_TEXTURE = 41
 
 //***************************
 // TEXTUREファイル名の読み込み
@@ -7,10 +7,10 @@ MAX_TEXTURE = 37
 TEXTURE_FILENAME = data/TEXTURE/sea000.jpg				# [0]
 TEXTURE_FILENAME = data/TEXTURE/sea001.png				# [1]
 TEXTURE_FILENAME = data/TEXTURE/sky002.jpg				# [2]
-TEXTURE_FILENAME = data/TEXTURE/woodBox.jpg				# [3]
-TEXTURE_FILENAME = data/TEXTURE/wood000.jpg				# [4]
-TEXTURE_FILENAME = data/TEXTURE/wood001.jpg				# [5]
-TEXTURE_FILENAME = data/TEXTURE/Effect.png				# [6]
+TEXTURE_FILENAME = data/TEXTURE/wood000.jpg				# [3]
+TEXTURE_FILENAME = data/TEXTURE/wood001.jpg				# [4]
+TEXTURE_FILENAME = data/TEXTURE/wood002.jpg				# [5]
+TEXTURE_FILENAME = data/TEXTURE/woodBox.jpg				# [6]
 TEXTURE_FILENAME = data/TEXTURE/Pause.png				# [7]
 TEXTURE_FILENAME = data/TEXTURE/Replay.png				# [8]
 TEXTURE_FILENAME = data/TEXTURE/Quit.png				# [9]
@@ -35,10 +35,14 @@ TEXTURE_FILENAME = data/TEXTURE/4th.png					# [27]
 TEXTURE_FILENAME = data/TEXTURE/5th.png					# [28]
 TEXTURE_FILENAME = data/TEXTURE/Cursor.png				# [29]
 TEXTURE_FILENAME = data/TEXTURE/Purpose.png				# [30]
-TEXTURE_FILENAME = data/TEXTURE/Tutorial.png			# [31]
+TEXTURE_FILENAME = data/TEXTURE/Tutorial_GamePad.png	# [31]
 TEXTURE_FILENAME = data/TEXTURE/Tutorial_Keyboard.png	# [32]
 TEXTURE_FILENAME = data/TEXTURE/PressAnyButton.png		# [33]
 TEXTURE_FILENAME = data/TEXTURE/PressAnyKey.png			# [34]
 TEXTURE_FILENAME = data/TEXTURE/Single.png				# [35]
 TEXTURE_FILENAME = data/TEXTURE/Multi.png				# [36]
+TEXTURE_FILENAME = data/TEXTURE/NumPlayer_2.png			# [37]
+TEXTURE_FILENAME = data/TEXTURE/NumPlayer_3.png			# [38]
+TEXTURE_FILENAME = data/TEXTURE/NumPlayer_4.png			# [39]
+TEXTURE_FILENAME = data/TEXTURE/Effect.png				# [40]
 

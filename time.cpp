@@ -187,6 +187,9 @@ void CTime::Update()
 
 					// 出現する
 					CObstacle::Stop(true);
+
+					// ポーズできなくする
+					CApplication::GetPause()->SetSelect(false);
 				}
 
 			}

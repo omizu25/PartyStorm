@@ -80,6 +80,7 @@ private:
 	int m_selectIdx;		// 選択されている番号
 	int m_numUse;			// 使用数
 	int m_time;				// タイム
+	float m_cycle;			// カーブの周期
 	bool m_sort;			// 並べ方 [ true : 縦 false : 横 ]
 };
 
