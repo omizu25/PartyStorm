@@ -198,8 +198,6 @@ void CPlayer::Update()
 
 	if (!m_bDead)
 	{// キーボードの取得
-		CKeyboard *pKeyboard = CApplication::GetKeyboard();
-
 		// モーション情報の取得
 		CMotion *pMotion = CMotionModel3D::GetMotion();
 

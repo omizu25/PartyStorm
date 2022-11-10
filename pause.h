@@ -75,7 +75,6 @@ public:
 	D3DXVECTOR3 GetSize()  override { return m_size; }								// 大きさのゲッター
 	void SetPause(const bool bPause);												// ポーズの使用状況
 	bool GetPause() { return m_bPause; }											// ポーズの使用状況のゲッター
-	void SetColor(const D3DXCOLOR &col);											// 色の設定
 	void SetSelect(const bool bSelect) { m_bSelect = bSelect; }						// 選択の設定
 
 private:

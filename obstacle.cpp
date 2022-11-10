@@ -14,6 +14,9 @@
 #include "model3D.h"
 #include "player.h"
 #include "move.h"
+#include "game.h"
+#include "application.h"
+#include "time.h"
 
 //*****************************************************************************
 // ’è”’è‹`
@@ -28,7 +31,7 @@ const int MIN_POP = 2;					// oŒ»‚ÌÅ¬”
 const int MAX_POP = 4;					// oŒ»‚ÌÅ‘å”
 const float MOVE_SPEED = 5.0f;			// ˆÚ“®‘¬“x
 const float POP_POS_Z = -1000.0f;		// oŒ»‚ÌZ‚ÌˆÊ’u
-const float POS_Y = -30.0f;				// Y‚ÌˆÊ’u
+const float POS_Y = -25.0f;				// Y‚ÌˆÊ’u
 const float RELEASE_POS_Z = 1250.0f;	// ‰ð•ú‚ÌZ‚ÌˆÊ’u
 const float POP_POS_X[] =				// oŒ»‚ÌX‚ÌˆÊ’u
 {
@@ -46,7 +49,7 @@ const int POP_MAX = sizeof(POP_POS_X) / sizeof(POP_POS_X[0]);	// oŒ»ˆÊ’u‚ÌÅ‘å
 //*****************************************************************************
 int CObstacle::m_time = 0;
 int CObstacle::m_pop = 0;
-int CObstacle::m_interval = 0.;
+int CObstacle::m_interval = 0;
 float CObstacle::m_move = 0.0f;
 bool CObstacle::m_stop = false;
 
@@ -172,7 +175,8 @@ CObstacle* CObstacle::Create(float posX, float inverse)
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //=============================================================================
 CObstacle::CObstacle() :
-	m_waveTime(0)
+	m_waveTime(0),
+	m_inverse(0.0f)
 {
 }
 
@@ -201,6 +205,7 @@ HRESULT CObstacle::Init()
 	SetColisonPos(D3DXVECTOR3(0.0f, size.y / 2.0f, 0.0f));
 
 	m_waveTime = 0;
+	m_inverse = 0.0f;
 
 	return E_NOTIMPL;
 }
@@ -226,9 +231,17 @@ void CObstacle::Update()
 
 	m_waveTime++;
 
-	pos.y = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * 25.0f;
+	if (CApplication::GetMode() == CApplication::MODE_GAME &&
+		CGame::GetTime()->GetTime() <= 0)
+	{// ƒQ[ƒ€’†‚Å§ŒÀŽžŠÔØ‚ê
+		pos.y += -0.5f;
+	}
+	else
+	{
+		pos.y = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * 20.0f;
 
-	pos.y += POS_Y;
+		pos.y += POS_Y;
+	}
 
 	// ˆÊ’u‚ÌÝ’è
 	CModelObj::SetPos(pos);
