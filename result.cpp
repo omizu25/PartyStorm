@@ -36,10 +36,10 @@ namespace
 const int POP_TIME = 240;	// 出現させる時間
 const int texIdx[4]
 {
-	16,
-	17,
-	18,
-	19
+	12,
+	13,
+	14,
+	15
 };
 }
 
@@ -213,27 +213,29 @@ HRESULT CResult::Init()
 		if (gameclear)
 		{// ゲームクリア
 			CObject2D *pObj = CObject2D::Create();
-			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.25f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
 			pObj->LoadTex(20);
 
 			m_pop = true;
 
-			D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.25f, (float)CRenderer::SCREEN_HEIGHT * 0.75f, 0.0f);
-			D3DXVECTOR3 size = D3DXVECTOR3(350.0f, 100.0f, 0.0f);
+			{// メニューの生成
+				D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.5f, (float)CRenderer::SCREEN_HEIGHT * 0.75f, 0.0f);
+				D3DXVECTOR3 size = D3DXVECTOR3(350.0f, 100.0f, 0.0f);
 
-			// メニューの生成
-			m_pMenu = CMenu::Create();
+				// メニューの生成
+				m_pMenu = CMenu::Create();
 
-			// メニューの設定
-			m_pMenu->Set(pos, size, 2, 50.0f, true, true);
+				// メニューの設定
+				m_pMenu->Set(pos, size, 2, 50.0f, true, true);
 
-			// 枠の設定
-			m_pMenu->SetFrame(D3DXVECTOR3(600.0f, 300.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
+				// 枠の設定
+				m_pMenu->SetFrame(D3DXVECTOR3(600.0f, 360.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
 
-			// テクスチャの設定
-			m_pMenu->SetTexture(0, 8);
-			m_pMenu->SetTexture(1, 11);
+				// テクスチャの設定
+				m_pMenu->SetTexture(0, 8);
+				m_pMenu->SetTexture(1, 11);
+			}
 		}
 	}
 	else
@@ -434,7 +436,7 @@ void CResult::Multi()
 	{// 出現する時間を越した
 		int gameover = 0;
 		int maxPlayer = CApplication::GetPersonCount();
-		maxPlayer = 4;
+		
 		for (int i = 0; i < maxPlayer; i++)
 		{
 			if (m_dead[i])
@@ -446,13 +448,31 @@ void CResult::Multi()
 		if (gameover == maxPlayer)
 		{// 全員死亡
 			CObject2D *pObj = CObject2D::Create();
-			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.25f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
 			pObj->LoadTex(21);
+
+			{// メニューの生成
+				D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.5f, (float)CRenderer::SCREEN_HEIGHT * 0.75f, 0.0f);
+				D3DXVECTOR3 size = D3DXVECTOR3(350.0f, 100.0f, 0.0f);
+
+				// メニューの生成
+				m_pMenu = CMenu::Create();
+
+				// メニューの設定
+				m_pMenu->Set(pos, size, 2, 50.0f, true, true);
+
+				// 枠の設定
+				m_pMenu->SetFrame(D3DXVECTOR3(600.0f, 360.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
+
+				// テクスチャの設定
+				m_pMenu->SetTexture(0, 8);
+				m_pMenu->SetTexture(1, 11);
+			}
 		}
 		else
 		{// 生き残りがいる
-			float posX = (float)CRenderer::SCREEN_WIDTH / ((maxPlayer - gameover) + 1);
+			float posX = (float)(CRenderer::SCREEN_WIDTH * 0.5f) / ((maxPlayer - gameover) + 1);
 			int count = 0;
 
 			for (int i = 0; i < maxPlayer; i++)
@@ -460,7 +480,7 @@ void CResult::Multi()
 				if (!m_dead[i])
 				{// 死亡していない
 					CObject2D *pObj = CObject2D::Create();
-					pObj->SetPos(D3DXVECTOR3(posX + (posX * count), 200.0f, 0.0f));
+					pObj->SetPos(D3DXVECTOR3(((float)(CRenderer::SCREEN_WIDTH * 0.5f)) + posX + (posX * count), 200.0f, 0.0f));
 					pObj->SetSize(D3DXVECTOR3(150.0f, 150.0f, 0.0f));
 					pObj->LoadTex(texIdx[i]);
 					count++;
@@ -470,9 +490,27 @@ void CResult::Multi()
 			assert(count == (maxPlayer - gameover));
 
 			CObject2D *pObj = CObject2D::Create();
-			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.65f, 0.0f));
+			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.74f, CRenderer::SCREEN_HEIGHT * 0.65f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(600.0f, 300.0f, 0.0f));
 			pObj->LoadTex(19);
+
+			{// メニューの生成
+				D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.25f, (float)CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f);
+				D3DXVECTOR3 size = D3DXVECTOR3(350.0f, 100.0f, 0.0f);
+
+				// メニューの生成
+				m_pMenu = CMenu::Create();
+
+				// メニューの設定
+				m_pMenu->Set(pos, size, 2, 100.0f, true, true);
+
+				// 枠の設定
+				m_pMenu->SetFrame(D3DXVECTOR3(550.0f, (float)CRenderer::SCREEN_HEIGHT, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
+
+				// テクスチャの設定
+				m_pMenu->SetTexture(0, 8);
+				m_pMenu->SetTexture(1, 11);
+			}
 		}
 
 		m_pop = true;
