@@ -88,6 +88,7 @@ private:
 	// メンバ変数
 	//--------------------------------------------------------------------
 	NEXT_MODE		m_nextMode;			// 次のモード
+	CObject2D		*m_pBGObj;			// 背景オブジェクト
 	CObject2D		*m_pPauseBGObj;		// ポーズ背景オブジェクト
 	CObject2D		*m_pReturnObj;		// リターンオブジェクト
 	CObject2D		*m_pNewGameObj;		// ニューゲームオブジェクト

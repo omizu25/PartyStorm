@@ -56,6 +56,7 @@ CPause *CPause::Create()
 CPause::CPause(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority)
 {
 	m_nextMode = MODE_RETURN;							// 次のモード
+	m_pBGObj = nullptr;									// 背景オブジェクト
 	m_pPauseBGObj = nullptr;							// ポーズ背景オブジェクト
 	m_pReturnObj = nullptr;								// リターンオブジェクト
 	m_pNewGameObj = nullptr;							// ニューゲームオブジェクト
@@ -90,7 +91,7 @@ HRESULT CPause::Init()
 {
 	m_pos = D3DXVECTOR3(640.0f, 360.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_size = D3DXVECTOR3(400.0f, 400.0f, 0.0f);
+	m_size = D3DXVECTOR3(1200.0f, 350.0f, 0.0f);
 	SetObjType(CObject::OBJTYPE_PAUSE);
 
 	m_fCycle = 0.025f;
@@ -242,6 +243,18 @@ void CPause::SetPause(const bool bPause)
 
 	if (m_bPause)
 	{
+		// 背景オブジェクト
+		m_pBGObj = CObject2D::Create();
+		D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		vec.x = (float)CRenderer::SCREEN_WIDTH;
+		vec.y = (float)CRenderer::SCREEN_HEIGHT;
+
+		m_pBGObj->SetPos(vec * 0.5f);
+		m_pBGObj->SetSize(vec);
+		m_pBGObj->LoadTex(-1);
+		m_pBGObj->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f));
+		m_pBGObj->SetObjType(CObject::OBJTYPE_PAUSE);
+
 		// ポーズ背景オブジェクト
 		m_pPauseBGObj = CObject2D::Create();
 		m_pPauseBGObj->SetSize(m_size);
@@ -251,9 +264,9 @@ void CPause::SetPause(const bool bPause)
 		m_pPauseBGObj->SetObjType(CObject::OBJTYPE_PAUSE);
 
 		// リターンオブジェクト
-		m_pReturnObj = CObject2D::Create();					
-		m_pReturnObj->SetSize(D3DXVECTOR3(300.0f, 100.0f, 0.0f));
-		m_pReturnObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y - m_pReturnObj->GetSize().y - 20.0f, 0.0f));
+		m_pReturnObj = CObject2D::Create();
+		m_pReturnObj->SetSize(D3DXVECTOR3(450.0f, 125.0f, 0.0f));
+		m_pReturnObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y - m_pReturnObj->GetSize().y - 50.0f, 0.0f));
 		m_pReturnObj->LoadTex(9);
 		m_pReturnObj->SetCol(SELECT_COLOR);
 		m_pReturnObj->SetObjType(CObject::OBJTYPE_PAUSE);
@@ -261,21 +274,24 @@ void CPause::SetPause(const bool bPause)
 		// ニューゲームオブジェクト
 		m_pNewGameObj = CObject2D::Create();
 		m_pNewGameObj->SetPos(m_pos);
-		m_pNewGameObj->SetSize(D3DXVECTOR3(400.0f, 100.0f, 0.0f));
+		m_pNewGameObj->SetSize(D3DXVECTOR3(450.0f, 125.0f, 0.0f));
 		m_pNewGameObj->LoadTex(10);
 		m_pNewGameObj->SetCol(SELECT_COLOR);
 		m_pNewGameObj->SetObjType(CObject::OBJTYPE_PAUSE);
 
 		// タイトルオブジェクト
 		m_pTitleObj = CObject2D::Create();
-		m_pTitleObj->SetSize(D3DXVECTOR3(300.0f, 100.0f, 0.0f));
-		m_pTitleObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y + m_pTitleObj->GetSize().y + 20.0f, 0.0f));
+		m_pTitleObj->SetSize(D3DXVECTOR3(450.0f, 125.0f, 0.0f));
+		m_pTitleObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y + m_pTitleObj->GetSize().y + 50.0f, 0.0f));
 		m_pTitleObj->LoadTex(11);
 		m_pTitleObj->SetCol(SELECT_COLOR);
 		m_pTitleObj->SetObjType(CObject::OBJTYPE_PAUSE);
 	}
 	else
 	{
+		// 背景オブジェクト
+		m_pBGObj->Uninit();
+
 		// ポーズ背景オブジェクト
 		m_pPauseBGObj->Uninit();
 
