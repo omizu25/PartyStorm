@@ -208,9 +208,19 @@ void CPlayer::Update()
 			D3DXVECTOR3 rot = GetRot();
 			SetPosOld(pos);
 
-			// 移動
-			pos.z += CCalculation::Gravity();
-			pos += Move();
+			if (CApplication::GetMode() == CApplication::MODE_GAME &&
+				CGame::GetTime()->GetTime() <= 0)
+			{// ゲーム中で制限時間切れ
+				pos.z += -20.0f;
+				m_rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+			else
+			{
+				// 移動
+				pos.z += CCalculation::Gravity();
+				pos += Move();
+			}
+			
 
 			// 回転
 			Rotate();
@@ -572,83 +582,108 @@ void CPlayer::Rotate()
 //=============================================================================
 void CPlayer::Collison()
 {
-	// サウンド情報の取得
-	CSound *pSound = CApplication::GetSound();
+	if (CApplication::GetMode() == CApplication::MODE_GAME &&
+		CGame::GetTime()->GetTime() <= 0)
+	{// ゲーム中で制限時間切れ
+		return;
+	}
 
 	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		CObject *pTop = CObject::GetTop(nCntPriority);
 
-		if (pTop != nullptr)
+		if (pTop == nullptr)
 		{// 変数宣言
-			CObject *pObject = pTop;
+			continue;
+		}
 
-			while (pObject)
-			{// 現在のオブジェクトの次のオブジェクトを保管
-				CObject *pObjectNext = pObject->GetNext();
+		CObject *pObject = pTop;
 
-				if (!pObject->GetFlagDeath()
-					&& (pObject->GetObjType() == OBJTYPE_3DMODEL
-					|| pObject->GetObjType() == OBJTYPE_3DPLAYER
-					|| pObject->GetObjType() == OBJTYPE_3DENEMY)
-					&& pObject != this)
-				{
-					if (ColisonRectangle3D(pObject, true))
-					{
-						if (pObject->GetObjType() == OBJTYPE_3DPLAYER)
-						{// プレイヤーの移動
-							CPlayer *pPlayer = dynamic_cast<CPlayer*>(pObject);
-							CMove *pMove = GetMove();
-							CMove *pMoveTarget = pPlayer->GetMove();
-							D3DXVECTOR3 pos = pPlayer->GetPos();
-							pos += pMove->GetMove() - pMoveTarget->GetMove();
-							pPlayer->SetPos(pos);
-						}	
-						if (pObject->GetObjType() == OBJTYPE_3DENEMY)
-						{// 敵との当たり判定
-							m_bDead = true;
-							CEffect::Explosion(GetPos());
-							pSound->PlaySound(CSound::SOUND_LABEL_SE_EAT);
+		while (true)
+		{
+			if (pObject == nullptr)
+			{// nullチェック
+				break;
+			}
 
-							if (m_pIdx != nullptr)
-							{// 終了処理
-								m_pIdx->Uninit();
-								m_pIdx = nullptr;
-							}
+			// 現在のオブジェクトの次のオブジェクトを保管
+			CObject *pObjectNext = pObject->GetNext();
 
-							// 死亡した
-							CResult::SetDead(m_nNum);
-
-							if (CApplication::GetMode() == CApplication::MODE_GAME)
-							{
-
-								CTime* pTime = CGame::GetTime();
-
-								// スコアの設定
-								CRanking::Set(pTime->GetTime());
-
-								CFollowModel *pCameraTarget = CGame::GetCameraTarget();
-
-								if (pCameraTarget != nullptr)
-								{// カメラターゲット情報
-									D3DXVECTOR3 pos = pCameraTarget->GetPos();
-									D3DXVECTOR3 posDest = D3DXVECTOR3(pos.x + MAX_VIB_RAND.x - (float)(rand() % (int)(MAX_VIB_RAND.x * 2.0f)),
-										pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f)), 0.0f);
-									pCameraTarget->SetPos(posDest);
-									pCameraTarget->SetFollow(CGame::CAMERA_POSR);
-									pCameraTarget->SetSpeed(VIB_SPEED);
-									pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
-									m_bVib = true;
-								}
-							}
-				
-						}
-					}
-				}
-
+			if (pObject->GetFlagDeath() ||
+				pObject == this)
+			{// 破棄する予定、自分自身
 				// 現在のオブジェクトの次のオブジェクトを更新
 				pObject = pObjectNext;
+				continue;
 			}
+			
+			// 種類の取得
+			CObject::EObjectType type = pObject->GetObjType();
+
+			if (type != OBJTYPE_3DPLAYER &&
+				type != OBJTYPE_3DENEMY)
+			{// 指定のタイプではない
+				// 現在のオブジェクトの次のオブジェクトを更新
+				pObject = pObjectNext;
+				continue;
+			}
+
+			if (!ColisonRectangle3D(pObject, true))
+			{// 当たっていない
+				// 現在のオブジェクトの次のオブジェクトを更新
+				pObject = pObjectNext;
+				continue;
+			}
+
+			if (type == OBJTYPE_3DPLAYER)
+			{// プレイヤー
+				CPlayer *pPlayer = dynamic_cast<CPlayer*>(pObject);
+				CMove *pMove = GetMove();
+				CMove *pMoveTarget = pPlayer->GetMove();
+				D3DXVECTOR3 pos = pPlayer->GetPos();
+				pos += pMove->GetMove() - pMoveTarget->GetMove();
+				pPlayer->SetPos(pos);
+			}
+			else if (type == OBJTYPE_3DENEMY)
+			{// 敵
+				m_bDead = true;
+				CEffect::Explosion(GetPos());
+				CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_EAT);
+
+				if (m_pIdx != nullptr)
+				{// 終了処理
+					m_pIdx->Uninit();
+					m_pIdx = nullptr;
+				}
+
+				if (CApplication::GetMode() == CApplication::MODE_GAME)
+				{// ゲーム中
+					// 死亡した
+					CResult::SetDead(m_nNum);
+
+					// スコアの設定
+					CRanking::Set(CGame::GetTime()->GetTime());
+
+					CFollowModel *pCameraTarget = CGame::GetCameraTarget();
+
+					if (pCameraTarget != nullptr)
+					{// カメラターゲット情報
+						D3DXVECTOR3 pos = pCameraTarget->GetPos();
+						D3DXVECTOR3 posDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+						posDest.x = pos.x + MAX_VIB_RAND.x - (float)(rand() % (int)(MAX_VIB_RAND.x * 2.0f));
+						posDest.y = pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f));
+						posDest.z = 0.0f;
+						pCameraTarget->SetPos(posDest);
+						pCameraTarget->SetFollow(CGame::CAMERA_POSR);
+						pCameraTarget->SetSpeed(VIB_SPEED);
+						pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
+						m_bVib = true;
+					}
+				}
+			}
+
+			// 現在のオブジェクトの次のオブジェクトを更新
+			pObject = pObjectNext;
 		}
 	}
 
@@ -664,6 +699,7 @@ void CPlayer::Collison()
 	{
 		pos.x = 250.0f - size.x;
 	}
+
 	if (pos.z - size.z < -700.0f)
 	{
 		pos.z = -700.0f + size.z;

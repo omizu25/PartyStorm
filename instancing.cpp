@@ -238,7 +238,7 @@ void CInstancing::Draw()
 		assert(num == numAll);
 
 		// バッファのコピー
-		CopyBuf(m_pPosBuff, worldPos, sizeof(D3DXVECTOR3) * numAll);
+		CopyBuf(m_pPosBuff, worldPos, sizeof(D3DXVECTOR4) * numAll);
 		CopyBuf(m_pColBuff, col, sizeof(D3DXCOLOR) * numAll);
 		CopyBuf(m_pSizeBuff, size, sizeof(D3DXVECTOR2) * numAll);
 
@@ -263,7 +263,7 @@ void CInstancing::Draw()
 
 	m_pShader->SetTechnique("tech");
 
-	m_pShader->SetTexture("g_tex", CApplication::GetTexture()->GetTexture(0));
+	m_pShader->SetTexture("g_tex", CApplication::GetTexture()->GetTexture(6));
 
 	CCamera* pCamera = CApplication::GetCamera();
 

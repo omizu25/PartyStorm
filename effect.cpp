@@ -18,7 +18,7 @@
 //==================================================
 const int CEffect::MAX_EXPLOSION = 3000;
 const int CEffect::MAX_LIFE = 100;
-const int CEffect::STD_MOVE = 100;
+const int CEffect::STD_MOVE = 50;
 const float CEffect::STD_SIZE = 12.0f;
 
 //==================================================

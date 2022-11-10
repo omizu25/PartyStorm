@@ -234,7 +234,7 @@ void CObstacle::Update()
 	if (CApplication::GetMode() == CApplication::MODE_GAME &&
 		CGame::GetTime()->GetTime() <= 0)
 	{// ƒQ[ƒ€’†‚Å§ŒÀŽžŠÔØ‚ê
-		pos.y += -0.5f;
+		pos.y += -1.0f;
 	}
 	else
 	{
@@ -283,6 +283,12 @@ void CObstacle::Draw()
 //=============================================================================
 void CObstacle::Collison()
 {
+	if (CApplication::GetMode() == CApplication::MODE_GAME &&
+		CGame::GetTime()->GetTime() <= 0)
+	{// ƒQ[ƒ€’†‚Å§ŒÀŽžŠÔØ‚ê
+		return;
+	}
+
 	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
 	{
 		// •Ï”éŒ¾
