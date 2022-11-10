@@ -1,5 +1,5 @@
 // テクスチャの最大数
-MAX_TEXTURE = 35
+MAX_TEXTURE = 37
 
 //***************************
 // TEXTUREファイル名の読み込み
@@ -39,4 +39,6 @@ TEXTURE_FILENAME = data/TEXTURE/Tutorial.png			# [31]
 TEXTURE_FILENAME = data/TEXTURE/Tutorial_Keyboard.png	# [32]
 TEXTURE_FILENAME = data/TEXTURE/PressAnyButton.png		# [33]
 TEXTURE_FILENAME = data/TEXTURE/PressAnyKey.png			# [34]
+TEXTURE_FILENAME = data/TEXTURE/Single.png				# [35]
+TEXTURE_FILENAME = data/TEXTURE/Multi.png				# [36]
 

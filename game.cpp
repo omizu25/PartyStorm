@@ -22,6 +22,7 @@
 #include "renderer.h"
 #include "object.h"
 #include "object3D.h"
+#include "object2D.h"
 
 //モデル
 #include "motion_model3D.h"
@@ -199,6 +200,29 @@ HRESULT CGame::Init()
 	pSnake->SetMotion("data/MOTION/snake.txt");
 	pSnake->SetPos(D3DXVECTOR3(-600.0f, 0.0f, 1000.0f));
 	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+
+	{// チュートリアル
+		CObject2D* pObj = CObject2D::Create();
+		pObj->SetPos(D3DXVECTOR3(200.0f, 100.0f, 0.0f));
+		pObj->SetSize(D3DXVECTOR3(400.0f, 200.0f, 0.0f));
+		int numJoy = CApplication::GetJoy()->GetUseJoyPad();
+
+		if (numJoy >= 1)
+		{// コントローラーが繋いである
+			pObj->LoadTex(31);
+		}
+		else
+		{// コントローラーが繋いでない
+			pObj->LoadTex(32);
+		}
+	}
+
+	{// 目的
+		CObject2D* pObj = CObject2D::Create();
+		pObj->SetPos(D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH - 200.0f, 100.0f, 0.0f));
+		pObj->SetSize(D3DXVECTOR3(250.0f, 100.0f, 0.0f));
+		pObj->LoadTex(30);
+	}
 
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
