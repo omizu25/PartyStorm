@@ -66,17 +66,17 @@ public:
 	void Update() override;															// 更新
 	void Draw() override;															// 描画
 	void SetPos(const D3DXVECTOR3 &pos) override;									// 位置のセッター
-	void SetPosOld(const D3DXVECTOR3 &posOld) override { m_posOld = posOld; }		// 過去位置のセッター
-	void SetRot(const D3DXVECTOR3 &rot) override;									// 向きのセッター
-	void SetSize(const D3DXVECTOR3 &size) override;									// 大きさのセッター
-	void SetColor(const D3DXCOLOR &col);											// 色の設定
-	void SetPause(const bool bPause);												// ポーズの使用状況
-	void SetSelect(const bool bSelect) { m_bSelect = bSelect; }						// 選択の設定
 	D3DXVECTOR3 GetPos() override { return m_pos; }									// 位置のゲッター
+	void SetPosOld(const D3DXVECTOR3 &posOld) override { m_posOld = posOld; }		// 過去位置のセッター
 	D3DXVECTOR3 GetPosOld()  override { return m_posOld; }							// 過去位置のゲッター
+	void SetRot(const D3DXVECTOR3 &rot) override;									// 向きのセッター
 	D3DXVECTOR3 GetRot()  override { return m_rot; }								// 向きのゲッター
+	void SetSize(const D3DXVECTOR3 &size) override;									// 大きさのセッター
 	D3DXVECTOR3 GetSize()  override { return m_size; }								// 大きさのゲッター
+	void SetPause(const bool bPause);												// ポーズの使用状況
 	bool GetPause() { return m_bPause; }											// ポーズの使用状況のゲッター
+	void SetColor(const D3DXCOLOR &col);											// 色の設定
+	void SetSelect(const bool bSelect) { m_bSelect = bSelect; }						// 選択の設定
 
 private:
 	//--------------------------------------------------------------------
