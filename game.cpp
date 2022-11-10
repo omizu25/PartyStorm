@@ -264,19 +264,6 @@ void CGame::Update()
 	// エフェクトの更新
 	CEffect::UpdateAll();
 
-	CKeyboard *pKeyboard = CApplication::GetKeyboard();
-	if (pKeyboard->GetTrigger(DIK_F3))
-	{
-		CApplication::SetNextMode(CApplication::MODE_RESULT);
-	}
-
-	//コントローラー使用の確認
-	CJoypad *pJoy = CApplication::GetJoy();
-	if (pJoy->GetTrigger(CJoypad::JOYKEY_A, 1))
-	{
-		CApplication::SetNextMode(CApplication::MODE_RESULT);
-	}
-
 	int nMaxPlayer = CApplication::GetPersonCount();
 	int nCntDead = 0;
 

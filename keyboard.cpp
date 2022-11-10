@@ -166,3 +166,25 @@ bool CKeyboard::GetRelease(int nKey)
 	return (m_aKeyStateRelease[nKey] & 0x80) ? true : false;
 }
 
+//=============================================================================
+// キーを使用状況の取得
+// Author : 唐﨑結斗
+// 概要 : キーを使用していたらtureを返す
+//=============================================================================
+bool CKeyboard::GetUseAnyKey()
+{
+	bool bUseAnyKey = false;
+
+	for (int nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
+	{
+		bUseAnyKey = (m_aKeyState[nCntKey] & 0x80) ? true : false;
+
+		if (bUseAnyKey)
+		{
+			break;
+		}
+	}
+
+	return bUseAnyKey;
+}
+

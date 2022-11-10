@@ -97,6 +97,7 @@ public:
 	int GetUseJoyPad() { return m_nUseJoyPad; }							// コントローラーの使用数の取得
 	float GetStickAngle(JOYKEY Key, int nPlayer);						// スティックの傾きの取得
 	bool Stick(JOYKEY Key, int nPlayer, float fDeadZone);				// スティックの使用状況の取得
+	bool AnyButton(int nPlayer);										// すべてのボタンの判定取得
 
 private:	
 	//--------------------------------------------------------------------

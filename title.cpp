@@ -160,45 +160,39 @@ void CTitle::Update()
 	// ジョイパッド 情報の取得
 	CJoypad *pJoy = CApplication::GetJoy();
 
-	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{
-		CApplication::SetNextMode(CApplication::MODE_GAME);
-	}
-
 	m_fAddSize += 0.05f;
 	D3DXVECTOR3 sizeTitleLogo = m_pTitleLogo->GetSize();
 	m_pTitleLogo->SetSize(D3DXVECTOR3(sizeTitleLogo.x + sinf(m_fAddSize) * 3.0f,
 		sizeTitleLogo.y + sinf(m_fAddSize) * 2.0f, 0.0f));
 
-	//ゲット
-	CDebugProc::Print("PersonCount Q or E: %d\n", m_nNumPlayer);
-
 	int nMaxPlayer = pJoy->GetUseJoyPad();
 
-	if (nMaxPlayer >= 0)
+	if (nMaxPlayer <= 0)
 	{
 		nMaxPlayer = 1;
 	}
 
-	if (pKeyboard->GetTrigger(DIK_Q))
-	{
-		m_nNumPlayer++;
-	}
-	if (pKeyboard->GetTrigger(DIK_E))
-	{
-		m_nNumPlayer--;
-	}
+	CApplication::SetPersonCount(nMaxPlayer);
 
-	if (m_nNumPlayer > nMaxPlayer)	// 4を越えないよう
+	if (pJoy->GetUseJoyPad() > 0)
 	{
-		m_nNumPlayer = 1;
+		for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
+		{
+			if (pJoy->AnyButton(nCntPlayer))
+			{
+				CApplication::SetNextMode(CApplication::MODE_GAME);
+				break;
+			}
+		}
 	}
-	if (m_nNumPlayer < 1)	// マイナス設定無し
+	else
 	{
-		m_nNumPlayer = nMaxPlayer;
+		if (pKeyboard->GetUseAnyKey())
+		{
+			CApplication::SetNextMode(CApplication::MODE_GAME);
+		}
 	}
-
-	CApplication::SetPersonCount(m_nNumPlayer);
+	
 }
 
 //=============================================================================
