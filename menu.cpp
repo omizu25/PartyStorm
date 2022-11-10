@@ -14,6 +14,7 @@
 #include "keyboard.h"
 #include "application.h"
 #include "sound.h"
+#include "joypad.h"
 #include <assert.h>
 
 //==================================================
@@ -132,27 +133,68 @@ int CMenu::Select()
 
 	// 入力情報の取得
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
+	CJoypad *pJoypad = CApplication::GetJoy();
+	bool bJoypad = false;
+
+	if (pJoypad->GetUseJoyPad() > 0)
+	{
+		bJoypad = true;
+	}
 
 	if (m_sort)
 	{// 縦
-		if (pKeyboard->GetTrigger(DIK_W))
-		{// 上キーが押された
-			Add(-1);
+		if (!bJoypad)
+		{
+			if (pKeyboard->GetTrigger(DIK_W))
+			{// 上キーが押された
+				Add(-1);
+			}
+			if (pKeyboard->GetTrigger(DIK_S))
+			{// 下キーが押された
+				Add(1);
+			}
 		}
-		if (pKeyboard->GetTrigger(DIK_S))
-		{// 下キーが押された
-			Add(1);
+		else
+		{
+			for (int nCntPlayer = 0; nCntPlayer < pJoypad->GetUseJoyPad(); nCntPlayer++)
+			{
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_UP, nCntPlayer))
+				{// 上キーが押された
+					Add(-1);
+				}
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_DOWN, nCntPlayer))
+				{// 下キーが押された
+					Add(1);
+				}
+			}
 		}
 	}
 	else
 	{// 横
-		if (pKeyboard->GetTrigger(DIK_A))
-		{// 左キーが押された
-			Add(-1);
+		if (!bJoypad)
+		{
+			if (pKeyboard->GetTrigger(DIK_A))
+			{// 左キーが押された
+				Add(-1);
+			}
+			if (pKeyboard->GetTrigger(DIK_D))
+			{// 右キーが押された
+				Add(1);
+			}
 		}
-		if (pKeyboard->GetTrigger(DIK_D))
-		{// 右キーが押された
-			Add(1);
+		else
+		{
+			for (int nCntPlayer = 0; nCntPlayer < pJoypad->GetUseJoyPad(); nCntPlayer++)
+			{
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_LEFT, nCntPlayer))
+				{// 左キーが押された
+					Add(-1);
+				}
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_RIGHT, nCntPlayer))
+				{// 右キーが押された
+					Add(1);
+				}
+			}
 		}
 	}
 
@@ -164,12 +206,29 @@ int CMenu::Select()
 	// 色の設定
 	m_pOption[m_selectIdx]->SetCol(col);
 
-	if (pKeyboard->GetTrigger(DIK_RETURN))
-	{// 決定キーが押された
-		// SE
-		CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
+	if (!bJoypad)
+	{
+		if (pKeyboard->GetTrigger(DIK_RETURN))
+		{// 決定キーが押された
+			// SE
+			CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
 
-		return m_selectIdx;
+			return m_selectIdx;
+		}
+	}
+	else
+	{
+		for (int nCntPlayer = 0; nCntPlayer < pJoypad->GetUseJoyPad(); nCntPlayer++)
+		{
+			if (pJoypad->GetTrigger(CJoypad::JOYKEY_B, nCntPlayer)
+				|| pJoypad->GetTrigger(CJoypad::JOYKEY_A, nCntPlayer))
+			{// 決定キーが押された
+			 // SE
+				CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
+
+				return m_selectIdx;
+			}
+		}
 	}
 
 	return -1;
