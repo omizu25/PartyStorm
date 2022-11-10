@@ -51,6 +51,8 @@ private:
 	//--------------------------------------------------------------------
 	CObject2D	*m_pTitleLogo;			// タイトルロゴオブジェクト
 	CObject2D	*m_pPressAny;			// プレスオブジェクト
+	CObject2D	*m_pMode;				// モードオブジェクト
+	CObject2D	*m_pNum;				// 人数オブジェクト
 	float		m_fCycle;				// カーブの周期
 	float		m_fAddSize;				// 大きさの参照値
 	int			m_nCntFrame;			// フレームカウント
