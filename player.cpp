@@ -221,7 +221,6 @@ void CPlayer::Update()
 				pos += Move();
 			}
 			
-
 			// ‰ñ“]
 			Rotate();
 

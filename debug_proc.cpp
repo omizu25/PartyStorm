@@ -22,6 +22,7 @@
 //--------------------------------------------------------------------
 LPD3DXFONT CDebugProc::m_pFont = nullptr;			// フォント情報
 char CDebugProc::m_aStr[0xfff] = {};				// 登録文字列
+bool CDebugProc::m_bDebug = true;					// デバック表示判定
 
 //=============================================================================
 // 文字列の登録
@@ -30,18 +31,21 @@ char CDebugProc::m_aStr[0xfff] = {};				// 登録文字列
 //=============================================================================
 void CDebugProc::Print(const char *pFormat, ...)
 {
-	// 変数
-	char aStrCpy[0xfff] = {};
+	if (m_bDebug)
+	{
+		// 変数
+		char aStrCpy[0xfff] = {};
 
-	// リストの作成
-	va_list args;
-	va_start(args, pFormat);
-	vsprintf(&aStrCpy[0], pFormat, args);
-	va_end(args);
+		// リストの作成
+		va_list args;
+		va_start(args, pFormat);
+		vsprintf(&aStrCpy[0], pFormat, args);
+		va_end(args);
 
 #ifdef _DEBUG
-	strcat(&m_aStr[0], &aStrCpy[0]);
+		strcat(&m_aStr[0], &aStrCpy[0]);
 #endif // DEBUG
+	}
 }
 
 //=============================================================================

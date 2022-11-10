@@ -303,22 +303,17 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// ‰Šú‰»ˆ—
 	assert(m_pRenderer != nullptr);
 
+#ifdef _DEBUG
 	if (FAILED(m_pRenderer->Init(m_hWnd, TRUE)) != 0)
 	{//‰Šú‰»ˆ—‚ªŽ¸”s‚µ‚½ê‡
 		return-1;
 	}
-
-//#ifdef _DEBUG
-//	if (FAILED(m_pRenderer->Init(m_hWnd, TRUE)) != 0)
-//	{//‰Šú‰»ˆ—‚ªŽ¸”s‚µ‚½ê‡
-//		return-1;
-//	}
-//#else
-//	if (FAILED(m_pRenderer->Init(m_hWnd, FALSE)) != 0)
-//	{//‰Šú‰»ˆ—‚ªŽ¸”s‚µ‚½ê‡
-//		return-1;
-//	}
-//#endif
+#else
+	if (FAILED(m_pRenderer->Init(m_hWnd, FALSE)) != 0)
+	{//‰Šú‰»ˆ—‚ªŽ¸”s‚µ‚½ê‡
+		return-1;
+	}
+#endif
 
 	// ‰Šú‰»ˆ—
 	assert(m_pTexture != nullptr);
@@ -507,6 +502,13 @@ void CApplication::Update()
 	CDebugProc::Print("FPS : %d\n", GetFps()); 
 	CDebugProc::Print("Œ»Ý‚ÌƒV[ƒ“ : %d\n", (int)m_mode);
 	CDebugProc::Print("ƒRƒ“ƒgƒ[ƒ‰[‚ÌŽg—p” : %d\n", m_pJoy->GetUseJoyPad());
+
+	if (m_pKeyboard->GetTrigger(DIK_F1))
+	{
+		bool bDebug = CDebugProc::GetDebug();
+		bDebug ^= 1;
+		CDebugProc::SetDebug(bDebug);
+	}
 
 	if (m_pKeyboard->GetTrigger(DIK_F2))
 	{

@@ -24,8 +24,10 @@ public:
 	//--------------------------------------------------------------------
 	// 静的メンバ関数
 	//--------------------------------------------------------------------
-	static void Print(const char *pFormat, ...);		// 文字列の登録
-	static void Draw(void);								// 表示
+	static void Print(const char *pFormat, ...);					// 文字列の登録
+	static void Draw(void);											// 表示
+	static void SetDebug(bool bDebug) { m_bDebug = bDebug; }		// デバック表示
+	static bool GetDebug() { return m_bDebug; }						// デバック表示
 
 	//--------------------------------------------------------------------
 	// コンストラクタとデストラクタ
@@ -45,6 +47,7 @@ private:
 	//--------------------------------------------------------------------
 	static LPD3DXFONT	m_pFont;			// フォント情報
 	static char			m_aStr[0xfff];		// 登録文字列
+	static bool			m_bDebug;			// デバック表示判定
 };
 
 #endif

@@ -593,7 +593,6 @@ void CCamera::Follow(void)
 			// Ž‹“_‚ÌˆÚ“®
 			m_posV += (m_posVDest - m_posV) * m_fCoeffFllow;
 		}
-		
 	}
 	else
 	{
