@@ -166,6 +166,7 @@
     <ClInclude Include="instancing.h" />
     <ClInclude Include="joypad.h" />
     <ClInclude Include="line.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="model_obj.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="keyboard.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="light.cpp" />
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="model3D.cpp" />
     <ClCompile Include="model_obj.cpp" />
