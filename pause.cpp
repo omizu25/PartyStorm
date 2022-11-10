@@ -252,7 +252,7 @@ void CPause::SetPause(const bool bPause)
 		m_pPauseBGObj = CObject2D::Create();
 		m_pPauseBGObj->SetSize(m_size);
 		m_pPauseBGObj->SetPos(m_pos);
-		m_pPauseBGObj->LoadTex(10);
+		m_pPauseBGObj->LoadTex(8);
 		m_pPauseBGObj->SetCol(BACK_COLOR);
 		m_pPauseBGObj->SetObjType(CObject::OBJTYPE_PAUSE);
 
@@ -260,7 +260,7 @@ void CPause::SetPause(const bool bPause)
 		m_pReturnObj = CObject2D::Create();					
 		m_pReturnObj->SetSize(D3DXVECTOR3(300.0f, 100.0f, 0.0f));
 		m_pReturnObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y - m_pReturnObj->GetSize().y - 20.0f, 0.0f));
-		m_pReturnObj->LoadTex(12);
+		m_pReturnObj->LoadTex(10);
 		m_pReturnObj->SetCol(SELECT_COLOR);
 		m_pReturnObj->SetObjType(CObject::OBJTYPE_PAUSE);
 
@@ -276,7 +276,7 @@ void CPause::SetPause(const bool bPause)
 		m_pTitleObj = CObject2D::Create();
 		m_pTitleObj->SetSize(D3DXVECTOR3(300.0f, 100.0f, 0.0f));
 		m_pTitleObj->SetPos(D3DXVECTOR3(m_pos.x, m_pos.y + m_pTitleObj->GetSize().y + 20.0f, 0.0f));
-		m_pTitleObj->LoadTex(15);
+		m_pTitleObj->LoadTex(12);
 		m_pTitleObj->SetCol(SELECT_COLOR);
 		m_pTitleObj->SetObjType(CObject::OBJTYPE_PAUSE);
 	}

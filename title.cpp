@@ -79,7 +79,7 @@ HRESULT CTitle::Init()
 	m_pTitleLogo = CObject2D::Create();
 	m_pTitleLogo->SetPos(D3DXVECTOR3(640.0f, 280.0f, 0.0f));
 	m_pTitleLogo->SetSize(D3DXVECTOR3(800.0f, 300.0f, 0.0f));
-	m_pTitleLogo->LoadTex(22);
+	m_pTitleLogo->LoadTex(19);
 
 	// カメラの位置変更
 	CCamera *pCamera = CApplication::GetCamera();
@@ -96,7 +96,7 @@ HRESULT CTitle::Init()
 	pMesh3D[0]->SetBlock(CMesh3D::DOUBLE_INT(10, 10));
 	pMesh3D[0]->SetSplitTex(true);
 	pMesh3D[0]->SetScrollTex(D3DXVECTOR2(0.0f, 0.01f), true);
-	pMesh3D[0]->LoadTex(2);
+	pMesh3D[0]->LoadTex(0);
 
 	// メッシュの生成
 	pMesh3D[1] = CMesh3D::Create();
@@ -107,7 +107,7 @@ HRESULT CTitle::Init()
 	pMesh3D[1]->SetSplitTex(false);
 	pMesh3D[1]->SetWave(7.0f, 10.0f);
 	pMesh3D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
-	pMesh3D[1]->LoadTex(3);
+	pMesh3D[1]->LoadTex(1);
 
 	// スカイボックスの設定
 	CSphere *pSphere = CSphere::Create();
@@ -116,7 +116,7 @@ HRESULT CTitle::Init()
 	pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
 	pSphere->SetRadius(5000.0f);
 	pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
-	pSphere->LoadTex(4);
+	pSphere->LoadTex(2);
 
 	//サメ設定
 	CEnemyShark *pEnemyShark = CEnemyShark::Create();

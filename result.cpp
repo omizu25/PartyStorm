@@ -26,6 +26,7 @@
 #include "renderer.h"
 #include "score.h"
 #include "ranking.h"
+#include "menu.h"
 
 //*****************************************************************************
 // 変数定義
@@ -46,6 +47,7 @@ const int texIdx[4]
 // 静的メンバ変数宣言
 //*****************************************************************************
 CPlayer **CResult::m_pPlayer = nullptr;	// プレイヤークラス
+CMenu *CResult::m_pMenu = nullptr;		// メニュークラス
 bool CResult::m_dead[4] = {};			// 死亡したかどうか
 
 //=============================================================================
@@ -113,7 +115,7 @@ HRESULT CResult::Init()
 		pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(10, 10));
 		pMesh3D->SetSplitTex(true);
 		pMesh3D->SetScrollTex(D3DXVECTOR2(0.0f, 0.01f), true);
-		pMesh3D->LoadTex(2);
+		pMesh3D->LoadTex(0);
 	}
 
 	{// メッシュの生成
@@ -125,7 +127,7 @@ HRESULT CResult::Init()
 		pMesh3D->SetSplitTex(false);
 		pMesh3D->SetWave(7.0f, 10.0f);
 		pMesh3D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
-		pMesh3D->LoadTex(3);
+		pMesh3D->LoadTex(1);
 	}
 
 	{// スカイボックスの設定
@@ -135,7 +137,7 @@ HRESULT CResult::Init()
 		pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
 		pSphere->SetRadius(5000.0f);
 		pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
-		pSphere->LoadTex(4);
+		pSphere->LoadTex(2);
 	}
 
 	{// モーションモデルの設定
@@ -210,22 +212,40 @@ HRESULT CResult::Init()
 			}
 		}
 
+		m_pMenu = nullptr;
+
 		if (gameclear)
 		{// ゲームクリア
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
-			pObj->LoadTex(24);
+			pObj->LoadTex(21);
 
 			m_pop = true;
+
+			D3DXVECTOR3 pos = D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.25f, (float)CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f);
+			D3DXVECTOR3 size = D3DXVECTOR3(350.0f, 100.0f, 0.0f);
+
+			// メニューの生成
+			m_pMenu = CMenu::Create();
+
+			// メニューの設定
+			m_pMenu->Set(pos, size, 2, 50.0f, true, true);
+
+			// 枠の設定
+			m_pMenu->SetFrame(D3DXVECTOR3(600.0f, (float)CRenderer::SCREEN_HEIGHT, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+
+			// テクスチャの設定
+			m_pMenu->SetTexture(0, 9);
+			m_pMenu->SetTexture(1, 12);
 		}
 	}
 	else
 	{// シングルプレイ
 		{// 背景
 			CObject2D *pObj = CObject2D::Create();
-			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.75f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
-			pObj->SetSize(D3DXVECTOR3(650.0f, CRenderer::SCREEN_HEIGHT, 0.0f));
+			pObj->SetPos(D3DXVECTOR3((float)CRenderer::SCREEN_WIDTH * 0.75f, (float)CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
+			pObj->SetSize(D3DXVECTOR3(650.0f, (float)CRenderer::SCREEN_HEIGHT, 0.0f));
 			pObj->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.25f));
 			pObj->LoadTex(-1);
 		}
@@ -260,14 +280,14 @@ HRESULT CResult::Init()
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.75f, CRenderer::SCREEN_HEIGHT * 0.15f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(600.0f, 150.0f, 0.0f));
-			pObj->LoadTex(26);
+			pObj->LoadTex(23);
 		}
 
 		{// 自分のスコアの文字
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.25f, CRenderer::SCREEN_HEIGHT * 0.3f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(500.0f, 150.0f, 0.0f));
-			pObj->LoadTex(27);
+			pObj->LoadTex(24);
 		}
 	}
 
@@ -407,7 +427,7 @@ void CResult::Multi()
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.5f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(1000.0f, 300.0f, 0.0f));
-			pObj->LoadTex(25);
+			pObj->LoadTex(22);
 		}
 		else
 		{// 生き残りがいる
@@ -431,7 +451,7 @@ void CResult::Multi()
 			CObject2D *pObj = CObject2D::Create();
 			pObj->SetPos(D3DXVECTOR3(CRenderer::SCREEN_WIDTH * 0.5f, CRenderer::SCREEN_HEIGHT * 0.65f, 0.0f));
 			pObj->SetSize(D3DXVECTOR3(600.0f, 300.0f, 0.0f));
-			pObj->LoadTex(23);
+			pObj->LoadTex(20);
 		}
 
 		m_pop = true;

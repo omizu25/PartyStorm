@@ -263,7 +263,7 @@ void CInstancing::Draw()
 
 	m_pShader->SetTechnique("tech");
 
-	m_pShader->SetTexture("g_tex", CApplication::GetTexture()->GetTexture(8));
+	m_pShader->SetTexture("g_tex", CApplication::GetTexture()->GetTexture(6));
 
 	CCamera* pCamera = CApplication::GetCamera();
 

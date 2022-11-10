@@ -115,7 +115,7 @@ HRESULT CGame::Init()
 	m_pMesh3D->SetBlock(CMesh3D::DOUBLE_INT(10, 10));
 	m_pMesh3D->SetSplitTex(true);
 	m_pMesh3D->SetScrollTex(D3DXVECTOR2(0.0f, 0.01f), true);
-	m_pMesh3D->LoadTex(2);
+	m_pMesh3D->LoadTex(0);
 
 	// メッシュの生成
 	CMesh3D *pMesh3D = CMesh3D::Create();
@@ -126,7 +126,7 @@ HRESULT CGame::Init()
 	pMesh3D->SetSplitTex(false);
 	pMesh3D->SetWave(7.0f, 10.0f);
 	pMesh3D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
-	pMesh3D->LoadTex(3);
+	pMesh3D->LoadTex(1);
 
 	// スカイボックスの設定
 	CSphere *pSphere = CSphere::Create();
@@ -135,7 +135,7 @@ HRESULT CGame::Init()
 	pSphere->SetBlock(CMesh3D::DOUBLE_INT(100, 100));
 	pSphere->SetRadius(5000.0f);
 	pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
-	pSphere->LoadTex(4);
+	pSphere->LoadTex(2);
 
 	// プレイヤーの設定
 	int nMaxPlayer = CApplication::GetPersonCount();

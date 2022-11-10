@@ -27,11 +27,11 @@ namespace
 {
 const int texIdx[CRanking::MAX_RANKING]
 {
+	25,
+	26,
+	27,
 	28,
 	29,
-	30,
-	31,
-	32,
 };
 }
 

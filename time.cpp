@@ -292,7 +292,7 @@ void CTime::SetCountDown()
 	SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));
 
 	// テクスチャの設定
-	m_pScore->SetTexture(20);
+	m_pScore->SetTexture(17);
 
 	CPlayer** pPlayer = CGame::GetPlayer();
 
