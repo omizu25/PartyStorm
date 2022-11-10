@@ -155,8 +155,6 @@ void CPause::Update()
 				if (!bJoypad)
 				{
 					bPause = pKeyboard->GetTrigger(DIK_RETURN);
-					m_fCycle = 0.1f;
-					m_nCntFrame = 0;
 				}
 				else
 				{
@@ -392,8 +390,6 @@ void CPause::FlashObj()
 {
 	CObject2D *pObj = nullptr;
 
-	m_nCntFrame++;
-
 	switch (m_nextMode)
 	{
 	case MODE_RETURN:
@@ -419,8 +415,11 @@ void CPause::FlashObj()
 		break;
 	}
 
+	m_nCntFrame++;
 	float sinCurve = (sinf((m_nCntFrame * m_fCycle) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
-	pObj->SetCol(D3DXCOLOR(SELECT_COLOR.r, SELECT_COLOR.g, SELECT_COLOR.b, 1.0f - (sinCurve * 0.7f)));
+	float alpha = 1.0f - (sinCurve * 0.7f);
+
+	pObj->SetCol(D3DXCOLOR(SELECT_COLOR.r, SELECT_COLOR.g, SELECT_COLOR.b, alpha));
 }
 
 //=============================================================================
