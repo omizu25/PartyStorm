@@ -23,7 +23,7 @@
 //*****************************************************************************
 namespace
 {
-const int MODEL_TYPE = 16;				// モデルの種類
+const int MODEL_TYPE = 17;				// モデルの種類
 const int MIN_INTERVAL = 60;			// 間隔の最小値
 const int MAX_INTERVAL = 120;			// 間隔の最小値
 const int POP_INCREASE = 1200;			// 出現が増える
