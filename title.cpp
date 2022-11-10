@@ -79,7 +79,7 @@ HRESULT CTitle::Init()
 
 	// プレスオブジェクト
 	m_pPressAny = CObject2D::Create();
-	m_pPressAny->SetPos(D3DXVECTOR3(640.0f, 600.0f, 0.0f));
+	m_pPressAny->SetPos(D3DXVECTOR3(640.0f, 550.0f, 0.0f));
 	m_pPressAny->SetSize(D3DXVECTOR3(450.0f, 180.0f, 0.0f));
 
 	int nMaxPlayer = CApplication::GetJoy()->GetUseJoyPad();
