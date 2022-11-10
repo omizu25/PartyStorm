@@ -295,7 +295,7 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	m_pMouse = new CMouse;
 	m_pJoy = new CJoypad;
 
-	if (FAILED(m_pJoy->Init(hInstance, hWnd, 4)))
+	if (FAILED(m_pJoy->Init(4)))
 	{
 		return E_FAIL;
 	}

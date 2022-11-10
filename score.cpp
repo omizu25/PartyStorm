@@ -315,7 +315,7 @@ void CScore::CalScore()
 {
 	if (m_nDestScore != m_nScore)
 	{
-		int add = (m_nDestScore - m_nScore) * 0.15f;
+		int add = (int)((m_nDestScore - m_nScore) * 0.15f);
 
 		if (add == 0)
 		{

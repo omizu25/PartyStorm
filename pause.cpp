@@ -65,8 +65,8 @@ CPause::CPause(int nPriority /*= CObject::PRIORITY_LEVEL3*/) : CObject(nPriority
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 過去の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 向き
-	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 大き
-	m_fAddAlpha = 0.0f;									// フレーム数のカウント
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 大きさ
+	m_fCycle = 0.0f;									// カーブの周期
 	m_nCntFrame = 0;									// フレームカウント
 	m_bPressEnter = true;								// エンターキーを押せるかさ
 	m_bPause = false;									// ポーズしているか
@@ -91,9 +91,11 @@ CPause::~CPause()
 HRESULT CPause::Init()
 {
 	m_pos = D3DXVECTOR3(640.0f, 360.0f, 0.0f);
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_size = D3DXVECTOR3(400.0f, 400.0f, 0.0f);
 	SetObjType(CObject::OBJTYPE_PAUSE);
+
+	m_fCycle = 0.025f;
 
 	return S_OK;
 }
@@ -152,6 +154,8 @@ void CPause::Update()
 				if (!bJoypad)
 				{
 					bPause = pKeyboard->GetTrigger(DIK_RETURN);
+					m_fCycle = 0.1f;
+					m_nCntFrame = 0;
 				}
 				else
 				{
@@ -177,6 +181,8 @@ void CPause::Update()
 				{
 					pSound->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
 					m_bPressEnter = false;
+					m_fCycle = 0.1f;
+					m_nCntFrame = 0;
 				}
 			}
 
@@ -300,16 +306,6 @@ void CPause::SetSize(const D3DXVECTOR3 & size)
 }
 
 //=============================================================================
-// 色のセッター
-// Author : 唐﨑結斗
-// 概要 : 色の設定を行う
-//=============================================================================
-void CPause::SetColor(const D3DXCOLOR & col)
-{
-	
-}
-
-//=============================================================================
 // ポーズのセッター
 // Author : 唐﨑結斗
 // 概要 : ポーズの設定を行う
@@ -367,6 +363,7 @@ void CPause::SetPause(const bool bPause)
 		m_pTitleObj->Uninit();
 	}
 
+	m_fCycle = 0.025f;
 	CObject::SetPause(m_bPause);
 }
 
@@ -379,15 +376,7 @@ void CPause::FlashObj()
 {
 	CObject2D *pObj = nullptr;
 
-	if (m_bPressEnter)
-	{
-		m_fAddAlpha += 0.07f;
-	}
-	else if (!m_bPressEnter)
-	{
-		m_fAddAlpha += 0.5f;
-		m_nCntFrame++;
-	}
+	m_nCntFrame++;
 
 	switch (m_nextMode)
 	{
@@ -414,7 +403,8 @@ void CPause::FlashObj()
 		break;
 	}
 
-	pObj->SetCol(D3DXCOLOR(SELECT_COLOR.r, SELECT_COLOR.g, SELECT_COLOR.b, sinf(m_fAddAlpha) * 3.0f));
+	float sinCurve = (sinf((m_nCntFrame * m_fCycle) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
+	pObj->SetCol(D3DXCOLOR(SELECT_COLOR.r, SELECT_COLOR.g, SELECT_COLOR.b, 1.0f - (sinCurve * 0.7f)));
 }
 
 //=============================================================================

@@ -25,8 +25,8 @@ public:
 private:
 	static const int MAX_EXPLOSION;	// 爆発の最大数
 	static const int MAX_LIFE;		// 寿命の最大値
+	static const int STD_MOVE;		// 移動量の最大値
 	static const float STD_SIZE;	// サイズの標準値
-	static const float STD_MOVE;	// 移動量の最大値
 
 	/* ↓静的メンバ関数↓ */
 public:

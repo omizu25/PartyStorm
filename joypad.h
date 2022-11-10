@@ -86,7 +86,7 @@ public:
 	//--------------------------------------------------------------------
 	// メンバ関数
 	//--------------------------------------------------------------------
-	HRESULT Init(HINSTANCE hInstance, HWND hWnd,const int nMax);		// 入力処理全部の初期化
+	HRESULT Init(const int nMax);										// 入力処理全部の初期化
 	void Uninit(void);													// 入力処理全部の終了処理
 	void Update(void);													// 入力処理全部の更新処理
 	bool GetPress(JOYKEY Key, int nPlayer);								// ジョイパッドプレス処理

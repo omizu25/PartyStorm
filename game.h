@@ -41,6 +41,7 @@ public:
 	// 静的メンバ関数
 	//--------------------------------------------------------------------
 	static void SetGame(const bool bGame) { m_bGame = bGame; }				// ゲームの状況の設定
+	static bool GetGame() { return m_bGame; }								// ゲームの状況のゲッター
 	static CMesh3D *GetMesh() { return m_pMesh3D; }							// メッシュのゲッター
 	static CTime *GetTime() { return m_pTime; }								// タイムのゲッター
 	static CPlayer **GetPlayer() { return m_pPlayer; }						// プレイヤーのゲッター

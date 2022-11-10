@@ -184,6 +184,12 @@ void CTime::Update()
 					m_nTime = 0;
 					m_pScore->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 					CGame::SetGame(false);
+
+					// 出現する
+					CObstacle::Stop(true);
+
+					// ポーズできなくする
+					CApplication::GetPause()->SetSelect(false);
 				}
 
 			}

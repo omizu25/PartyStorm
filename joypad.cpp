@@ -42,7 +42,7 @@ CJoypad::~CJoypad()
 // Author : 唐﨑結斗
 // 概要 : 頂点バッファを生成し、メンバ変数の初期値を設定
 //=============================================================================
-HRESULT CJoypad::Init(HINSTANCE hInstance, HWND hWnd, const int nMax)
+HRESULT CJoypad::Init(const int nMax)
 {
 	//XInputのステートを設定（有効にする）
 	XInputEnable(true);
@@ -235,7 +235,6 @@ bool CJoypad::Stick(JOYKEY Key, int nPlayer, float fDeadZone)
 {
 	// 変数宣言
 	bool bStick = false;
-	float fLength = 0.0f;
 	D3DXVECTOR2 stickVec;
 
 	switch (Key)

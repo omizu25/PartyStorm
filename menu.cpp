@@ -50,6 +50,7 @@ CMenu::CMenu() :
 	m_selectIdx(0),
 	m_numUse(0),
 	m_time(0),
+	m_cycle(0.0f),
 	m_sort(false)
 {
 }
@@ -72,6 +73,7 @@ HRESULT CMenu::Init()
 	m_numUse = 0;
 	m_selectIdx = 0;
 	m_time = 0;
+	m_cycle = 0.025f;
 	m_sort = false;
 
 	return S_OK;
@@ -200,7 +202,7 @@ int CMenu::Select()
 
 	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-	float sinCurve = (sinf((m_time * 0.025f) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
+	float sinCurve = (sinf((m_time * m_cycle) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
 	col.a = 1.0f - (sinCurve * 0.7f);
 
 	// 色の設定
@@ -212,6 +214,7 @@ int CMenu::Select()
 		{// 決定キーが押された
 			// SE
 			CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
+			m_cycle = 0.1f;
 
 			return m_selectIdx;
 		}
@@ -225,7 +228,7 @@ int CMenu::Select()
 			{// 決定キーが押された
 			 // SE
 				CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
-
+				m_cycle = 0.1f;
 				return m_selectIdx;
 			}
 		}
