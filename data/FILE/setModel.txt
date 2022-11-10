@@ -6,37 +6,37 @@
 # СDВћОcК[
 #------------------------------------------------------------------------------
 MODELSET
-	TYPE = 14					# ОнЧё
+	TYPE = 15					# ОнЧё
 	POS = -430.30 0.0 300.0		# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 10.0 50.0			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 14					# ОнЧё
+	TYPE = 15					# ОнЧё
 	POS = 500.0 50.0 600.0		# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 0.0 3.0			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 15						# ОнЧё
+	TYPE = 16						# ОнЧё
 	POS = 800.0 0.0 2200.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 0.8 1.0				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 15						# ОнЧё
+	TYPE = 16						# ОнЧё
 	POS = -900.0 10.0 2400.0		# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -2.0 2.36				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 15						# ОнЧё
+	TYPE = 16						# ОнЧё
 	POS = 900.0 -50.0 2000.0		# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -0.2 -0.8				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 15						# ОнЧё
+	TYPE = 16						# ОнЧё
 	POS = -900.0 10.0 2400.0		# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -2.0 2.36				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
@@ -45,133 +45,133 @@ END_MODELSET
 # Нт
 #------------------------------------------------------------------------------
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = -300.0 0.0 500.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 1.57 0.0				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = -300.0 50.0 500.0			# И Тu(Вw/Вx/Вy)
 	ROT = 3.14 1.75 -0.5			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = -300.0 50.0 220.0			# И Тu(Вw/Вx/Вy)
 	ROT = 3.14 1.7 0.0				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = -300.0 0.0 0.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -2.0 -0.3				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 21						# ОнЧё
+	TYPE = 19						# ОнЧё
 	POS = -300.0 0.0 -50.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 1.8 0.2				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = -310.0 0.0 -180.0			# И Тu(Вw/Вx/Вy)
 	ROT = -0.74 -1.57 -0.2			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = -300.0 0.0 -280.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.5 1.57 -0.5				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 21						# ОнЧё
+	TYPE = 19						# ОнЧё
 	POS = -300.0 0.0 -360.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 1.8 0.2				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = -310.0 0.0 -500.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.2 -1.57 0.5				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = -300.0 0.0 -700.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 1.57 0.2				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = -300.0 0.0 -620.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 1.57 -0.2				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = 300.0 0.0 500.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -1.57 0.0				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = 300.0 50.0 500.0			# И Тu(Вw/Вx/Вy)
 	ROT = 3.14 -1.75 -0.5			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = 300.0 50.0 220.0			# И Тu(Вw/Вx/Вy)
 	ROT = 3.14 -1.7 0.0				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = 300.0 0.0 0.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 2.0 -0.3				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 21						# ОнЧё
+	TYPE = 19						# ОнЧё
 	POS = 300.0 0.0 -50.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -1.8 0.2				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = 310.0 0.0 -180.0			# И Тu(Вw/Вx/Вy)
 	ROT = -0.74 1.57 -0.2			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = 300.0 0.0 -280.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.5 -1.57 -0.5			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 21						# ОнЧё
+	TYPE = 19						# ОнЧё
 	POS = -300.0 0.0 -360.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -1.8 0.2				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 22						# ОнЧё
+	TYPE = 20						# ОнЧё
 	POS = 290.0 0.0 -500.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.2 1.57 -0.5				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = 300.0 0.0 -700.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -1.57 0.2				# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
 
 MODELSET
-	TYPE = 20						# ОнЧё
+	TYPE = 18						# ОнЧё
 	POS = 300.0 0.0 -620.0			# И Тu(Вw/Вx/Вy)
 	ROT = 0.0 -1.57 -0.2			# МьВЂ(Вw/Вx/Вy)
 END_MODELSET
