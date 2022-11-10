@@ -43,7 +43,7 @@ CTitle::CTitle()
 {
 	m_pTitleLogo = nullptr;		// タイトルロゴオブジェクト
 	m_pPressAny = nullptr;		// プレスオブジェクト
-	m_fAddAlpha = 0.0f;			// フレーム数のカウント
+	m_fCycle = 0.0f;			// フレーム数のカウント
 	m_fAddSize = 0.0f;			// 大きさの参照値
 	m_nCntFrame = 0;			// フレームカウント
 	m_nNumPlayer = 0;			// プレイヤー数
@@ -83,7 +83,7 @@ HRESULT CTitle::Init()
 	m_pPressAny = CObject2D::Create();
 	m_pPressAny->SetPos(D3DXVECTOR3(640.0f, 600.0f, 0.0f));
 	m_pPressAny->SetSize(D3DXVECTOR3(450.0f, 180.0f, 0.0f));
-	m_pPressAny->LoadTex(19);
+	m_pPressAny->LoadTex(34);
 
 	// カメラの位置変更
 	CCamera *pCamera = CApplication::GetCamera();
@@ -131,6 +131,8 @@ HRESULT CTitle::Init()
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
 
+	m_fCycle = 0.01f;
+
 	return S_OK;
 }
 
@@ -141,11 +143,8 @@ HRESULT CTitle::Init()
 //=============================================================================
 void CTitle::Uninit()
 {
-	// サウンド情報の取得
-	CSound *pSound = CApplication::GetSound();
-
 	// サウンド終了
-	pSound->StopSound();
+	CApplication::GetSound()->StopSound();
 
 	// スコアの解放
 	Release();
@@ -164,11 +163,17 @@ void CTitle::Update()
 	// ジョイパッド 情報の取得
 	CJoypad *pJoy = CApplication::GetJoy();
 
-	m_fAddSize += 0.05f;
-	D3DXVECTOR3 sizeTitleLogo = m_pTitleLogo->GetSize();
-	m_pTitleLogo->SetSize(D3DXVECTOR3(sizeTitleLogo.x + sinf(m_fAddSize) * 3.0f,
-		sizeTitleLogo.y + sinf(m_fAddSize) * 2.0f, 0.0f));
+	{// タイトルロゴのサイズ変更
+		m_fAddSize += 0.05f;
 
+		D3DXVECTOR3 sizeTitleLogo = m_pTitleLogo->GetSize();
+		sizeTitleLogo.x += sinf(m_fAddSize) * 3.0f;
+		sizeTitleLogo.y += sinf(m_fAddSize) * 2.0f;
+
+		m_pTitleLogo->SetSize(sizeTitleLogo);
+	}
+
+	// 点滅
 	FlashObj();
 
 	int nMaxPlayer = pJoy->GetUseJoyPad();
@@ -187,20 +192,17 @@ void CTitle::Update()
 
 	CApplication::SetPersonCount(nMaxPlayer);
 
-	/*if (pKeyboard->GetPress(DIK_P))
-	{
-		CApplication::SetNextMode(CApplication::MODE_TITLE);
-	}*/
-
 	if (m_bPressEnter)
 	{
-		if (pJoy->GetUseJoyPad() > 0)
+		if (pJoy->GetUseJoyPad() > 1)
 		{
 			for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
 			{
 				if (pJoy->AnyButton(nCntPlayer))
 				{
 					m_bPressEnter = false;
+					m_nCntFrame = 0;
+					m_fCycle = 0.1f;
 					break;
 				}
 			}
@@ -210,6 +212,8 @@ void CTitle::Update()
 			if (pKeyboard->GetUseAnyKey())
 			{
 				m_bPressEnter = false;
+				m_nCntFrame = 0;
+				m_fCycle = 0.1f;
 			}
 		}
 	}
@@ -229,7 +233,6 @@ void CTitle::Update()
 //=============================================================================
 void CTitle::Draw()
 {
-
 }
 
 //=============================================================================
@@ -239,15 +242,11 @@ void CTitle::Draw()
 //=============================================================================
 void CTitle::FlashObj()
 {
-	if (m_bPressEnter)
-	{
-		m_fAddAlpha += 0.07f;
-	}
-	else if (!m_bPressEnter)
-	{
-		m_fAddAlpha += 0.5f;
-		m_nCntFrame++;
-	}
+	m_nCntFrame++;
 
-	m_pPressAny->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, sinf(m_fAddAlpha) * 3.0f));
+	float sinCurve = (sinf((m_nCntFrame * m_fCycle) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
+	float alpha = (sinCurve * 0.75f) + 0.25f;
+
+	// 色の設定
+	m_pPressAny->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha));
 }

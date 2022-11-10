@@ -52,7 +52,7 @@ private:
 	//--------------------------------------------------------------------
 	CObject2D	*m_pTitleLogo;			// タイトルロゴオブジェクト
 	CObject2D	*m_pPressAny;			// プレスオブジェクト
-	float		m_fAddAlpha;			// フレーム数のカウント
+	float		m_fCycle;				// カーブの周期
 	float		m_fAddSize;				// 大きさの参照値
 	int			m_nCntFrame;			// フレームカウント
 	bool		m_bPressEnter;			// エンターキーを押せるか
