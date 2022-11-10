@@ -571,7 +571,8 @@ void CCamera::Move(void)
 //=============================================================================
 void CCamera::Follow(void)
 {
-	if (!m_pTarget->GetFlagDeath())
+	if (m_pTarget != nullptr
+		&& !m_pTarget->GetFlagDeath())
 	{// •Ï”éŒ¾
 		D3DXVECTOR3 targetPos = m_pTarget->GetPos() + m_posRAdd;
 		D3DXVECTOR3 targetRot = m_pTarget->GetRot();
