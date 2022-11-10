@@ -199,8 +199,7 @@ void CInstancing::Draw()
 	// ライトを無効にする
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	// レンダーステートの設定
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
@@ -229,7 +228,7 @@ void CInstancing::Draw()
 			worldPos[num].z = objPos.z;
 			worldPos[num].w = atan2f(move.x, move.y);
 
-			col[num] = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+			col[num] = pObject[i]->GetCol();
 			size[num] = pObject[i]->GetSize();
 
 			num++;
