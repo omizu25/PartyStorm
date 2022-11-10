@@ -187,11 +187,6 @@ void CTitle::Update()
 
 	CApplication::SetPersonCount(nMaxPlayer);
 
-	/*if (pKeyboard->GetPress(DIK_P))
-	{
-		CApplication::SetNextMode(CApplication::MODE_TITLE);
-	}*/
-
 	if (m_bPressEnter)
 	{
 		if (pJoy->GetUseJoyPad() > 0)
