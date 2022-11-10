@@ -36,6 +36,7 @@ public:
 	bool GetPress(int nKey) override;								// プレス情報の取得
 	bool GetTrigger(int nKey) override;								// トリガー情報の取得
 	bool GetRelease(int nKey) override;								// リリース情報の取得
+	bool GetUseAnyKey();											// キーを使用状況の取得
 
 private:
 	//--------------------------------------------------------------------

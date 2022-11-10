@@ -49,7 +49,7 @@ const int texIdx[4]
 //--------------------------------------------------------------------
 // 定数定義
 //--------------------------------------------------------------------
-const D3DXVECTOR2 CPlayer::MAX_VIB_RAND = D3DXVECTOR2(70.0f, 100.0f);		// 振動の幅
+const D3DXVECTOR2 CPlayer::MAX_VIB_RAND = D3DXVECTOR2(40.0f, 70.0f);		// 振動の幅
 const float CPlayer::VIB_SPEED = 20.0f;										// 振動の速度
 const float CPlayer::VIB_COEFFICIENT = 0.2f;								// 振動の減衰値
 
@@ -421,81 +421,81 @@ D3DXVECTOR3 CPlayer::Move()
 		}
 	}
 
-	pJoy->GetStick(CJoypad::JOYKEY_LEFT_STICK,m_nNum);
-
-	//キーボード
-	if (pKeyboard->GetPress(DIK_W)
-		|| pKeyboard->GetPress(DIK_A)
-		|| pKeyboard->GetPress(DIK_D)
-		|| pKeyboard->GetPress(DIK_S))
-	{// 移動キーが押された
-		if (pKeyboard->GetPress(DIK_W))
-		{// [W]キーが押された時
-			if (pKeyboard->GetPress(DIK_A))
+	if (pJoy->GetUseJoyPad() == 0)
+	{//キーボード
+		if (pKeyboard->GetPress(DIK_W)
+			|| pKeyboard->GetPress(DIK_A)
+			|| pKeyboard->GetPress(DIK_D)
+			|| pKeyboard->GetPress(DIK_S))
+		{// 移動キーが押された
+			if (pKeyboard->GetPress(DIK_W))
+			{// [W]キーが押された時
+				if (pKeyboard->GetPress(DIK_A))
+				{// [A]キーが押された時
+				 // 移動方向の更新
+					m_rotDest.y = D3DX_PI * -0.25f;
+				}
+				else if (pKeyboard->GetPress(DIK_D))
+				{// [D]キーが押された時
+				 // 移動方向の更新
+					m_rotDest.y = D3DX_PI * 0.25f;
+				}
+				else
+				{// 移動方向の更新
+					m_rotDest.y = D3DX_PI * 0.0f;
+				}
+			}
+			else if (pKeyboard->GetPress(DIK_S))
+			{// [S]キーが押された時
+				if (pKeyboard->GetPress(DIK_A))
+				{// [A]キーが押された時
+				 // 移動方向の更新
+					m_rotDest.y = D3DX_PI * -0.75f;
+				}
+				else if (pKeyboard->GetPress(DIK_D))
+				{// [D]キーが押された時
+				 // 移動方向の更新
+					m_rotDest.y = D3DX_PI * 0.75f;
+				}
+				else
+				{// 移動方向の更新q
+					m_rotDest.y = D3DX_PI;
+				}
+			}
+			else if (pKeyboard->GetPress(DIK_A))
 			{// [A]キーが押された時
 			 // 移動方向の更新
-				m_rotDest.y = D3DX_PI * -0.25f;
+				m_rotDest.y = D3DX_PI * -0.5f;
 			}
 			else if (pKeyboard->GetPress(DIK_D))
 			{// [D]キーが押された時
 			 // 移動方向の更新
-				m_rotDest.y = D3DX_PI * 0.25f;
+				m_rotDest.y = D3DX_PI * 0.5f;
 			}
-			else
-			{// 移動方向の更新
-				m_rotDest.y = D3DX_PI * 0.0f;
-			}
-		}
-		else if (pKeyboard->GetPress(DIK_S))
-		{// [S]キーが押された時
-			if (pKeyboard->GetPress(DIK_A))
-			{// [A]キーが押された時
-			 // 移動方向の更新
-				m_rotDest.y = D3DX_PI * -0.75f;
-			}
-			else if (pKeyboard->GetPress(DIK_D))
-			{// [D]キーが押された時
-			 // 移動方向の更新
-				m_rotDest.y = D3DX_PI * 0.75f;
-			}
-			else
-			{// 移動方向の更新q
-				m_rotDest.y = D3DX_PI;
-			}
-		}
-		else if (pKeyboard->GetPress(DIK_A))
-		{// [A]キーが押された時
-		 // 移動方向の更新
-			m_rotDest.y = D3DX_PI * -0.5f;
-		}
-		else if (pKeyboard->GetPress(DIK_D))
-		{// [D]キーが押された時
-		 // 移動方向の更新
-			m_rotDest.y = D3DX_PI * 0.5f;
-		}
 
-		// カメラ情報の取得
-		CCamera *pCamera = CApplication::GetCamera();
+			// カメラ情報の取得
+			CCamera *pCamera = CApplication::GetCamera();
 
-		// 移動方向の算出
-		m_rotDest.y += pCamera->GetRot().y;
+			// 移動方向の算出
+			m_rotDest.y += pCamera->GetRot().y;
 
-		// 移動方向の正規化
-		m_rotDest.y = CCalculation::RotNormalization(m_rotDest.y);
+			// 移動方向の正規化
+			m_rotDest.y = CCalculation::RotNormalization(m_rotDest.y);
 
-		// 移動量の計算
-		move = D3DXVECTOR3(sinf(m_rotDest.y), 0.0f, cosf(m_rotDest.y));
+			// 移動量の計算
+			move = D3DXVECTOR3(sinf(m_rotDest.y), 0.0f, cosf(m_rotDest.y));
 
-		// 角度の正規化
-		m_rotDest.y -= D3DX_PI;
+			// 角度の正規化
+			m_rotDest.y -= D3DX_PI;
 
-		if (m_EAction == NEUTRAL_ACTION)
-		{
-			m_EAction = MOVE_ACTION;
-
-			if (pMotion != nullptr)
+			if (m_EAction == NEUTRAL_ACTION)
 			{
-				pMotion->SetNumMotion(MOVE_ACTION);
+				m_EAction = MOVE_ACTION;
+
+				if (pMotion != nullptr)
+				{
+					pMotion->SetNumMotion(MOVE_ACTION);
+				}
 			}
 		}
 	}
@@ -614,19 +614,23 @@ void CPlayer::Collison()
 							// スコアの設定
 							CRanking::Set(pTime->GetTime());
 
-							CFollowModel *pCameraTarget = CGame::GetCameraTarget();
+							if (CApplication::GetMode() == CApplication::MODE_GAME)
+							{
+								CFollowModel *pCameraTarget = CGame::GetCameraTarget();
 
-							if (pCameraTarget != nullptr)
-							{// カメラターゲット情報
-								D3DXVECTOR3 pos = pCameraTarget->GetPos();
-								D3DXVECTOR3 posDest = D3DXVECTOR3(pos.x + MAX_VIB_RAND.x - (float)(rand() % (int)(MAX_VIB_RAND.x * 2.0f)),
-									pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f)), 0.0f);
-								pCameraTarget->SetPos(posDest);
-								pCameraTarget->SetFollow(CGame::CAMERA_POSR);
-								pCameraTarget->SetSpeed(VIB_SPEED);
-								pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
-								m_bVib = true;
+								if (pCameraTarget != nullptr)
+								{// カメラターゲット情報
+									D3DXVECTOR3 pos = pCameraTarget->GetPos();
+									D3DXVECTOR3 posDest = D3DXVECTOR3(pos.x + MAX_VIB_RAND.x - (float)(rand() % (int)(MAX_VIB_RAND.x * 2.0f)),
+										pos.y + MAX_VIB_RAND.y - (float)(rand() % (int)(MAX_VIB_RAND.y * 2.0f)), 0.0f);
+									pCameraTarget->SetPos(posDest);
+									pCameraTarget->SetFollow(CGame::CAMERA_POSR);
+									pCameraTarget->SetSpeed(VIB_SPEED);
+									pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
+									m_bVib = true;
+								}
 							}
+				
 						}
 					}
 				}

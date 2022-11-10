@@ -263,3 +263,25 @@ bool CJoypad::Stick(JOYKEY Key, int nPlayer, float fDeadZone)
 
 	return bStick;
 }
+
+//=============================================================================
+// すべてのボタンの判定取得
+// Author : 唐﨑結斗
+// 概要 : どこかのボタンが押されたらtrueを返す
+//=============================================================================
+bool CJoypad::AnyButton(int nPlayer)
+{
+	bool bAnyButton = false;
+
+	for (int nCntButton = 0; nCntButton < JOYKEY_MAX; nCntButton++)
+	{
+		bAnyButton = (m_pJoyPad[nPlayer].press.Gamepad.wButtons & (0x01 << nCntButton)) ? true : false;
+
+		if (bAnyButton)
+		{
+			break;
+		}
+	}
+
+	return bAnyButton;
+}
