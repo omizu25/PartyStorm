@@ -438,7 +438,6 @@ void CPause::SelectMode()
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 	CJoypad *pJoypad = CApplication::GetJoy();
 	bool bJoypad = false;
-	bool bPause = false;
 
 	if (pJoypad->GetUseJoyPad() > 0)
 	{
@@ -495,7 +494,6 @@ void CPause::SelectMode()
 		}
 	}
 	
-
 	m_nextMode = (NEXT_MODE)nMode;
 }
 
