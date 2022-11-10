@@ -18,6 +18,8 @@
 #include "keyboard.h"
 #include "sound.h"
 #include "fade.h"
+#include "joypad.h"
+#include "debug_proc.h"
 
 //--------------------------------------------------------------------
 // ’è”’è‹`
@@ -127,6 +129,14 @@ void CPause::Update()
 
 	// “ü—Íî•ñ‚ÌŽæ“¾
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
+	CJoypad *pJoypad = CApplication::GetJoy();
+	bool bJoypad = false;
+	bool bPause = false;
+
+	if (pJoypad->GetUseJoyPad() > 0)
+	{
+		bJoypad = true;
+	}
 
 	if (CApplication::GetMode() == CApplication::MODE_GAME
 		&& !CApplication::GetFade()->GetFadeSituation())
@@ -140,13 +150,41 @@ void CPause::Update()
 
 			FlashObj();
 
-			if (m_bPressEnter
-				&& pKeyboard->GetTrigger(DIK_RETURN))
+			if (m_bPressEnter)
 			{
-				pSound->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
-				m_bPressEnter = false;
-				m_fCycle = 0.1f;
-				m_nCntFrame = 0;
+				if (!bJoypad)
+				{
+					bPause = pKeyboard->GetTrigger(DIK_RETURN);
+					m_fCycle = 0.1f;
+					m_nCntFrame = 0;
+				}
+				else
+				{
+					for (int nCntJoy = 0; nCntJoy < pJoypad->GetUseJoyPad(); nCntJoy++)
+					{
+						bPause = pJoypad->GetTrigger(CJoypad::JOYKEY_A, nCntJoy);
+
+						if (bPause)
+						{
+							break;
+						}
+
+						bPause = pJoypad->GetTrigger(CJoypad::JOYKEY_B, nCntJoy);
+
+						if (bPause)
+						{
+							break;
+						}
+					}
+				}
+				
+				if (bPause)
+				{
+					pSound->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
+					m_bPressEnter = false;
+					m_fCycle = 0.1f;
+					m_nCntFrame = 0;
+				}
 			}
 
 			if (!m_bPressEnter
@@ -177,17 +215,53 @@ void CPause::Update()
 				}
 			}
 
-			if (pKeyboard->GetTrigger(DIK_P))
+			if (!bJoypad)
+			{
+				bPause = pKeyboard->GetTrigger(DIK_P);
+			}
+			else
+			{
+				for (int nCntJoy = 0; nCntJoy < pJoypad->GetUseJoyPad(); nCntJoy++)
+				{
+					bPause = pJoypad->GetTrigger(CJoypad::JOYKEY_START, nCntJoy);
+
+					if (bPause)
+					{
+						break;
+					}
+				}
+			}
+
+			if (bPause)
 			{
 				SetPause(false);
 			}
 
 		}
-		else if (!m_bPause
-			&& pKeyboard->GetTrigger(DIK_P))
+		else if (!m_bPause)
 		{
-			SetPause(true);
-			pSound->PlaySound(CSound::SOUND_LABEL_SE_PAUSE);
+			if (!bJoypad)
+			{
+				bPause = pKeyboard->GetTrigger(DIK_P);
+			}
+			else
+			{
+				for (int nCntJoy = 0; nCntJoy < pJoypad->GetUseJoyPad(); nCntJoy++)
+				{
+					bPause = pJoypad->GetTrigger(CJoypad::JOYKEY_START, nCntJoy);
+
+					if (bPause)
+					{
+						break;
+					}
+				}
+			}
+
+			if (bPause)
+			{
+				SetPause(true);
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_PAUSE);
+			}
 		}
 	}
 }
@@ -363,27 +437,65 @@ void CPause::SelectMode()
 
 	// “ü—Íî•ñ‚ÌŽæ“¾
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
+	CJoypad *pJoypad = CApplication::GetJoy();
+	bool bJoypad = false;
+	bool bPause = false;
 
-	if (pKeyboard->GetTrigger(DIK_W))
+	if (pJoypad->GetUseJoyPad() > 0)
 	{
-		pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
-		nMode--;
+		bJoypad = true;
+	}
 
-		if (nMode < 0)
+	if (!bJoypad)
+	{
+		if (pKeyboard->GetTrigger(DIK_W))
 		{
-			nMode = 2;
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
+			nMode--;
+
+			if (nMode < 0)
+			{
+				nMode = 2;
+			}
+		}
+		else if (pKeyboard->GetTrigger(DIK_S))
+		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
+			nMode++;
+
+			if (nMode > 2)
+			{
+				nMode = 0;
+			}
 		}
 	}
-	else if (pKeyboard->GetTrigger(DIK_S))
+	else
 	{
-		pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
-		nMode++;
-
-		if (nMode > 2)
+		for (int nCntJoy = 0; nCntJoy < pJoypad->GetUseJoyPad(); nCntJoy++)
 		{
-			nMode = 0;
+			if (pJoypad->GetTrigger(CJoypad::JOYKEY_UP, nCntJoy))
+			{
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
+				nMode--;
+
+				if (nMode < 0)
+				{
+					nMode = 2;
+				}
+			}
+			else if (pJoypad->GetTrigger(CJoypad::JOYKEY_DOWN, nCntJoy))
+			{
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
+				nMode++;
+
+				if (nMode > 2)
+				{
+					nMode = 0;
+				}
+			}
 		}
 	}
+	
 
 	m_nextMode = (NEXT_MODE)nMode;
 }

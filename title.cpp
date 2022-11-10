@@ -311,7 +311,7 @@ void CTitle::Update()
 	if (m_bPressEnter)
 	{
 		if (pJoy->GetUseJoyPad() > 0)
-		{// パッドが使用されている
+		{
 			for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
 			{
 				if (pJoy->AnyButton(nCntPlayer))
@@ -319,6 +319,8 @@ void CTitle::Update()
 					m_bPressEnter = false;
 					m_nCntFrame = 0;
 					m_fCycle = 0.1f;
+					// SE
+					CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
 					break;
 				}
 			}
@@ -330,6 +332,8 @@ void CTitle::Update()
 				m_bPressEnter = false;
 				m_nCntFrame = 0;
 				m_fCycle = 0.1f;
+				// SE
+				CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
 			}
 		}
 	}
