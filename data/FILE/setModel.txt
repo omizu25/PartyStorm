@@ -13,8 +13,8 @@ END_MODELSET
 
 MODELSET
 	TYPE = 15					# Ží—Þ
-	POS = 500.0 50.0 600.0		# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 3.0			# Œü‚«(‚w/‚x/‚y)
+	POS = 450.0 -10.0 600.0		# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 2.0 -0.5			# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET

@@ -22,6 +22,7 @@ class CMesh3D;
 class CScore;
 class CTime;
 class CFollowModel;
+class CObject2D;
 
 //=============================================================================
 // ゲームクラス
@@ -76,6 +77,7 @@ public:
 	// メンバ変数
 	//--------------------------------------------------------------------
 	int m_nCntFrame;		// フレームカウント
+	CObject2D *m_pTutorial;	// チュートリアル
 };
 
 #endif

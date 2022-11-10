@@ -33,6 +33,7 @@
 #include "mesh.h"
 #include "sphere.h"
 #include "model_obj.h"
+#include "obstacle.h"
 
 //=============================================================================
 // コンストラクタ
@@ -184,29 +185,10 @@ HRESULT CTitle::Init()
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
 
-	{// モーションモデルの設定
-		CMotionModel3D *pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(400.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-
-		pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(-400.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-
-		pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(600.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-
-		pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(-600.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-	}
-
 	m_fCycle = 0.01f;
+
+	// 静的メンバの初期化
+	CObstacle::InitStatic();
 
 	return S_OK;
 }
@@ -232,6 +214,9 @@ void CTitle::Uninit()
 //=============================================================================
 void CTitle::Update()
 {
+	// 背景の出現
+	CObstacle::PopBG();
+
 	// 入力情報の取得
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 

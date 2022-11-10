@@ -25,7 +25,7 @@ namespace
 {
 const int MODEL_TYPE = 17;				// モデルの種類
 const int MIN_INTERVAL = 60;			// 間隔の最小値
-const int MAX_INTERVAL = 120;			// 間隔の最小値
+const int MAX_INTERVAL = 120;			// 間隔の最大値
 const int POP_INCREASE = 1200;			// 出現が増える
 const int MIN_POP = 2;					// 出現の最小数
 const int MAX_POP = 4;					// 出現の最大数
@@ -33,8 +33,8 @@ const float MOVE_SPEED = 5.0f;			// 移動速度
 const float POP_POS_Z = -1000.0f;		// 出現のZの位置
 const float POS_Y = -25.0f;				// Yの位置
 const float RELEASE_POS_Z = 1250.0f;	// 解放のZの位置
-const float POP_POS_X[] =				// 出現のXの位置
-{
+const float POP_POS_X[] =
+{// 出現のXの位置
 	-200.0f,
 	-100.0f,
 	0.0f,
@@ -42,12 +42,25 @@ const float POP_POS_X[] =				// 出現のXの位置
 	200.0f,
 };
 const int POP_MAX = sizeof(POP_POS_X) / sizeof(POP_POS_X[0]);	// 出現位置の最大数
+const int BG_INTERVAL = 180;			// 背景の間隔
+const float RELEASE_POS_Z_BG = 5000.0f;	// 背景の解放のZの位置
+const float POP_POS_X_BG[] =
+{// 背景の出現のXの位置
+	-1300.0f,
+	-1050.0f,
+	-650.0f,
+	550.0f,
+	1200.0f,
+};
+const int POP_MAX_BG = sizeof(POP_POS_X_BG) / sizeof(POP_POS_X_BG[0]);	// 背景の出現位置の最大数
 }
 
 //*****************************************************************************
 // 静的メンバ変数宣言
 //*****************************************************************************
 int CObstacle::m_time = 0;
+int CObstacle::m_timeBG = 0;
+int CObstacle::m_popIdxBG = 0;
 int CObstacle::m_pop = 0;
 int CObstacle::m_interval = 0;
 float CObstacle::m_move = 0.0f;
@@ -59,6 +72,8 @@ bool CObstacle::m_stop = false;
 void CObstacle::InitStatic()
 {
 	m_time = 0;
+	m_timeBG = 0;
+	m_popIdxBG = -1;
 	m_pop = MIN_POP;
 	m_interval = MAX_INTERVAL;
 	m_move = 1.0f;
@@ -110,7 +125,7 @@ void CObstacle::Pop()
 		for (int i = 0; i < m_pop; i++)
 		{
 			// 生成
-			Create(POP_POS_X[random[i]], inverse);
+			Create(POP_POS_X[random[i]], POP_POS_Z, inverse, RELEASE_POS_Z);
 
 			inverse *= -1.0f;
 		}
@@ -141,6 +156,38 @@ void CObstacle::Pop()
 }
 
 //=============================================================================
+// 背景の出現
+//=============================================================================
+void CObstacle::PopBG()
+{
+	if (m_stop)
+	{// 出現を止める
+		return;
+	}
+
+	if (m_timeBG % BG_INTERVAL == 0)
+	{// 一定間隔
+		int random = 0;
+
+		while (true)
+		{
+			random = rand() % POP_MAX;
+
+			if (random != m_popIdxBG)
+			{// 前回の出現した番号ではない
+				m_popIdxBG = random;
+				break;
+			}
+		}
+
+		// 生成
+		Create(POP_POS_X_BG[random], 0.0f, 1.0f, RELEASE_POS_Z_BG);
+	}
+
+	m_timeBG++;
+}
+
+//=============================================================================
 // 出現を止めるかどうか
 //=============================================================================
 void CObstacle::Stop(bool stop)
@@ -151,7 +198,7 @@ void CObstacle::Stop(bool stop)
 //=============================================================================
 // 生成
 //=============================================================================
-CObstacle* CObstacle::Create(float posX, float inverse)
+CObstacle* CObstacle::Create(float posX, float posZ, float inverse, float diePosZ)
 {
 	// オブジェクトインスタンス
 	CObstacle* pObstacle = new CObstacle;
@@ -163,9 +210,10 @@ CObstacle* CObstacle::Create(float posX, float inverse)
 	pObstacle->Init();
 
 	// 位置の設定
-	pObstacle->SetPos(D3DXVECTOR3(posX, 0.0f, POP_POS_Z));
+	pObstacle->SetPos(D3DXVECTOR3(posX, 0.0f, posZ));
 
 	pObstacle->m_inverse = inverse;
+	pObstacle->m_diePosZ = diePosZ;
 
 	// インスタンスを返す
 	return pObstacle;
@@ -176,7 +224,8 @@ CObstacle* CObstacle::Create(float posX, float inverse)
 //=============================================================================
 CObstacle::CObstacle() :
 	m_waveTime(0),
-	m_inverse(0.0f)
+	m_inverse(0.0f),
+	m_diePosZ(0.0f)
 {
 }
 
@@ -206,6 +255,7 @@ HRESULT CObstacle::Init()
 
 	m_waveTime = 0;
 	m_inverse = 0.0f;
+	m_diePosZ = 0.0f;
 
 	return E_NOTIMPL;
 }
@@ -236,6 +286,10 @@ void CObstacle::Update()
 	{// ゲーム中で制限時間切れ
 		pos.y += -1.0f;
 	}
+	else if (pos.z >= 4500.0f)
+	{// 指定の値以上
+		pos.y += -1.0f;
+	}
 	else
 	{
 		pos.y = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * 20.0f;
@@ -254,7 +308,7 @@ void CObstacle::Update()
 	// 向きの設定
 	CModelObj::SetRot(rot);
 
-	if (pos.z >= RELEASE_POS_Z)
+	if (pos.z >= m_diePosZ)
 	{// 解放する位置を越した
 		Uninit();
 		return;

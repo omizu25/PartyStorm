@@ -178,40 +178,19 @@ HRESULT CGame::Init()
 	m_pEnemyShark->SetPos(D3DXVECTOR3(0.0f, -200.0f, 1500.0f));
 	m_pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
 
-	// モーションモデルの設定
-	CMotionModel3D *pSnake = CMotionModel3D::Create();
-	pSnake->SetMotion("data/MOTION/snake.txt");
-	pSnake->SetPos(D3DXVECTOR3(400.0f, 0.0f, 1000.0f));
-	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-
-	pSnake = CMotionModel3D::Create();
-	pSnake->SetMotion("data/MOTION/snake.txt");
-	pSnake->SetPos(D3DXVECTOR3(-400.0f, 0.0f, 1000.0f));
-	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-
-	pSnake = CMotionModel3D::Create();
-	pSnake->SetMotion("data/MOTION/snake.txt");
-	pSnake->SetPos(D3DXVECTOR3(600.0f, 0.0f, 1000.0f));
-	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-
-	pSnake = CMotionModel3D::Create();
-	pSnake->SetMotion("data/MOTION/snake.txt");
-	pSnake->SetPos(D3DXVECTOR3(-600.0f, 0.0f, 1000.0f));
-	pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-
 	{// チュートリアル
-		CObject2D* pObj = CObject2D::Create();
-		pObj->SetPos(D3DXVECTOR3(200.0f, 100.0f, 0.0f));
-		pObj->SetSize(D3DXVECTOR3(400.0f, 200.0f, 0.0f));
+		m_pTutorial = CObject2D::Create();
+		m_pTutorial->SetPos(D3DXVECTOR3(200.0f, 100.0f, 0.0f));
+		m_pTutorial->SetSize(D3DXVECTOR3(400.0f, 200.0f, 0.0f));
 		int numJoy = CApplication::GetJoy()->GetUseJoyPad();
 
 		if (numJoy >= 1)
 		{// コントローラーが繋いである
-			pObj->LoadTex(31);
+			m_pTutorial->LoadTex(31);
 		}
 		else
 		{// コントローラーが繋いでない
-			pObj->LoadTex(32);
+			m_pTutorial->LoadTex(32);
 		}
 	}
 
@@ -287,8 +266,22 @@ void CGame::Update()
 	// 障害物
 	CObstacle::Pop();
 
+	// 背景の出現
+	CObstacle::PopBG();
+
 	// エフェクトの更新
 	CEffect::UpdateAll();
+
+	{// チュートリアル
+		if (CApplication::GetJoy()->GetUseJoyPad() >= 1)
+		{// コントローラーが繋いである
+			m_pTutorial->LoadTex(31);
+		}
+		else
+		{// コントローラーが繋いでない
+			m_pTutorial->LoadTex(32);
+		}
+	}
 
 	int nMaxPlayer = CApplication::GetPersonCount();
 	int nCntDead = 0;

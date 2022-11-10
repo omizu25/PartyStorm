@@ -24,13 +24,16 @@ public:
 	//--------------------------------------------------------------------
 	static void InitStatic();		// 静的メンバ変数の初期化
 	static void Pop();				// 出現
+	static void PopBG();			// 背景の出現
 	static void Stop(bool stop);	// 出現を止めるかどうか
-	static CObstacle* Create(float posX, float inverse);	// 障害物の生成
+	static CObstacle* Create(float posX, float posZ, float inverse, float diePosZ);	// 生成
 
 	//--------------------------------------------------------------------
 	// 静的メンバ変数
 	//--------------------------------------------------------------------
 	static int m_time;		// 時間
+	static int m_timeBG;	// 背景の時間
+	static int m_popIdxBG;	// 背景の出現した番号
 	static int m_pop;		// 出現数
 	static int m_interval;	// 間隔
 	static float m_move;	// 移動量
@@ -57,6 +60,7 @@ private:
 	//--------------------------------------------------------------------
 	int m_waveTime;		// ウェーブ用の時間
 	float m_inverse;	// 逆の動きするかどうか
+	float m_diePosZ;	// 破棄するZの位置
 };
 
 #endif

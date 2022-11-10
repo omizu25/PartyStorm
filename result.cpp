@@ -27,6 +27,7 @@
 #include "score.h"
 #include "ranking.h"
 #include "menu.h"
+#include "obstacle.h"
 
 //*****************************************************************************
 // 変数定義
@@ -134,28 +135,6 @@ HRESULT CResult::Init()
 		pSphere->SetRadius(5000.0f);
 		pSphere->SetSphereRange(D3DXVECTOR2(D3DX_PI * 2.0f, D3DX_PI * -0.5f));
 		pSphere->LoadTex(2);
-	}
-
-	{// モーションモデルの設定
-		CMotionModel3D *pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(400.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-
-		pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(-400.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-
-		pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(600.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-
-		pSnake = CMotionModel3D::Create();
-		pSnake->SetMotion("data/MOTION/snake.txt");
-		pSnake->SetPos(D3DXVECTOR3(-600.0f, 0.0f, 1000.0f));
-		pSnake->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 	}
 
 	// プレイヤーの設定
@@ -323,6 +302,9 @@ HRESULT CResult::Init()
 		pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
 	}
 
+	// 静的メンバ変数の初期化
+	CObstacle::InitStatic();
+
 	return S_OK;
 }
 
@@ -366,6 +348,9 @@ void CResult::Uninit()
 //=============================================================================
 void CResult::Update()
 {
+	// 背景の出現
+	CObstacle::PopBG();
+
 	int maxPlayer = CApplication::GetPersonCount();
 	
 	if (maxPlayer > 1)
