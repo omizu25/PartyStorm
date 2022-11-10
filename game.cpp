@@ -269,6 +269,10 @@ void CGame::Uninit()
 	// スコアの解放
 	Release();
 
+	// カメラの位置変更
+	CCamera *pCamera = CApplication::GetCamera();
+	pCamera->SetFollowTarget(nullptr, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f, 1.0f);
+
 	// エフェクトの終了
 	CEffect::ReleaseAll();
 }

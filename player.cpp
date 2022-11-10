@@ -281,6 +281,8 @@ void CPlayer::Update()
 			CFollowModel *pCameraTarget = CGame::GetCameraTarget();
 			pCameraTarget->SetFollow(false);
 			pCameraTarget->SetPos(CGame::CAMERA_POSR);
+			m_nVibCount = 0;
+			m_bVib = false;
 		}
 	}
 }
@@ -677,7 +679,10 @@ void CPlayer::Collison()
 						pCameraTarget->SetFollow(CGame::CAMERA_POSR);
 						pCameraTarget->SetSpeed(VIB_SPEED);
 						pCameraTarget->SetCoefficient(VIB_COEFFICIENT);
-						m_bVib = true;
+						if (!m_bVib)
+						{
+							m_bVib = true;
+						}
 					}
 				}
 			}
