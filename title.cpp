@@ -75,14 +75,14 @@ HRESULT CTitle::Init()
 
 	// タイトルロゴ
 	m_pTitleLogo = CObject2D::Create();
-	m_pTitleLogo->SetPos(D3DXVECTOR3(640.0f, 280.0f, 0.0f));
+	m_pTitleLogo->SetPos(D3DXVECTOR3(640.0f, 230.0f, 0.0f));
 	m_pTitleLogo->SetSize(D3DXVECTOR3(800.0f, 300.0f, 0.0f));
 	m_pTitleLogo->LoadTex(18);
 
 	// プレスオブジェクト
 	m_pPressAny = CObject2D::Create();
-	m_pPressAny->SetPos(D3DXVECTOR3(640.0f, 500.0f, 0.0f));
-	m_pPressAny->SetSize(D3DXVECTOR3(800.0f, 300.0f, 0.0f));
+	m_pPressAny->SetPos(D3DXVECTOR3(640.0f, 600.0f, 0.0f));
+	m_pPressAny->SetSize(D3DXVECTOR3(450.0f, 180.0f, 0.0f));
 	m_pPressAny->LoadTex(19);
 
 	// カメラの位置変更
@@ -176,14 +176,21 @@ void CTitle::Update()
 	if (nMaxPlayer <= 0)
 	{
 		nMaxPlayer = 1;
-		m_pPressAny->LoadTex(19);
+		m_pPressAny->LoadTex(34);
+		m_pPressAny->SetSize(D3DXVECTOR3(550.0f, 180.0f, 0.0f));
 	}
 	else
 	{
-		m_pPressAny->LoadTex(20);
+		m_pPressAny->LoadTex(33);
+		m_pPressAny->SetSize(D3DXVECTOR3(600.0f, 180.0f, 0.0f));
 	}
 
 	CApplication::SetPersonCount(nMaxPlayer);
+
+	/*if (pKeyboard->GetPress(DIK_P))
+	{
+		CApplication::SetNextMode(CApplication::MODE_TITLE);
+	}*/
 
 	if (m_bPressEnter)
 	{
@@ -242,5 +249,5 @@ void CTitle::FlashObj()
 		m_nCntFrame++;
 	}
 
-	m_pPressAny->SetCol(D3DXCOLOR(1.0f, 0.1f, 1.0f, sinf(m_fAddAlpha) * 3.0f));
+	m_pPressAny->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, sinf(m_fAddAlpha) * 3.0f));
 }

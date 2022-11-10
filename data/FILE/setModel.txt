@@ -33,81 +33,32 @@ END_MODELSET
 # ò
 #------------------------------------------------------------------------------
 MODELSET
-	TYPE = 17						# Ží—Þ
+	TYPE = 20						# Ží—Þ
 	POS = -260.0 0.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
+	ROT = 0.0 1.57 0.0				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET
-	TYPE = 17						# Ží—Þ
+	TYPE = 22						# Ží—Þ
+	POS = -260.0 50.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 3.14 1.75 -0.5			# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 22						# Ží—Þ
+	POS = -260.0 50.0 220.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 3.14 1.7 0.0				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = -260.0 0.0 0.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -2.0 -0.3				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+
+MODELSET
+	TYPE = 21						# Ží—Þ
 	POS = 260.0 0.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = -260.0 0.0 190.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = 260.0 0.0 190.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = -260.0 0.0 -120.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = 260.0 0.0 -120.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = -260.0 0.0 -430.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = 260.0 0.0 -430.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = -260.0 0.0 -740.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
-END_MODELSET
-
-MODELSET
-	TYPE = 17						# Ží—Þ
-	POS = 260.0 0.0 -740.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 0.0 0.0				# Œü‚«(‚w/‚x/‚y)
-	COLISON = 1						# “–‚½‚è”»’è‚ðs‚¤‚©”Û‚©
-	COLISON_POS = 0.0 40.0 0.0		# “–‚½‚è”»’è‚ÌˆÊ’u
+	ROT = 0.0 1.57 0.0				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
