@@ -41,10 +41,8 @@
 //=============================================================================
 CTitle::CTitle()
 {
-	m_nextMode = MODE_NONE;		// 次に設定するモード
 	m_pTitleLogo = nullptr;		// タイトルロゴオブジェクト
-	m_pNewGame = nullptr;		// ニューゲームオブジェクト
-	m_pExit = nullptr;			// 終了オブジェクト
+	m_pPressAny = nullptr;		// プレスオブジェクト
 	m_fAddAlpha = 0.0f;			// フレーム数のカウント
 	m_fAddSize = 0.0f;			// 大きさの参照値
 	m_nCntFrame = 0;			// フレームカウント
@@ -80,6 +78,12 @@ HRESULT CTitle::Init()
 	m_pTitleLogo->SetPos(D3DXVECTOR3(640.0f, 280.0f, 0.0f));
 	m_pTitleLogo->SetSize(D3DXVECTOR3(800.0f, 300.0f, 0.0f));
 	m_pTitleLogo->LoadTex(19);
+
+	// プレスオブジェクト
+	m_pPressAny = CObject2D::Create();
+	m_pPressAny->SetPos(D3DXVECTOR3(640.0f, 500.0f, 0.0f));
+	m_pPressAny->SetSize(D3DXVECTOR3(800.0f, 300.0f, 0.0f));
+	m_pPressAny->LoadTex(19);
 
 	// カメラの位置変更
 	CCamera *pCamera = CApplication::GetCamera();
@@ -165,34 +169,50 @@ void CTitle::Update()
 	m_pTitleLogo->SetSize(D3DXVECTOR3(sizeTitleLogo.x + sinf(m_fAddSize) * 3.0f,
 		sizeTitleLogo.y + sinf(m_fAddSize) * 2.0f, 0.0f));
 
+	FlashObj();
+
 	int nMaxPlayer = pJoy->GetUseJoyPad();
 
 	if (nMaxPlayer <= 0)
 	{
 		nMaxPlayer = 1;
+		m_pPressAny->LoadTex(19);
+	}
+	else
+	{
+		m_pPressAny->LoadTex(20);
 	}
 
 	CApplication::SetPersonCount(nMaxPlayer);
 
-	if (pJoy->GetUseJoyPad() > 0)
+	if (m_bPressEnter)
 	{
-		for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
+		if (pJoy->GetUseJoyPad() > 0)
 		{
-			if (pJoy->AnyButton(nCntPlayer))
+			for (int nCntPlayer = 0; nCntPlayer < nMaxPlayer; nCntPlayer++)
 			{
-				CApplication::SetNextMode(CApplication::MODE_GAME);
-				break;
+				if (pJoy->AnyButton(nCntPlayer))
+				{
+					m_bPressEnter = false;
+					break;
+				}
+			}
+		}
+		else
+		{
+			if (pKeyboard->GetUseAnyKey())
+			{
+				m_bPressEnter = false;
 			}
 		}
 	}
 	else
 	{
-		if (pKeyboard->GetUseAnyKey())
+		if (m_nCntFrame >= 60)
 		{
 			CApplication::SetNextMode(CApplication::MODE_GAME);
 		}
 	}
-	
 }
 
 //=============================================================================
@@ -203,4 +223,24 @@ void CTitle::Update()
 void CTitle::Draw()
 {
 
+}
+
+//=============================================================================
+// オブジェクトの点滅
+// Author : 唐﨑結斗
+// 概要 : 指定のオブジェクトを点滅させる
+//=============================================================================
+void CTitle::FlashObj()
+{
+	if (m_bPressEnter)
+	{
+		m_fAddAlpha += 0.07f;
+	}
+	else if (!m_bPressEnter)
+	{
+		m_fAddAlpha += 0.5f;
+		m_nCntFrame++;
+	}
+
+	m_pPressAny->SetCol(D3DXCOLOR(1.0f, 0.1f, 1.0f, sinf(m_fAddAlpha) * 3.0f));
 }

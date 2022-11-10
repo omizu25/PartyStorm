@@ -423,19 +423,26 @@ D3DXVECTOR3 CPlayer::Move()
 
 	if (pJoy->GetUseJoyPad() == 0)
 	{//キーボード
-		if (pKeyboard->GetPress(DIK_W)
+		if ((pKeyboard->GetPress(DIK_W)
 			|| pKeyboard->GetPress(DIK_A)
 			|| pKeyboard->GetPress(DIK_D)
 			|| pKeyboard->GetPress(DIK_S))
+			|| (pKeyboard->GetPress(DIK_UP)
+			|| pKeyboard->GetPress(DIK_LEFT)
+			|| pKeyboard->GetPress(DIK_RIGHT)
+			|| pKeyboard->GetPress(DIK_DOWN)))
 		{// 移動キーが押された
-			if (pKeyboard->GetPress(DIK_W))
+			if (pKeyboard->GetPress(DIK_W)
+				|| pKeyboard->GetPress(DIK_UP))
 			{// [W]キーが押された時
-				if (pKeyboard->GetPress(DIK_A))
+				if (pKeyboard->GetPress(DIK_A)
+					|| pKeyboard->GetPress(DIK_LEFT))
 				{// [A]キーが押された時
 				 // 移動方向の更新
 					m_rotDest.y = D3DX_PI * -0.25f;
 				}
-				else if (pKeyboard->GetPress(DIK_D))
+				else if (pKeyboard->GetPress(DIK_D)
+					|| pKeyboard->GetPress(DIK_RIGHT))
 				{// [D]キーが押された時
 				 // 移動方向の更新
 					m_rotDest.y = D3DX_PI * 0.25f;
@@ -445,14 +452,17 @@ D3DXVECTOR3 CPlayer::Move()
 					m_rotDest.y = D3DX_PI * 0.0f;
 				}
 			}
-			else if (pKeyboard->GetPress(DIK_S))
+			else if (pKeyboard->GetPress(DIK_S)
+				|| pKeyboard->GetPress(DIK_DOWN))
 			{// [S]キーが押された時
-				if (pKeyboard->GetPress(DIK_A))
+				if (pKeyboard->GetPress(DIK_A)
+					|| pKeyboard->GetPress(DIK_LEFT))
 				{// [A]キーが押された時
 				 // 移動方向の更新
 					m_rotDest.y = D3DX_PI * -0.75f;
 				}
-				else if (pKeyboard->GetPress(DIK_D))
+				else if (pKeyboard->GetPress(DIK_D)
+					|| pKeyboard->GetPress(DIK_RIGHT))
 				{// [D]キーが押された時
 				 // 移動方向の更新
 					m_rotDest.y = D3DX_PI * 0.75f;
@@ -462,12 +472,14 @@ D3DXVECTOR3 CPlayer::Move()
 					m_rotDest.y = D3DX_PI;
 				}
 			}
-			else if (pKeyboard->GetPress(DIK_A))
+			else if (pKeyboard->GetPress(DIK_A)
+				|| pKeyboard->GetPress(DIK_LEFT))
 			{// [A]キーが押された時
 			 // 移動方向の更新
 				m_rotDest.y = D3DX_PI * -0.5f;
 			}
-			else if (pKeyboard->GetPress(DIK_D))
+			else if (pKeyboard->GetPress(DIK_D)
+				|| pKeyboard->GetPress(DIK_RIGHT))
 			{// [D]キーが押された時
 			 // 移動方向の更新
 				m_rotDest.y = D3DX_PI * 0.5f;
