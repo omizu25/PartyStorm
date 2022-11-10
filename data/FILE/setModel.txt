@@ -7,25 +7,37 @@
 #------------------------------------------------------------------------------
 MODELSET
 	TYPE = 14					# Ží—Þ
-	POS = -330.30 0.0 300.0		# ˆÊ’u(‚w/‚x/‚y)
+	POS = -430.30 0.0 300.0		# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 10.0 50.0			# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET
 	TYPE = 14					# Ží—Þ
-	POS = 400.0 50.0 600.0		# ˆÊ’u(‚w/‚x/‚y)
+	POS = 500.0 50.0 600.0		# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 0.0 3.0			# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET
 	TYPE = 15						# Ží—Þ
-	POS = 500.0 0.0 200.0			# ˆÊ’u(‚w/‚x/‚y)
+	POS = 800.0 0.0 2200.0			# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 0.8 1.0				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET
 	TYPE = 15						# Ží—Þ
-	POS = -500.0 10.0 200.0			# ˆÊ’u(‚w/‚x/‚y)
+	POS = -900.0 10.0 2400.0		# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -2.0 2.36				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 15						# Ží—Þ
+	POS = 900.0 -50.0 2000.0		# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -0.2 -0.8				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 15						# Ží—Þ
+	POS = -900.0 10.0 2400.0		# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 -2.0 2.36				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
@@ -34,31 +46,133 @@ END_MODELSET
 #------------------------------------------------------------------------------
 MODELSET
 	TYPE = 20						# Ží—Þ
-	POS = -260.0 0.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
+	POS = -300.0 0.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 1.57 0.0				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET
 	TYPE = 22						# Ží—Þ
-	POS = -260.0 50.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
+	POS = -300.0 50.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 3.14 1.75 -0.5			# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET
 	TYPE = 22						# Ží—Þ
-	POS = -260.0 50.0 220.0			# ˆÊ’u(‚w/‚x/‚y)
+	POS = -300.0 50.0 220.0			# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 3.14 1.7 0.0				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
 MODELSET
 	TYPE = 20						# Ží—Þ
-	POS = -260.0 0.0 0.0			# ˆÊ’u(‚w/‚x/‚y)
+	POS = -300.0 0.0 0.0			# ˆÊ’u(‚w/‚x/‚y)
 	ROT = 0.0 -2.0 -0.3				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
 
+MODELSET
+	TYPE = 21						# Ží—Þ
+	POS = -300.0 0.0 -50.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 1.8 0.2				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 22						# Ží—Þ
+	POS = -310.0 0.0 -180.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = -0.74 -1.57 -0.2			# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = -300.0 0.0 -280.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.5 1.57 -0.5				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
 
 MODELSET
 	TYPE = 21						# Ží—Þ
-	POS = 260.0 0.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
-	ROT = 0.0 1.57 0.0				# Œü‚«(‚w/‚x/‚y)
+	POS = -300.0 0.0 -360.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 1.8 0.2				# Œü‚«(‚w/‚x/‚y)
 END_MODELSET
+
+MODELSET
+	TYPE = 22						# Ží—Þ
+	POS = -310.0 0.0 -500.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.2 -1.57 0.5				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = -300.0 0.0 -700.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 1.57 0.2				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = -300.0 0.0 -620.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 1.57 -0.2				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = 300.0 0.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -1.57 0.0				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 22						# Ží—Þ
+	POS = 300.0 50.0 500.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 3.14 -1.75 -0.5			# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 22						# Ží—Þ
+	POS = 300.0 50.0 220.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 3.14 -1.7 0.0				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = 300.0 0.0 0.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 2.0 -0.3				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 21						# Ží—Þ
+	POS = 300.0 0.0 -50.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -1.8 0.2				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 22						# Ží—Þ
+	POS = 310.0 0.0 -180.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = -0.74 1.57 -0.2			# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = 300.0 0.0 -280.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.5 -1.57 -0.5			# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 21						# Ží—Þ
+	POS = -300.0 0.0 -360.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -1.8 0.2				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 22						# Ží—Þ
+	POS = 290.0 0.0 -500.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.2 1.57 -0.5				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = 300.0 0.0 -700.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -1.57 0.2				# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
+MODELSET
+	TYPE = 20						# Ží—Þ
+	POS = 300.0 0.0 -620.0			# ˆÊ’u(‚w/‚x/‚y)
+	ROT = 0.0 -1.57 -0.2			# Œü‚«(‚w/‚x/‚y)
+END_MODELSET
+
