@@ -55,8 +55,10 @@ bool CResult::m_dead[4] = {};			// 死亡したかどうか
 // コンストラクタ
 //=============================================================================
 CResult::CResult() :
+	m_mode(CApplication::MODE_GAME),
 	m_time(0),
-	m_pop(false)
+	m_pop(false),
+	m_pressEnter(false)
 {
 }
 
@@ -91,11 +93,31 @@ void CResult::SetDead(int numPlayer)
 //=============================================================================
 HRESULT CResult::Init()
 {
-	// サウンド情報の取得
-	CSound *pSound = CApplication::GetSound();
+	m_mode = CApplication::MODE_GAME;
+	m_pressEnter = false;
 
-	// リザルトBGMの再生
-	pSound->PlaySound(CSound::SOUND_LABEL_RESULTBGM);
+	{// サウンドの設定
+		int gameover = 0;
+		int maxPlayer = CApplication::GetPersonCount();
+
+		for (int i = 0; i < maxPlayer; i++)
+		{
+			if (m_dead[i])
+			{// 死亡した
+				gameover++;
+			}
+		}
+
+		if (gameover == maxPlayer &&
+			maxPlayer > 1)
+		{// 全員死亡
+			CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_GAMEOVERBGM);
+		}
+		else
+		{
+			CApplication::GetSound()->PlaySound(CSound::SOUND_LABEL_RESULTBGM);
+		}
+	}
 
 	{// カメラの位置変更
 		CCamera *pCamera = CApplication::GetCamera();
@@ -362,26 +384,47 @@ void CResult::Update()
 		Single();
 	}
 
-	if (m_pMenu != nullptr)
-	{// 選択
-		int select = m_pMenu->Select();
+	if (!m_pressEnter)
+	{// エンターが押されていない
+		if (m_pMenu != nullptr)
+		{// 選択
+			int mode = m_pMenu->Select();
 
-		switch (select)
+			switch (mode)
+			{
+			case -1:
+				break;
+
+			case 0:
+				m_mode = CApplication::MODE_GAME;
+				m_pressEnter = true;
+				m_time = 0;
+				break;
+
+			case 1:
+				m_mode = CApplication::MODE_TITLE;
+				m_pressEnter = true;
+				m_time = 0;
+				break;
+
+			default:
+				assert(false);
+				break;
+			}
+		}
+	}
+	else
+	{// エンターが押された
+
+		if (m_pMenu != nullptr)
+		{// 選択
+			// 色の変更
+			m_pMenu->ColorChange();
+		}
+
+		if (m_time >= 60)
 		{
-		case -1:
-			break;
-
-		case 0:
-			CApplication::SetNextMode(CApplication::MODE_GAME);
-			break;
-
-		case 1:
-			CApplication::SetNextMode(CApplication::MODE_TITLE);
-			break;
-
-		default:
-			assert(false);
-			break;
+			CApplication::SetNextMode(m_mode);
 		}
 	}
 }
@@ -400,7 +443,10 @@ void CResult::Single()
 {
 	// エフェクトの更新
 	CEffect::UpdateAll();
+
+	m_time++;
 }
+
 
 //=============================================================================
 // マルチ

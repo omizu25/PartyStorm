@@ -40,6 +40,7 @@
 #include "time.h"
 #include "follow_model.h"
 #include "sound.h"
+#include "pause.h"
 #include "result.h"
 
 //--------------------------------------------------------------------
@@ -157,15 +158,17 @@ HRESULT CGame::Init()
 
 	// タイムの設定
 	m_pTime = CTime::Create();
-	m_pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
 
 	if (nMaxPlayer > 1)
 	{// マルチプレイ
 		m_pTime->SetTime(60);
+		m_pTime->SetPos(D3DXVECTOR3(640.0f, 75.0f, 0.0f));
+		m_pTime->SetSize(D3DXVECTOR3(200.0f, 300.0f, 0.0f));
 	}
 	else
 	{// シングルプレイ
 		m_pTime->SetTime(0);
+		m_pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
 	}
 
 	// カウントダウンの設定
@@ -298,6 +301,9 @@ void CGame::Update()
 	{// ゲームを終わる
 		m_bGame = false;
 		m_pTime->StopTime(true);
+
+		// ポーズできなくする
+		CApplication::GetPause()->SetSelect(false);
 	}
 
 	if (!m_bGame)

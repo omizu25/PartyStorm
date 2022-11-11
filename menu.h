@@ -49,7 +49,8 @@ public:
 	D3DXVECTOR3 GetRot()  override { return m_rot; }								// 向きのゲッター
 	void SetSize(const D3DXVECTOR3 &size) override;									// 大きさのセッター
 	D3DXVECTOR3 GetSize()  override { return m_size; }								// 大きさのゲッター
-	int Select();	// 選択
+	int Select();		// 選択
+	void ColorChange();	// 色の変更
 	void CMenu::SetTexture(int idx, int texIdx);	// テクスチャの設定
 	void SetFrame(const D3DXVECTOR3& size, const D3DXCOLOR& col);	// 枠の設定
 	int GetSelectIdx();	// 選択されている番号の取得

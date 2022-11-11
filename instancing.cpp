@@ -199,10 +199,6 @@ void CInstancing::Draw()
 	// ライトを無効にする
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
 	{// エフェクトの情報取得
 		D3DXVECTOR4* worldPos = new D3DXVECTOR4[numAll];	// ワールド座標位置バッファ
 		D3DXCOLOR* col = new D3DXCOLOR[numAll];

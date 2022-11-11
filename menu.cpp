@@ -200,13 +200,8 @@ int CMenu::Select()
 		}
 	}
 
-	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
-	float sinCurve = (sinf((m_time * m_cycle) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
-	col.a = 1.0f - (sinCurve * 0.7f);
-
-	// 色の設定
-	m_pOption[m_selectIdx]->SetCol(col);
+	// 色の変更
+	ColorChange();
 
 	if (!bJoypad)
 	{
@@ -235,6 +230,20 @@ int CMenu::Select()
 	}
 
 	return -1;
+}
+
+//--------------------------------------------------
+// 色の変更
+//--------------------------------------------------
+void CMenu::ColorChange()
+{
+	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+	float sinCurve = (sinf((m_time * m_cycle) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
+	col.a = 1.0f - (sinCurve * 0.7f);
+
+	// 色の設定
+	m_pOption[m_selectIdx]->SetCol(col);
 }
 
 //--------------------------------------------------

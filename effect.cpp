@@ -18,7 +18,7 @@
 //==================================================
 const int CEffect::MAX_EXPLOSION = 3000;
 const int CEffect::MAX_LIFE = 100;
-const int CEffect::STD_MOVE = 50;
+const int CEffect::STD_MOVE = 75;
 const float CEffect::STD_SIZE = 12.0f;
 
 //==================================================
@@ -109,7 +109,7 @@ CEffect** CEffect::GetEffect()
 //--------------------------------------------------
 void CEffect::Explosion(const D3DXVECTOR3& pos)
 {
-	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 0.1f, 1.0f);
+	D3DXCOLOR col = D3DXCOLOR(1.0f, 0.1f, 0.1f, 1.0f);
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	
 	int max = STD_MOVE * 2;

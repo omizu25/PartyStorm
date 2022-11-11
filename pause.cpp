@@ -377,6 +377,7 @@ void CPause::SetPause(const bool bPause)
 		m_pTitleObj->Uninit();
 	}
 
+	m_nextMode = MODE_RETURN;
 	m_fCycle = 0.025f;
 	CObject::SetPause(m_bPause);
 }
