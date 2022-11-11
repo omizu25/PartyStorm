@@ -131,8 +131,6 @@ void CMenu::Draw()
 //--------------------------------------------------
 int CMenu::Select()
 {
-	m_time++;
-
 	// “ü—Íî•ñ‚Ìæ“¾
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 	CJoypad *pJoypad = CApplication::GetJoy();
@@ -237,6 +235,8 @@ int CMenu::Select()
 //--------------------------------------------------
 void CMenu::ColorChange()
 {
+	m_time++;
+
 	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 	float sinCurve = (sinf((m_time * m_cycle) * (D3DX_PI * 2.0f)) + 1.0f) * 0.5f;
