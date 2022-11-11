@@ -172,6 +172,81 @@ D3DXVECTOR3 CJoypad::GetStick(JOYKEY Key, int nPlayer)
 	return m_pJoyPad[nPlayer].joyStickPos;
 }
 
+
+//=============================================================================
+// スティックプレス処理
+// Author : 唐﨑結斗
+// 概要 : スティック入力計算を行い結果を返す
+//=============================================================================
+bool CJoypad::GetStickPress(JOYKEY Key, bool RightLeft, int nPlayer)
+{
+	JOYKEY stick = JOYKEY_LEFT_STICK;
+
+	if (RightLeft)
+	{// 右
+		stick = JOYKEY_RIGHT_STICK;
+	}
+	else
+	{// 左
+		stick = JOYKEY_LEFT_STICK;
+	}
+
+
+	D3DXVECTOR3 pos = GetStick(stick, nPlayer);	//現在の傾きの取得
+	pos.y *= -1.0f;//Yを分かりやすくするために＋－を反転
+
+	if (pos.y > 0.5f
+		&& JOYKEY_UP == Key)
+	{
+		return true;
+	}
+	else if (pos.x > 0.5f
+		&& JOYKEY_RIGHT == Key)
+	{
+		return true;
+	}
+	else if (pos.y < -0.5f
+		&& JOYKEY_DOWN == Key)
+	{
+		return true;
+	}
+	else if (pos.x < -0.5f
+		&& JOYKEY_LEFT == Key)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+//=============================================================================
+// スティック入力処理
+// Author : 唐﨑結斗
+// 概要 : スティック入力計算を行い結果を返す
+//=============================================================================
+bool CJoypad::GetStickTrigger(JOYKEY Key, bool RightLeft, int nPlayer)
+{
+	if (GetStickPress(Key, RightLeft, nPlayer)
+		&& Key != m_oldKey[nPlayer][RightLeft])
+	{
+		m_oldKey[nPlayer][RightLeft] = Key;
+		return true;
+	}
+	else if (GetStickPress(Key, RightLeft, nPlayer)
+		&& Key == m_oldKey[nPlayer][RightLeft])
+	{
+		return false;
+	}
+	else if (!GetStickPress(Key, RightLeft, nPlayer)
+		&& Key != m_oldKey[nPlayer][RightLeft])
+	{
+		return false;
+	}
+
+	m_oldKey[nPlayer][RightLeft] = JOYKEY_MAX;
+	return false;
+}
+
 //=============================================================================
 // ペダル入力処理
 // Author : 唐﨑結斗

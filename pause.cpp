@@ -474,7 +474,8 @@ void CPause::SelectMode()
 	{
 		for (int nCntJoy = 0; nCntJoy < pJoypad->GetUseJoyPad(); nCntJoy++)
 		{
-			if (pJoypad->GetTrigger(CJoypad::JOYKEY_UP, nCntJoy))
+			if (pJoypad->GetTrigger(CJoypad::JOYKEY_UP, nCntJoy) ||
+				pJoypad->GetStickTrigger(CJoypad::JOYKEY_UP, false, nCntJoy))
 			{
 				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 				nMode--;
@@ -484,7 +485,8 @@ void CPause::SelectMode()
 					nMode = 2;
 				}
 			}
-			else if (pJoypad->GetTrigger(CJoypad::JOYKEY_DOWN, nCntJoy))
+			else if (pJoypad->GetTrigger(CJoypad::JOYKEY_DOWN, nCntJoy) ||
+				pJoypad->GetStickTrigger(CJoypad::JOYKEY_DOWN, false, nCntJoy))
 			{
 				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 				nMode++;

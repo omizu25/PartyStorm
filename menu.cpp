@@ -158,11 +158,13 @@ int CMenu::Select()
 		{
 			for (int nCntPlayer = 0; nCntPlayer < pJoypad->GetUseJoyPad(); nCntPlayer++)
 			{
-				if (pJoypad->GetTrigger(CJoypad::JOYKEY_UP, nCntPlayer))
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_UP, nCntPlayer) ||
+					pJoypad->GetStickTrigger(CJoypad::JOYKEY_UP, false, nCntPlayer))
 				{// 上キーが押された
 					Add(-1);
 				}
-				if (pJoypad->GetTrigger(CJoypad::JOYKEY_DOWN, nCntPlayer))
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_DOWN, nCntPlayer) ||
+					pJoypad->GetStickTrigger(CJoypad::JOYKEY_DOWN, false, nCntPlayer))
 				{// 下キーが押された
 					Add(1);
 				}
@@ -186,11 +188,13 @@ int CMenu::Select()
 		{
 			for (int nCntPlayer = 0; nCntPlayer < pJoypad->GetUseJoyPad(); nCntPlayer++)
 			{
-				if (pJoypad->GetTrigger(CJoypad::JOYKEY_LEFT, nCntPlayer))
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_LEFT, nCntPlayer) ||
+					pJoypad->GetStickTrigger(CJoypad::JOYKEY_LEFT, false, nCntPlayer))
 				{// 左キーが押された
 					Add(-1);
 				}
-				if (pJoypad->GetTrigger(CJoypad::JOYKEY_RIGHT, nCntPlayer))
+				if (pJoypad->GetTrigger(CJoypad::JOYKEY_RIGHT, nCntPlayer) ||
+					pJoypad->GetStickTrigger(CJoypad::JOYKEY_RIGHT, false, nCntPlayer))
 				{// 右キーが押された
 					Add(1);
 				}

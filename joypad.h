@@ -86,15 +86,17 @@ public:
 	//--------------------------------------------------------------------
 	// メンバ関数
 	//--------------------------------------------------------------------
-	HRESULT Init(const int nMax);										// 入力処理全部の初期化
-	void Uninit(void);													// 入力処理全部の終了処理
-	void Update(void);													// 入力処理全部の更新処理
-	bool GetPress(JOYKEY Key, int nPlayer);								// ジョイパッドプレス処理
-	bool GetTrigger(JOYKEY Key, int nPlayer);							// ジョイパッドトリガー処理
-	D3DXVECTOR3 GetStick(JOYKEY Key, int nPlayer);						// ジョイパッドスティック処理
-	int GetTriggerPedal(JOYKEY Key, int nPlayer);						// ジョイパッドトリガーペダル処理
-	void Vibration(int nTime, WORD nStrength, int nPlayer);				// ジョイパッド振動制御
-	int GetUseJoyPad() { return m_nUseJoyPad; }							// コントローラーの使用数の取得
+	HRESULT Init(const int nMax);										// 初期化
+	void Uninit(void);													// 終了
+	void Update(void);													// 更新
+	bool GetPress(JOYKEY Key, int nPlayer);								// プレス
+	bool GetTrigger(JOYKEY Key, int nPlayer);							// トリガー
+	D3DXVECTOR3 GetStick(JOYKEY Key, int nPlayer);						// スティック
+	bool GetStickPress(JOYKEY Key, bool RightLeft, int nPlayer);		// スティックプレス
+	bool GetStickTrigger(JOYKEY Key, bool RightLeft, int nPlayer);		// スティックトリガー
+	int GetTriggerPedal(JOYKEY Key, int nPlayer);						// トリガーペダル
+	void Vibration(int nTime, WORD nStrength, int nPlayer);				// 振動制御
+	int GetUseJoyPad() { return m_nUseJoyPad; }							// 使用数の取得
 	float GetStickAngle(JOYKEY Key, int nPlayer);						// スティックの傾きの取得
 	bool Stick(JOYKEY Key, int nPlayer, float fDeadZone);				// スティックの使用状況の取得
 	bool AnyButton(int nPlayer);										// すべてのボタンの判定取得
@@ -106,6 +108,7 @@ private:
 	LPDIRECTINPUT8			m_pInput;					// DirectInputオブジェクトへのポインタ
 	LPDIRECTINPUTDEVICE8	m_pDevJoypad;				// 入力デバイス（キーボード（コントローラー用は別に作る））へのポインタ
 	JOYPAD					*m_pJoyPad;					// ジョイパッド情報
+	JOYKEY					m_oldKey[4][2];				//ジョイスティックの前回の傾き
 	int						m_nMax;						// コントローラーの使用可能数
 	int						m_nUseJoyPad;				// 使用しているコントローラー数
 };
