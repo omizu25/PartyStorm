@@ -175,7 +175,7 @@ void CPause::Update()
 						}
 					}
 				}
-				
+
 				if (bPause)
 				{
 					pSound->PlaySound(CSound::SOUND_LABEL_SE_DECIDE);
@@ -185,8 +185,33 @@ void CPause::Update()
 				}
 			}
 
+			if (m_bPressEnter)
+			{
+				if (!bJoypad)
+				{
+					bPause = pKeyboard->GetTrigger(DIK_P);
+				}
+				else
+				{
+					for (int nCntJoy = 0; nCntJoy < pJoypad->GetUseJoyPad(); nCntJoy++)
+					{
+						bPause = pJoypad->GetTrigger(CJoypad::JOYKEY_START, nCntJoy);
+
+						if (bPause)
+						{
+							break;
+						}
+					}
+				}
+
+				if (bPause)
+				{
+					SetPause(false);
+				}
+			}
+
 			if (!m_bPressEnter
-				&& m_nCntFrame >= 40)
+				&& m_nCntFrame >= 60)
 			{
 				m_bPressEnter = true;
 				m_nCntFrame = 0;
@@ -212,29 +237,6 @@ void CPause::Update()
 					break;
 				}
 			}
-
-			if (!bJoypad)
-			{
-				bPause = pKeyboard->GetTrigger(DIK_P);
-			}
-			else
-			{
-				for (int nCntJoy = 0; nCntJoy < pJoypad->GetUseJoyPad(); nCntJoy++)
-				{
-					bPause = pJoypad->GetTrigger(CJoypad::JOYKEY_START, nCntJoy);
-
-					if (bPause)
-					{
-						break;
-					}
-				}
-			}
-
-			if (bPause)
-			{
-				SetPause(false);
-			}
-
 		}
 		else if (!m_bPause)
 		{
