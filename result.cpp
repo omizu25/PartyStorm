@@ -456,12 +456,12 @@ void CResult::Multi()
 	// エフェクトの更新
 	CEffect::UpdateAll();
 
+	m_time++;
+
 	if (m_pop)
 	{// 出現した
 		return;
 	}
-
-	m_time++;
 
 	if (m_time >= POP_TIME)
 	{// 出現する時間を越した
