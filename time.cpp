@@ -21,7 +21,7 @@
 #include "texture.h"
 #include "game.h"
 #include "player.h"
-#include "obstacle.h"
+#include "obstacle_manager.h"
 #include "pause.h"
 
 //=============================================================================
@@ -143,14 +143,11 @@ void CTime::Update()
 					pPlayer[i]->SetAction(true);
 				}
 
-
-				CTime* pTime = CGame::GetTime();
-
 				// 時間が進む
-				pTime->StopTime(false);
+				CGame::GetTime()->StopTime(false);
 
 				// 出現する
-				CObstacle::Stop(false);
+				CGame::GetObstacle()->SetStop(false);
 
 				// ポーズできる
 				CApplication::GetPause()->SetSelect(true);
@@ -186,7 +183,7 @@ void CTime::Update()
 					CGame::SetGame(false);
 
 					// 出現する
-					CObstacle::Stop(true);
+					CGame::GetObstacle()->SetStop(true);
 
 					// ポーズできなくする
 					CApplication::GetPause()->SetSelect(false);
@@ -309,13 +306,11 @@ void CTime::SetCountDown()
 		pPlayer[i]->SetAction(false);
 	}
 
-	CTime* pTime = CGame::GetTime();
-
 	// 時間の停止
-	pTime->StopTime(true);
+	CGame::GetTime()->StopTime(true);
 
 	// 出現の停止
-	CObstacle::Stop(true);
+	CGame::GetObstacle()->SetStop(true);
 
 	// ポーズできなくする
 	CApplication::GetPause()->SetSelect(false);

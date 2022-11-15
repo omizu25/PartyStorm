@@ -33,7 +33,7 @@
 #include "mesh.h"
 #include "sphere.h"
 #include "model_obj.h"
-#include "obstacle.h"
+#include "obstacle_manager.h"
 
 //=============================================================================
 // コンストラクタ
@@ -185,10 +185,10 @@ HRESULT CTitle::Init()
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
 
-	m_fCycle = 0.01f;
+	// 障害物の背景
+	CObstacleManager::Create();
 
-	// 静的メンバの初期化
-	CObstacle::InitStatic();
+	m_fCycle = 0.01f;
 
 	return S_OK;
 }
@@ -214,9 +214,6 @@ void CTitle::Uninit()
 //=============================================================================
 void CTitle::Update()
 {
-	// 背景の出現
-	CObstacle::PopBG();
-
 	// 入力情報の取得
 	CKeyboard *pKeyboard = CApplication::GetKeyboard();
 

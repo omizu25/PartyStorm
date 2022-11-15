@@ -29,6 +29,7 @@
 #include "player.h"
 #include "Shark.h"
 #include "obstacle.h"
+#include "obstacle_manager.h"
 #include "move.h"
 
 #include "effect.h"
@@ -58,6 +59,7 @@ CScore *CGame::m_pScore = nullptr;						// スコアクラス
 CTime *CGame::m_pTime = nullptr;						// タイムクラス
 CMesh3D *CGame::m_pMesh3D;								// メッシュクラス
 CFollowModel *CGame::m_pCameraTarget = nullptr;			// カメラターゲット
+CObstacleManager *CGame::m_pObstacle = nullptr;			// 障害物のマネージャー
 bool CGame::m_bGame = false;							// ゲームの状況
 
 //=============================================================================
@@ -156,6 +158,10 @@ HRESULT CGame::Init()
 		pMove->SetMoving(1.0f, 8.5f, 0.5f, 0.1f);
 	}
 
+	// 障害物
+	m_pObstacle = CObstacleManager::Create();
+	m_pObstacle->SetGame(true);
+
 	// タイムの設定
 	m_pTime = CTime::Create();
 
@@ -170,10 +176,6 @@ HRESULT CGame::Init()
 		m_pTime->SetTime(0);
 		m_pTime->SetPos(D3DXVECTOR3(640.0f, 50.0f, 0.0f));
 	}
-
-	// カウントダウンの設定
-	CTime* pCountDown = CTime::Create();
-	pCountDown->SetCountDown();
 	
 	//サメ設定
 	m_pEnemyShark = CEnemyShark::Create();
@@ -204,11 +206,12 @@ HRESULT CGame::Init()
 		pObj->LoadTex(30);
 	}
 
+	// カウントダウンの設定
+	CTime* pCountDown = CTime::Create();
+	pCountDown->SetCountDown();
+
 	// モデルの設置
 	CModelObj::LoadFile("data/FILE/setModel.txt");
-
-	// 静的メンバ変数の初期化
-	CObstacle::InitStatic();
 
 	// 死亡の初期化
 	CResult::InitDead();
@@ -265,13 +268,7 @@ void CGame::Uninit()
 // 概要 : 更新を行う
 //=============================================================================
 void CGame::Update()
-{// キーボードの取得
-	// 障害物
-	CObstacle::Pop();
-
-	// 背景の出現
-	CObstacle::PopBG();
-
+{
 	// エフェクトの更新
 	CEffect::UpdateAll();
 

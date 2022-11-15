@@ -27,7 +27,7 @@
 #include "score.h"
 #include "ranking.h"
 #include "menu.h"
-#include "obstacle.h"
+#include "obstacle_manager.h"
 
 //*****************************************************************************
 // •Ï”’è‹`
@@ -324,8 +324,8 @@ HRESULT CResult::Init()
 		pEnemyShark->SetRot(D3DXVECTOR3(D3DX_PI * 0.05f, 0.0f, 0.0f));
 	}
 
-	// Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
-	CObstacle::InitStatic();
+	// áŠQ•¨‚Ì”wŒi
+	CObstacleManager::Create();
 
 	return S_OK;
 }
@@ -370,9 +370,6 @@ void CResult::Uninit()
 //=============================================================================
 void CResult::Update()
 {
-	// ”wŒi‚ÌoŒ»
-	CObstacle::PopBG();
-
 	int maxPlayer = CApplication::GetPersonCount();
 	
 	if (maxPlayer > 1)

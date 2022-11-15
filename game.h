@@ -23,6 +23,7 @@ class CScore;
 class CTime;
 class CFollowModel;
 class CObject2D;
+class CObstacleManager;
 
 //=============================================================================
 // ゲームクラス
@@ -47,6 +48,7 @@ public:
 	static CTime *GetTime() { return m_pTime; }								// タイムのゲッター
 	static CPlayer **GetPlayer() { return m_pPlayer; }						// プレイヤーのゲッター
 	static CFollowModel *GetCameraTarget() { return m_pCameraTarget; }		// カメラターゲットのゲッター
+	static CObstacleManager *GetObstacle() { return m_pObstacle; }			// 障害物のマネージャーのゲッター
 
 	//--------------------------------------------------------------------
 	// コンストラクタとデストラクタ
@@ -63,6 +65,7 @@ public:
 	static CScore *m_pScore;					// スコアクラス
 	static CTime *m_pTime;						// タイムクラス
 	static CFollowModel *m_pCameraTarget;		// カメラターゲット
+	static CObstacleManager *m_pObstacle;		// 障害物のマネージャー
 	static bool m_bGame;						// ゲームの状況
 
 	//--------------------------------------------------------------------

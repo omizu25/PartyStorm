@@ -183,6 +183,7 @@
     <ClInclude Include="object2D.h" />
     <ClInclude Include="object3D.h" />
     <ClInclude Include="obstacle.h" />
+    <ClInclude Include="obstacle_manager.h" />
     <ClInclude Include="parts.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="player.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="object3D.cpp" />
     <ClCompile Include="obstacle.cpp" />
+    <ClCompile Include="obstacle_manager.cpp" />
     <ClCompile Include="parts.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="player.cpp" />
