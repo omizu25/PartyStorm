@@ -36,19 +36,19 @@ public:
 	//--------------------------------------------------------------------
 	// 定数定義
 	//--------------------------------------------------------------------
-	static const D3DXVECTOR3 CAMERA_POSV;		// 視点
-	static const D3DXVECTOR3 CAMERA_POSR;		// 注視点
+	static const D3DXVECTOR3 CAMERA_POSV;	// 視点
+	static const D3DXVECTOR3 CAMERA_POSR;	// 注視点
 
 	//--------------------------------------------------------------------
 	// 静的メンバ関数
 	//--------------------------------------------------------------------
-	static void SetGame(const bool bGame) { m_bGame = bGame; }				// ゲームの状況の設定
-	static bool GetGame() { return m_bGame; }								// ゲームの状況のゲッター
-	static CMesh3D *GetMesh() { return m_pMesh3D; }							// メッシュのゲッター
-	static CTime *GetTime() { return m_pTime; }								// タイムのゲッター
-	static CPlayer **GetPlayer() { return m_pPlayer; }						// プレイヤーのゲッター
-	static CFollowModel *GetCameraTarget() { return m_pCameraTarget; }		// カメラターゲットのゲッター
-	static CObstacleManager *GetObstacle() { return m_pObstacle; }			// 障害物のマネージャーのゲッター
+	static void SetGame(const bool bGame) { m_bGame = bGame; }			// ゲームの状況の設定
+	static bool GetGame() { return m_bGame; }							// ゲームの状況のゲッター
+	static CMesh3D *GetMesh() { return m_pMesh3D; }						// メッシュのゲッター
+	static CTime *GetTime() { return m_pTime; }							// タイムのゲッター
+	static CPlayer **GetPlayer() { return m_pPlayer; }					// プレイヤーのゲッター
+	static CFollowModel *GetCameraTarget() { return m_pCameraTarget; }	// カメラターゲットのゲッター
+	static CObstacleManager *GetObstacle() { return m_pObstacle; }		// 障害物のマネージャーのゲッター
 
 	//--------------------------------------------------------------------
 	// コンストラクタとデストラクタ
@@ -57,24 +57,31 @@ public:
 	~CGame() override;
 
 	//--------------------------------------------------------------------
-	// 静的メンバ変数
+	// メンバ関数
 	//--------------------------------------------------------------------
-	static CPlayer **m_pPlayer;					// プレイヤークラス
-	static CEnemyShark *m_pEnemyShark;			// サメ敵
-	static CMesh3D *m_pMesh3D;					// メッシュクラス
-	static CScore *m_pScore;					// スコアクラス
-	static CTime *m_pTime;						// タイムクラス
-	static CFollowModel *m_pCameraTarget;		// カメラターゲット
-	static CObstacleManager *m_pObstacle;		// 障害物のマネージャー
-	static bool m_bGame;						// ゲームの状況
+	HRESULT Init() override;	// 初期化
+	void Uninit() override;		// 終了
+	void Update() override;		// 更新
+	void Draw() override;		// 描画
 
+private:
 	//--------------------------------------------------------------------
 	// メンバ関数
 	//--------------------------------------------------------------------
-	HRESULT Init() override;					// 初期化
-	void Uninit() override;						// 終了
-	void Update() override;						// 更新
-	void Draw() override;						// 描画
+	void ObjChange();	// オブジェクトの変更
+	void Dead();		// 死亡判定
+
+	//--------------------------------------------------------------------
+	// 静的メンバ変数
+	//--------------------------------------------------------------------
+	static CPlayer **m_pPlayer;				// プレイヤークラス
+	static CEnemyShark *m_pEnemyShark;		// サメ敵
+	static CMesh3D *m_pMesh3D;				// メッシュクラス
+	static CScore *m_pScore;				// スコアクラス
+	static CTime *m_pTime;					// タイムクラス
+	static CFollowModel *m_pCameraTarget;	// カメラターゲット
+	static CObstacleManager *m_pObstacle;	// 障害物のマネージャー
+	static bool m_bGame;					// ゲームの状況
 
 	//--------------------------------------------------------------------
 	// メンバ変数

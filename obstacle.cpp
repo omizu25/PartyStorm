@@ -112,41 +112,15 @@ void CObstacle::Uninit()
 //--------------------------------------------------
 void CObstacle::Update()
 {
-	// 位置の取得
-	D3DXVECTOR3 pos = CModelObj::GetPos();
-
-	pos.z += (MOVE_SPEED * m_move);
-
 	m_waveTime++;
 
-	if (CApplication::GetMode() == CApplication::MODE_GAME &&
-		CGame::GetTime()->GetTime() <= 0)
-	{// ゲーム中で制限時間切れ
-		pos.y += -1.0f;
-	}
-	else if (pos.z >= 4500.0f)
-	{// 指定の値以上
-		pos.y += -1.0f;
-	}
-	else
-	{
-		pos.y = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * 20.0f;
+	// 移動
+	Move();
 
-		pos.y += POS_Y;
-	}
+	// 回転
+	Rot();
 
-	// 位置の設定
-	CModelObj::SetPos(pos);
-
-	// 向きの取得
-	D3DXVECTOR3 rot = CModelObj::GetRot();
-
-	rot.z = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * (D3DX_PI * 0.03f * m_inverse);
-
-	// 向きの設定
-	CModelObj::SetRot(rot);
-
-	if (pos.z >= m_diePosZ)
+	if (CModelObj::GetPos().z >= m_diePosZ)
 	{// 解放する位置を越した
 		Uninit();
 		return;
@@ -166,6 +140,51 @@ void CObstacle::Draw()
 {
 	// 描画
 	CModelObj::Draw();
+}
+
+//--------------------------------------------------
+// 移動
+//--------------------------------------------------
+void CObstacle::Move()
+{
+	// 位置の取得
+	D3DXVECTOR3 pos = CModelObj::GetPos();
+
+	// 移動
+	pos.z += (MOVE_SPEED * m_move);
+
+	if (CApplication::GetMode() == CApplication::MODE_GAME &&
+		CGame::GetTime()->GetTime() <= 0)
+	{// ゲーム中で制限時間切れ
+		pos.y += -1.0f;
+	}
+	else if (pos.z >= 4500.0f)
+	{// 指定の値以上
+		pos.y += -1.0f;
+	}
+	else
+	{
+		// 上下移動
+		pos.y = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * 20.0f;
+		pos.y += POS_Y;
+	}
+
+	// 位置の設定
+	CModelObj::SetPos(pos);
+}
+
+//--------------------------------------------------
+// 回転
+//--------------------------------------------------
+void CObstacle::Rot()
+{
+	// 向きの取得
+	D3DXVECTOR3 rot = CModelObj::GetRot();
+
+	rot.z = sinf((m_waveTime * 0.01f) * (D3DX_PI * 2.0f)) * (D3DX_PI * 0.03f * m_inverse);
+
+	// 向きの設定
+	CModelObj::SetRot(rot);
 }
 
 //--------------------------------------------------

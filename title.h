@@ -58,7 +58,7 @@ private:
 	float		m_fCycle;		// カーブの周期
 	float		m_fAddSize;		// 大きさの参照値
 	int			m_nCntFrame;	// フレームカウント
-	bool		m_bPressEnter;	// エンターキーを押せるか
+	bool		m_bPressEnter;	// エンターキーが押されたどうか
 	int			m_nNumPlayer;	// プレイヤー数
 };
 

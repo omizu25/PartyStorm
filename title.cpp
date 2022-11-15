@@ -183,6 +183,7 @@ HRESULT CTitle::Init()
 	CObstacleManager::Create();
 
 	m_fCycle = 0.01f;
+	m_bPressEnter = false;
 
 	return S_OK;
 }
@@ -204,6 +205,8 @@ void CTitle::Uninit()
 //=============================================================================
 void CTitle::Update()
 {
+	m_nCntFrame++;
+
 	// パッドの接続数の取得
 	int numPlayer = CApplication::GetJoy()->GetUseJoyPad();
 
@@ -221,7 +224,7 @@ void CTitle::Update()
 	// 点滅
 	FlashObj();
 
-	if (m_bPressEnter)
+	if (!m_bPressEnter)
 	{// まだエンターが押されていない
 		// 入力
 		Input();
@@ -229,7 +232,7 @@ void CTitle::Update()
 	else
 	{
 		if (m_nCntFrame >= 60)
-		{// 一定間隔後
+		{// 一定時間後
 			CApplication::SetNextMode(CApplication::MODE_GAME);
 		}
 	}
@@ -330,7 +333,7 @@ void CTitle::Input()
 				continue;
 			}
 
-			m_bPressEnter = false;
+			m_bPressEnter = true;
 			m_nCntFrame = 0;
 			m_fCycle = 0.1f;
 
@@ -343,7 +346,7 @@ void CTitle::Input()
 	{
 		if (CApplication::GetKeyboard()->GetUseAnyKey())
 		{// 全てのキー
-			m_bPressEnter = false;
+			m_bPressEnter = true;
 			m_nCntFrame = 0;
 			m_fCycle = 0.1f;
 

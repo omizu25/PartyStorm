@@ -2,6 +2,7 @@
 //
 // リザルトクラス(result.cpp)
 // Author : 唐﨑結斗
+// Author : 香月瑞輝
 // 概要 : リザルトクラスの管理を行う
 //
 //=============================================================================
@@ -12,16 +13,13 @@
 #include <assert.h>
 
 #include "result.h"
-#include "keyboard.h"
 #include "object2D.h"
 #include "sound.h"
 #include "camera.h"
-#include "mesh.h"
 #include "sphere.h"
 #include "player.h"
 #include "Shark.h"
 #include "model_obj.h"
-#include "move.h"
 #include "effect.h"
 #include "renderer.h"
 #include "score.h"
@@ -93,12 +91,10 @@ void CResult::SetDead(int numPlayer)
 //=============================================================================
 HRESULT CResult::Init()
 {
-	m_mode = CApplication::MODE_GAME;
-	m_pressEnter = false;
+	int maxPlayer = CApplication::GetPersonCount();
 
 	{// サウンドの設定
 		int gameover = 0;
-		int maxPlayer = CApplication::GetPersonCount();
 
 		for (int i = 0; i < maxPlayer; i++)
 		{
@@ -159,35 +155,35 @@ HRESULT CResult::Init()
 		pSphere->LoadTex(2);
 	}
 
-	// プレイヤーの設定
-	int maxPlayer = CApplication::GetPersonCount();
-	m_pPlayer = new CPlayer*[maxPlayer];
-	assert(m_pPlayer != nullptr);
+	{// プレイヤーの設定
+		m_pPlayer = new CPlayer*[maxPlayer];
+		assert(m_pPlayer != nullptr);
 
-	float posX = 500.0f / (maxPlayer + 1);
+		float posX = 500.0f / (maxPlayer + 1);
 
-	for (int i = 0; i < maxPlayer; i++)
-	{// プレイヤーの生成
-		m_pPlayer[i] = CPlayer::Create();
-		m_pPlayer[i]->SetMotion("data/MOTION/motion.txt");
-		m_pPlayer[i]->SetPos(D3DXVECTOR3(-250.0f + posX + (posX * i), 0.0f, -300.0f));
-		m_pPlayer[i]->SetNum(i);
+		for (int i = 0; i < maxPlayer; i++)
+		{// プレイヤーの生成
+			m_pPlayer[i] = CPlayer::Create();
+			m_pPlayer[i]->SetMotion("data/MOTION/motion.txt");
+			m_pPlayer[i]->SetPos(D3DXVECTOR3(-250.0f + posX + (posX * i), 0.0f, -300.0f));
+			m_pPlayer[i]->SetNum(i);
 
-		if (maxPlayer > 1)
-		{// マルチプレイ
-			if (m_dead[i])
-			{// 死んだプレイヤー
-				m_pPlayer[i]->SetAction(true);
-				m_pPlayer[i]->SetMove(false);
+			if (maxPlayer > 1)
+			{// マルチプレイ
+				if (m_dead[i])
+				{// 死んだプレイヤー
+					m_pPlayer[i]->SetAction(true);
+					m_pPlayer[i]->SetMove(false);
+				}
+				else
+				{// 生きてるプレイヤー
+					m_pPlayer[i]->SetAction(false);
+				}
 			}
 			else
-			{// 生きてるプレイヤー
+			{// シングルプレイ
 				m_pPlayer[i]->SetAction(false);
 			}
-		}
-		else
-		{// シングルプレイ
-			m_pPlayer[i]->SetAction(false);
 		}
 	}
 
@@ -196,6 +192,8 @@ HRESULT CResult::Init()
 
 	m_time = 0;
 	m_pop = false;
+	m_mode = CApplication::MODE_GAME;
+	m_pressEnter = false;
 
 	bool gameclear = true;
 	
@@ -335,11 +333,8 @@ HRESULT CResult::Init()
 //=============================================================================
 void CResult::Uninit()
 {
-	// サウンド情報の取得
-	CSound *pSound = CApplication::GetSound();
-
 	// サウンド終了
-	pSound->StopSound();
+	CApplication::GetSound()->StopSound();
 
 	// エフェクトの終了
 	CEffect::ReleaseAll();
@@ -357,7 +352,7 @@ void CResult::Uninit()
 			}
 		}
 
-		delete m_pPlayer;
+		delete[] m_pPlayer;
 		m_pPlayer = nullptr;
 	}
 
@@ -370,45 +365,20 @@ void CResult::Uninit()
 //=============================================================================
 void CResult::Update()
 {
-	int maxPlayer = CApplication::GetPersonCount();
-	
-	if (maxPlayer > 1)
+	m_time++;
+
+	if (CApplication::GetPersonCount() > 1)
 	{// マルチプレイ
 		Multi();
 	}
-	else
-	{// シングルプレイ
-		Single();
-	}
+
+	// エフェクトの更新
+	CEffect::UpdateAll();
 
 	if (!m_pressEnter)
 	{// エンターが押されていない
-		if (m_pMenu != nullptr)
-		{// 選択
-			int mode = m_pMenu->Select();
-
-			switch (mode)
-			{
-			case -1:
-				break;
-
-			case 0:
-				m_mode = CApplication::MODE_GAME;
-				m_pressEnter = true;
-				m_time = 0;
-				break;
-
-			case 1:
-				m_mode = CApplication::MODE_TITLE;
-				m_pressEnter = true;
-				m_time = 0;
-				break;
-
-			default:
-				assert(false);
-				break;
-			}
-		}
+		// 選択
+		Select();
 	}
 	else
 	{// エンターが押された
@@ -420,7 +390,7 @@ void CResult::Update()
 		}
 
 		if (m_time >= 60)
-		{
+		{// 一定時間後
 			CApplication::SetNextMode(m_mode);
 		}
 	}
@@ -433,28 +403,46 @@ void CResult::Draw()
 {
 }
 
+//=============================================================================+
+// 選択
 //=============================================================================
-// シングル
-//=============================================================================
-void CResult::Single()
+void CResult::Select()
 {
-	// エフェクトの更新
-	CEffect::UpdateAll();
+	if (m_pMenu == nullptr)
+	{// 選択
+		return;
+	}
 
-	m_time++;
+	int mode = m_pMenu->Select();
+
+	switch (mode)
+	{
+	case -1:
+		break;
+
+	case 0:
+		m_mode = CApplication::MODE_GAME;
+		m_pressEnter = true;
+		m_time = 0;
+		break;
+
+	case 1:
+		m_mode = CApplication::MODE_TITLE;
+		m_pressEnter = true;
+		m_time = 0;
+		break;
+
+	default:
+		assert(false);
+		break;
+	}
 }
-
 
 //=============================================================================
 // マルチ
 //=============================================================================
 void CResult::Multi()
 {
-	// エフェクトの更新
-	CEffect::UpdateAll();
-
-	m_time++;
-
 	if (m_pop)
 	{// 出現した
 		return;

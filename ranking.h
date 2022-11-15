@@ -24,7 +24,7 @@ class CObject2D;
 //==================================================
 class CRanking : public CObject
 {
-	/* ↓静的メンバ関数↓ */
+	/* ↓定義↓ */
 public:
 	static const int MAX_RANKING = 5;	// ランキングの最大数
 	static const float STD_WIDTH;		// 幅の標準値

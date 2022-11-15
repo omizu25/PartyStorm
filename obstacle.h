@@ -39,6 +39,8 @@ public:
 	void Draw() override;		// •`‰æ
 
 private:
+	void Move();		// ˆÚ“®
+	void Rot();			// ‰ñ“]
 	void Collison();	// “–‚½‚è”»’è
 
 	/* «ƒƒ“ƒo•Ï”« */
