@@ -44,20 +44,22 @@ private:
 	//--------------------------------------------------------------------
 	// メンバ関数
 	//--------------------------------------------------------------------
-	void FlashObj();
+	void ObjChange();	// オブジェクトの変更
+	void Input();		// 入力
+	void FlashObj();	// 点滅
 
 	//--------------------------------------------------------------------
 	// メンバ変数
 	//--------------------------------------------------------------------
-	CObject2D	*m_pTitleLogo;			// タイトルロゴオブジェクト
-	CObject2D	*m_pPressAny;			// プレスオブジェクト
-	CObject2D	*m_pMode;				// モードオブジェクト
-	CObject2D	*m_pNum;				// 人数オブジェクト
-	float		m_fCycle;				// カーブの周期
-	float		m_fAddSize;				// 大きさの参照値
-	int			m_nCntFrame;			// フレームカウント
-	bool		m_bPressEnter;			// エンターキーを押せるか
-	int			m_nNumPlayer;			// プレイヤー数
+	CObject2D	*m_pTitleLogo;	// タイトルロゴオブジェクト
+	CObject2D	*m_pPressAny;	// プレスオブジェクト
+	CObject2D	*m_pMode;		// モードオブジェクト
+	CObject2D	*m_pNum;		// 人数オブジェクト
+	float		m_fCycle;		// カーブの周期
+	float		m_fAddSize;		// 大きさの参照値
+	int			m_nCntFrame;	// フレームカウント
+	bool		m_bPressEnter;	// エンターキーを押せるか
+	int			m_nNumPlayer;	// プレイヤー数
 };
 
 #endif
